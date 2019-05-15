@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>首页</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <script type="text/javascript">
+        (function () {
+            var docEl = document.documentElement;
+
+
+            function setRemUnit(){
+                // 获取到rem的基准值
+                var rem = docEl.clientWidth / 10;
+
+                // 动态设置html根元素的font-size
+                docEl.style.fontSize = rem + 'px';
+            }
+
+            setRemUnit();
+
+            // 窗口大小变化时 触发
+            window.addEventListener('resize', setRemUnit);
+
+            // 窗口出现在当前屏幕时 （有浏览器兼容性）
+            window.addEventListener('pageshow', function(e){
+                if (e.persisted) {
+                    setRemUnit();
+                }
+            });
+        })();
+    </script>
+    <link rel="stylesheet" type="text/css" href="../lib/reset.css">
+    <link rel="stylesheet" type="text/css" href="./searchBar/searchBar.css">
+    <link rel="stylesheet" type="text/css" href="./category/category.css">
+    <link rel="stylesheet" type="text/css" href="./contentList/contentList.css">
+    <link rel="stylesheet" type="text/css" href="./starScore/starScore.css">
+    <link rel="stylesheet" type="text/css" href="../common/bottomBar/bottomBar.css">
+    <link rel="stylesheet" type="text/css" href="./header/header.css">
+</head>
+<body>
+    <!--头部开始-->
+    <div class="header">
+        <div class="search-bar">
+            <div class="bar-location">
+                <div class="location-icon"></div>
+                <div class="location-text">郑州市</div>
+            </div>
+        
+            <div class="search-btn">
+                <p class="place-holder">鸡翅</p>
+            </div>
+        </div>
+        <img class="header-img" src="http://xs01.meituan.net/waimai_i/img/bannertemp.e8a6fa63.jpg">
+    </div>
+    <!--头部结束-->
+    <!--类目结束-->
+    <div class="category-content clearfix"></div>
+    <!--类目结束-->
+    <!--商家列表开始-->
+    <div class="list-content">
+        <h4 class="list-title">
+            <span class="title-line"></span>
+            <span>附近商家</span>
+            <span class="title-line"></span>
+        </h4>
+        <div class="list-wrap"></div>
+        <div class="loading">加载中</div>
+    </div>
+    <!--商家列表结束-->
+    <!--底部栏开始-->
+    <div class="bottom-bar"></div>
+    <!--底部栏结束-->
+    <script type="text/javascript" src="../lib/jquery.min.js"></script>
+    <script type="text/javascript" src="./starScore/starScore.js"></script>
+    <script type="text/javascript" src="./category/category.js"></script>
+    <script type="text/javascript" src="../common/bottomBar/bottomBar.js"></script>
+    <script type="text/javascript" src="./contentList/contentList.js"></script>
+</body>
+</html>
