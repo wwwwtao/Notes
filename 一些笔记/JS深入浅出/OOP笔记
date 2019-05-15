@@ -1,0 +1,12 @@
+        原型链与继承
+        https://www.imooc.com/video/7054; 
+
+        foo.prototype {
+            construvtor:foo,
+            _proto_:Object.prototype
+        }
+
+        Object.create()方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__。 
+
+        动态修改prototype的属性 会影响所有已创建或新创建的实例
+        如果修改整个prototype 赋值为新的对象 对已经创建的实例不会修改 只会影响后续创建的实例！！！！ 坑 

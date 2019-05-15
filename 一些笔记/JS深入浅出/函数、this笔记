@@ -72,6 +72,20 @@ func(1,2); // 3
             func();     // 1
             new func(); // {b : 100}    用 new  如果 return不是对象的话 会返回this 一个空对象指针 空对象原型是foo.prototype
 
+            1、谁最终调用函数，this最终指向谁(记住！)
+                ①this指向谁，不应考虑函数在哪声明，而应该考虑函数在哪调用！！！
+                ②this指向的永远只可能是对象，而不可能是函数。
+                ③this指向的对象，叫做函数的上下文context，也叫函数的调用者。
+
+
+                2、this指向的规律！！！(跟函数的调用方式息息相关，记住这点，相信你一定会分清this指向哒)
+                ①通过函数名()调用的，this永远指向window
+                ②通过对象.方法调用的，this指向这个对象。
+                ③函数作为数组中的一个元素，用数组下标调用的，this指向这个数组
+                ④函数作为window内置函数的回调函数使用，this指向window。
+                setInterval setTimeout 等。
+                ⑤函数作为构造函数，使用new关键字调用，this指向新new出的对象 对象的原型等于构造器的prototype属性
+
                 < -- 模拟 bind 方法 -- >           !   !   !   !   !
             看bind方法模拟.html    
         

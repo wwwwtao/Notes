@@ -42,7 +42,9 @@ set()：设置
 
 3、Object.defineProperty(obj, prop, descriptor)
 
-功能：在一个对象上定义一个新属性或修改一个现有属性，并返回该对象。(可以指定configurable writable等等)
+功能：在一个对象上定义一个新属性或修改一个现有属性，并返回该对象。(可以指定configurable writable等等 设置可不可以枚举 )
+
+3.1 hasOwnProperty() 方法会返回一个布尔值，指示对象自身属性中是否具有指定的属性 (可以判断对象上的属性是不是原型链中的属性)
 
 4、Object.defineProperties(obj, props)
 
