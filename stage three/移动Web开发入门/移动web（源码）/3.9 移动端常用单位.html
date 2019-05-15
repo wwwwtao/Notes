@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>3.9 移动端常用单位</title>
+    <link rel="stylesheet" href="css/iconfont.css">
+    <style>
+        /*px/%/em/rem/vw/vh*/
+
+        /*css reset*/
+            * {
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+            body {
+                background-color: #e2e2e2;
+                color: #595B66;
+            }
+            a {
+                font-size: 12px;
+                color: #686868;
+                text-decoration: none;
+            }
+            li {
+                list-style: none;
+            }
+
+        /*body {
+            font-size: 20px;
+        }*/
+
+        html {
+            font-size: 12px;
+        }
+        .tabbar-container {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            z-index: 1000;
+            width: 100%;
+            
+            /*height: 5em;
+            font-size: 12px;*/
+            /*font-size: 12em;*/
+
+            /*height: 5rem;*/
+
+            /*width: 100vw;
+            height: 10vh;*/
+            background-color: #fff;
+            box-shadow: 0 0 10px 0 rgba(154, 141 ,141, 0.6);
+
+            height: 50px;
+            /*
+                height
+                    375px -> 100%(375px) x 50px
+                    750px -> 100%(750px) x 100px
+                    ?(视口宽度) -> (? / 750) * 100 px
+                    ?(视口宽度) = document.documentElement.clientWidth
+                    height = (document.documentElement.clientWidth / 750) * 100 px
+                    height = (document.documentElement.clientWidth / 375) * 50 px
+            */
+
+            /*
+                用px/em做单位，每次都要用js一一修改
+                能不能统一修改呢？
+                    375px -> 1rem = 20px;
+                        height = 50 / 20 = 2.5rem;
+                    750px -> 1rem = 40px;
+                        height = 100 / 40 = 2.5rem;
+                    ?(视口宽度) -> 1rem = (? / 375) * 20 px
+                    ?(视口宽度) = document.documentElement.clientWidth
+                    1rem = (document.documentElement.clientWidth / 375) * 20 px
+                    1rem = (document.documentElement.clientWidth / 750) * 40 px
+                    height = 2.5rem;
+            */
+            /*375px 1rem = 20px;*/
+            height: 2.5rem;
+        }
+        .tabbar-link .iconfont {
+            /*font-size: 24px;*/
+            font-size: 1.2rem;
+            /*font-size: 2em;*/
+
+            /*
+                font-size
+                    375px -> 24px
+                    750px -> 48px
+                    ?(视口宽度) -> (? / 750) * 48 px
+                    ?(视口宽度) = document.documentElement.clientWidth
+                    font-size = (document.documentElement.clientWidth / 750) * 48 px
+                    font-size = (document.documentElement.clientWidth / 375) * 24 px
+            */
+            /*
+                用px/em做单位，每次都要用js一一修改
+                能不能统一修改呢？
+                    375px -> 1rem = 20px;
+                        font-size = 24 / 20 = 1.2rem;
+                    750px -> 1rem = 40px;
+                        font-size = 48 / 40 = 1.2rem;
+                    ?(视口宽度) -> 1rem = (? / 375) * 20 px
+                    ?(视口宽度) = document.documentElement.clientWidth
+                    1rem = (document.documentElement.clientWidth / 375) * 20 px
+                    1rem = (document.documentElement.clientWidth / 750) * 40 px
+                    font-size = 1.2rem;
+            */
+        }
+        .tabbar,
+        .tabbar-item,
+        .tabbar-link {
+            height: 100%;
+        }
+        .tabbar {
+            display: flex;
+        }
+        .tabbar-item {
+            flex: 1;
+        }
+        .tabbar-link {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 0.6rem;
+        }
+        .tabbar-item-active .tabbar-link {
+            color: #de181b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- <p style="text-indent: 2em;">
+        我是短路
+        我是短路
+        我是短路
+        我是短路
+        我是短路
+        我是短路
+        我是短路
+        我是短路
+        我是短路
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+        adasdasdasdasd
+    </p> -->
+
+    <div class="tabbar-container">
+        <ul class="tabbar">
+            <li class="tabbar-item tabbar-item-active">
+                <a href="###" class="tabbar-link">
+                    <i class="iconfont icon-home"></i>
+                    <span>首页</span>
+                </a>
+            </li>
+            <li class="tabbar-item">
+                <a href="###" class="tabbar-link">
+                    <i class="iconfont icon-category"></i>
+                    <span>分类页</span>
+                </a>
+            </li>
+            <li class="tabbar-item">
+                <a href="###" class="tabbar-link">
+                    <i class="iconfont icon-cart"></i>
+                    <span>购物车</span>
+                </a>
+            </li>
+            <li class="tabbar-item">
+                <a href="###" class="tabbar-link">
+                    <i class="iconfont icon-personal"></i>
+                    <span>个人中心</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        setRemUnit();
+
+        window.onresize = setRemUnit;
+
+        function setRemUnit() {
+            var docEl = document.documentElement;
+            var viewWidth = docEl.clientWidth;
+
+            docEl.style.fontSize = viewWidth / 375 * 20 + 'px';
+            // docEl.style.fontSize = viewWidth / 750 * 40 + 'px';
+            // 1rem = 20px
+        }
+    </script>
+</body>
+</html>

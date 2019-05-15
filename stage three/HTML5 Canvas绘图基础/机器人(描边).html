@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+    <style>
+        canvas {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800">
+        您的浏览器不支持canvas
+    </canvas>
+
+    <script>
+        //在此处写出代码
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext('2d');
+        //头部
+        ctx.strokeRect(300, 200, 200, 100);
+        //左耳
+        ctx.strokeRect(270, 220, 30, 40);
+        //右耳
+        ctx.strokeRect(500, 220, 30, 40);
+        //嘴巴
+        ctx.strokeRect(370, 260, 60, 20);
+
+        //两只眼睛
+        ctx.beginPath();
+        ctx.arc(330, 230, 10, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(470, 230, 10, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        //天线
+        ctx.beginPath();
+        ctx.moveTo(350, 200);
+        ctx.lineTo(300, 100);
+        ctx.moveTo(450, 200);
+        ctx.lineTo(500, 100);
+        ctx.stroke();
+
+        ctx.beginPath();
+        // 身子
+        ctx.strokeRect(330, 300, 140, 180);
+        // 左手
+        ctx.strokeRect(100, 350, 230, 20);
+        // 右手  x坐标就是身子x坐标加身子宽
+        ctx.strokeRect(470, 350, 230, 20);
+        // 左脚  左右脚y坐标是身子y坐标加高
+        ctx.strokeRect(350, 480, 20, 230);
+        // 右脚
+        ctx.strokeRect(430, 480, 20, 230);
+    </script>
+</body>
+
+</html>

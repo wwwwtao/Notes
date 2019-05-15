@@ -1,0 +1,125 @@
+
+for...in 和for...of 循环
+var arr = ['a', 'b', 'c', 'd'];
+    for (let a in arr) {
+      console.log(a);          // 0 1 2 3
+    }
+    for (let a of arr) {
+      console.log(a);          // a b c d
+    } 
+        上面代码表明，for...in循环读取键名，for...of循环读取键值。如果要通过for...of循环，获取数组的索引，可以借助数组实例的entries方法和keys方法
+        fon...in 会把原型上可枚举的属性也取出来 而且不保证顺序
+
+需警惕CSS3属性的书写顺序
+要用渐进增强的写法 因为某些属性在浏览器中的实现效果有可能与正常的CSS3实现效果不太一样  所以正常css3写在最后
+
+           css属性选择器
+[attribute=value]	用于选取带有指定属性和值的元素。
+[attribute~=value]	用于选取属性值中包含指定词汇的元素。
+
+    ‘+’选择器则表示某元素后相邻的兄弟元素，也就是紧挨着的，是单个的。
+    而‘~’选择器则表示某元素后所有同级的指定元素，强调所有的。
+
+    parentNode 属性可返回某节点的父节点。
+
+           select 元素可创建单选或多选菜单。
+<select&> 元素中的 <option> 标签用于定义列表中的可用选项。
+
+outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的外围，可起到突出元素的作用。
+
+
+          line-height 带单位和不带单位的区别
+带单位的行高有继承性 继承了父元素的行高计算值   子元素12px  父元素14px  行高28px
+不带单位直接继承 例如行高2倍 子元素12px  行高24px
+
+           text-indent 属性规定文本块中首行文本的缩进。 注释：允许使用负值。如果使用负值，那么首行会被缩进到左边。   (可以用em)
+注意：在 CSS 2.1 之前，text-indent 总是继承计算值，而不是声明值。
+
+           continue ：跳过本次循环剩余的代码，继续执行下一次循环。 循环控制语句
+
+           contenteditable 一段可编辑的段落 true表示可编辑
+
+           disabled 属性规定禁用按钮。被禁用的按钮既不可用，也不可点击。
+
+
+insertAdjacentHTML 方法：在指定的地方插入html标签语句
+1.     beforeBegin: 插入到标签开始前
+
+2.     afterBegin:插入到标签开始标记之后
+
+3.     beforeEnd:插入到标签结束标记前
+
+4.     afterEnd:插入到标签结束标记后
+
+对象到数字的转换过程如下：
+
+空数组 == false     true == 1
+如果对象具有valueof（）方法，后者返回一个原始值，则JavaScript将这个原始值转换为数字并返回；否则，如果对象具有toString（）方法，后者返回一个原始值，JavaScript将这个字符串转换为数字并返回；否则，报错。数组继承了默认的valueOf()方法，但是数组、函数和正则表达式调用此方法后，只返回对象本身，因此转换为数字，还会继续调用toString（）方法，空数组调用toString（）返回空字符串，转换为数字为0，new Array(1)同样因为虽然长度为1，但值为undefined，转换为数字仍未0.所以，才会出现博主提出的疑问。
+
+Math.abs //绝对值
+
+Absolution：元素会脱离文档流，定位是相对于离它最近的且不是static定位的父元素而言，若该元素没有设置宽度，则宽度由元素里面的内容决定，且宽度不会影响父元素，定位为absolution后，原来的位置相当于是空的，下面的的元素会来占据。
+
+Relative：元素仍处于文档流中，定位是相对于原本自身的位置，若没有设置宽度，则宽度为父元素的宽度，该元素的大小会影响父元素的大小。
+
+setAttribute() 方法添加指定的属性，并为其赋指定的值。
+text-overflow 属性规定当文本溢出包含元素时发生的事情。clip 修剪文本	ellipsis 显示省略符号来代表被修剪的文本。 string 使用给定的字符串来代表被修剪的文本。
+
+chrome内核下 a标签点击高亮的蓝色的图层 {
+  -webkit-tap-highlight-color: transparent;  //这样就没有了
+}
+
+h5新增的标签
+header
+功能：header标签定义页面的页眉信息。
+nav:
+定义导航链接。
+article:
+功能：定义一个独立的内容
+footer
+功能：用来定义页尾。
+session:
+功能：定义网页的中的“区块
+aside:
+功能：aside标签定义其所处内容之外的内容。
+datalist
+  datalist标签用来定义选项列表
+audio:
+功能：可以用来定义音乐。
+video:
+功能：定义一个视频
+embed:
+功能：embed标签用来定义插入的内容（媒体内容），比如可以插入swf
+
+html.clientHeight
+在各浏览器中，均返回视口高度。
+
+html.offsetHeight
+返回 <html> 元素的高度，可以理解为文档高度，前提是没有给 <html> 元素设置 height。IE6-8 中还是返回视口高度。
+
+html.scrollHeight
+总是返回文档高度。在 Firefox、Opera、IE8 中，返回文档高度和视口高度中较大的那个。
+
+ 
+,运算符 等于后面的值
+位移  << 运算符
+
+1<<3   等于 1*2³  8
+2<<3  等于 2*2³  16
+
+css瀑布流
+父元素 {                  子元素{
+    column-count: 3;              break-inside: avoid;       //避免分页
+    column-gap: 2em;          }
+}
+
+
+                    < !!! --防止冒泡和捕获
+w3c的方法是e.stopPropagation()，IE则是使用e.cancelBubble = true
+
+
+                    < !!! --取消默认事件
+w3c的方法是e.preventDefault()，IE则是使用e.returnValue = false;
+
+getElementsByName() 方法可返回带有指定名称的对象的集合。//name属性
+getElementsByTagName() 方法可返回带有指定标签名的对象的集合。 //标签名

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>06-ajax-get</title>
+    <script src="myAjax.js"></script>
+    <script>
+        window.onload = function (ev) {
+            var oBtn = document.querySelector("button");
+            var res = encodeURIComponent("wd=张三");
+            console.log(res);
+            oBtn.onclick = function (ev1) {
+                //                            %E5%BC%A0%E4%B8%89
+                // https://www.baidu.com/s?wd=%E5%BC%A0%E4%B8%89
+                // url?key=value&key=value;
+                ajax("04-ajax-get.php", {
+                    "userName":"lnj",
+                    "userPwd":"123456"
+                }, 3000
+                , function (xhr) {
+                    alert(xhr.responseText);
+                }, function (xhr) {
+                    alert("请求失败");
+                });
+            }
+        }
+    </script>
+
+</head>
+<body>
+<button>发送请求</button>
+</body>
+</html>

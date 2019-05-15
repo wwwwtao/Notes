@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>用户注册ajax接口测试</title>
+<link rel="stylesheet" href="style/common.css">
+<script src="myAjax.js"></script>
+<script>
+
+/*   usage:	07-user.php?act=xxx&user=用户名&pass=密码
+			act:
+				add——注册用户
+				login——登陆
+	
+	return:	{error: 0, desc: 文字描述信息}
+			error:
+				0	成功
+				1	失败——具体原因参考desc
+*/
+window.onload = function(){ 
+	var oUser = document.getElementById("add_user");
+	var oPass = document.getElementById("add_pass");
+	var oBtn  = document.getElementById("add_btn");
+
+	//注册
+	oBtn.onclick = function(){
+
+	    var json = {
+	        "act": "add",
+            "user":oUser.value,
+            "pass":oPass.value
+        };
+	    ajax("07-user.php",json,function (xhr) {
+            alert(xhr.responseText);
+        }, function (xhr) {
+            alert("失败");
+        });
+	};
+};
+</script>
+</head>
+
+<body>
+<!--登陆-->
+<div class="loginBox">
+	<ul class="loginList clearfix">
+    	<li class="hTxt">用户注册</li>
+        <li class="inputBox">
+        	<input type="text" class="inputs" id="add_user">
+        </li>
+        <li class="inputBox">
+        	<input type="password" class="inputs" id="add_pass">
+        </li>
+        <li class="btns">
+            <input id="add_btn" type="button" class="reg" value="" />
+        </li>
+        <li class="look"><a href="07-user_view.php" target="_blank">查看已注册用户</a></li>
+    </ul>
+</div>
+</body>
+</html>

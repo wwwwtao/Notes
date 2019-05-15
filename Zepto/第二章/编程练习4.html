@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>我是div元素前面的第一个p</p>
+    <div>我是div元素</div>
+    <p>div后面的第一个p</p>
+    <ul class="demo">
+        <li>
+            <a href="#">前端</a>
+            <ul>
+                <li><a href="#">jQuery</a></li>
+                <li><a href="#">JavaScript</a></li>
+                <li class="visited"><a href="#">html</a></li>
+                <li><a href="#">css</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">后端</a>
+            <ul>
+                <li><a href="#">PHP</a></li>
+                <li><a href="#">Java</a></li>
+                <li><a href="#">SpringBoot</a></li>
+                <li><a href="#">Python</a></li>
+            </ul>
+        </li>
+    </ul>
+    <p>最后一个p元素</p>
+    <script src="https://cdn.bootcss.com/zepto/1.1.7/zepto.min.js"></script>
+    <script>
+        /*此处写代码*/
+        $(document).ready(function() {
+            $("div").css("color","orange");
+            $("div ~ p").last().css("color","green");
+            $("div + p").css("color","yellow");
+            $(".demo>li a ").css("color","red");
+            $(".demo ul a ").css("color","pink");
+        })
+    </script>
+</body>
+
+</html>

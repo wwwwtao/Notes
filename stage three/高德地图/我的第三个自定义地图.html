@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=1.4.14&key=5ac64dd2f8f358f0779db94b0ae45c92&plugin=AMap.Transfer,AMap.Riding,AMap.Driving,AMap.Autocomplete">
+        </script>
+    <link rel="stylesheet" href="../高德地图/css/font-awesome.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #Tool {
+            width: 300px;
+            height: 200px;
+            background-color: #3691ff;
+            position: relative;
+            left: 10px;
+            top: 10px;
+        }
+
+        #Trip {
+            display: flex;
+            justify-content: center;
+        }
+
+        #Trip .fa {
+            padding: 10px 25px 0 25px;
+            opacity: 0.4;
+            color: white;
+        }
+
+        #Trip .active {
+            opacity: 1;
+        }
+
+        #origin,
+        #terminal {
+            margin-top: 15px;
+            width: 80%;
+            height: 30px;
+            margin-left: 30px;
+            background-color: #2e85f2;
+            opacity: 0.8;
+            color: white;
+        }
+
+        #startNode,
+        #endNode {
+            width: 219px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            border: none;
+            color: white;
+        }
+
+        #searchNode {
+            float: right;
+            margin-top: 15px;
+            margin-right: 30px;
+        }
+
+        .btn1 {
+            width: 110px;
+            height: 40px;
+            background-color: #4e9fff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #navigation {
+            width: 300px;
+            position: relative;
+            left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <!-- Tool工具栏 -->
+    <div id="Tool">
+        <!-- 出行方式Trip -->
+        <div id="Trip">
+            <i class="fa fa-car active"></i>
+            <i class="fa fa-bus"></i>
+            <i class="fa fa-bicycle"></i>
+        </div>
+        <!-- 起点输入框 -->
+        <div id="origin">
+            <label for="startNode">起</label>
+                <input type="text" id="startNode" placeholder="请输入起点">
+        </div>
+        <!-- 终点输入框 -->
+        <div id="terminal">
+            <label for="endNode">终</label>
+                <input type="text" id="endNode" placeholder="请输入终点">
+        </div>
+        <!-- 搜索框 -->
+        <div id="searchNode">
+            <button class="btn1">开车去</button>
+        </div>
+    </div>
+    <!-- 导航信息的盒子 -->
+    <div id="navigation">
+    </div>
+
+
+    <script type="text/javascript">
+        // 地图对象
+        var map = new AMap.Map("container", {
+            zoom: 11,
+            center: [116.379391, 39.861536]
+        });
+        // map.setCity("北京");
+
+        //起点输入框的提示
+        new AMap.Autocomplete({
+            input: "startNode"
+        })
+        //终点输入框的提示
+        new AMap.Autocomplete({
+            input: "endNode"
+        })
+
+        //出行方式按钮点击事件
+        //所有(三种)出行方式的三个图标集合
+        var Trip = document.getElementById("Trip");
+        var Is = Trip.getElementsByTagName("i");
+        // 第一种出行方式的图标 也就是驾车图标的点击
+        Is[0].onclick = function () {
+            active();
+            this.classList.add("active");
+            btn1.innerHTML = "开车去";
+        }
+        //公交图标的点击事件
+        Is[1].onclick = function () {
+            active();
+            this.classList.add("active");
+            btn1.innerHTML = "坐公交"
+        }
+        // 骑行图标的点击事件
+        Is[2].onclick = function () {
+            active();
+            this.classList.add("active");
+            btn1.innerHTML = "骑行去"
+        }
+        // 封装了点击时清除别的图标上的active类名的方法
+        function active() {
+            for (var j = 0; j < Is.length; j++) {
+                Is[j].classList.remove("active");
+            }
+        }
+
+        // 搜索导航路线按钮
+        var btn1 = document.querySelector(".btn1");
+        //导航事件
+        btn1.onclick = function () {
+            map.clearMap();
+            switch (btn1.innerHTML) {
+                case "开车去":
+                    navigation.innerHTML = "";
+                    new AMap.Driving({
+                        map: map,
+                        panel: "navigation"
+                    }).search([
+                        { keyword: startNode.value, city: "北京" },
+                        { keyword: endNode.value, city: "北京" }
+                    ], function (status, data) {
+                        // console.log(data)
+                    })
+                    break;
+                case "坐公交":
+                    navigation.innerHTML = "";
+                    new AMap.Transfer({
+                        map: map,
+                        panel: "navigation",
+                        city: "北京",
+                    }).search([
+                        { keyword: startNode.value, city: "北京" },
+                        { keyword: endNode.value, city: "北京" }
+                    ], function (status, data) {
+                        // console.log(data)
+                    })
+                    break;
+                case "骑行去":
+                    navigation.innerHTML = "";
+                    new AMap.Riding({
+                        panel: "navigation",
+                        map: map,
+                    }).search([
+                        { keyword: startNode.value, city: "北京" },
+                        { keyword: endNode.value, city: "北京" }
+                    ]
+                        , function (status, data) {
+                            // console.log(data)
+                        })
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

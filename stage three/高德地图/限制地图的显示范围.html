@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=1.4.14&key=5ac64dd2f8f358f0779db94b0ae45c92"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #setZoomNode {
+            width: 400px;
+            height: 100px;
+            position: absolute;
+            z-index: 99;
+            right: 20px;
+            top: 20px;
+            border: 1px solid black;
+            box-shadow: 0 0 5px black;
+            background-color: #fff;
+        }
+
+        /* #setCenterNode {
+            width: 300px;
+            height: 100px;
+            position: absolute;
+            z-index: 99;
+            right: 20px;
+            top: 130px;
+            border: 1px solid black;
+            box-shadow: 0 0 5px black;
+            background-color: #fff;
+        } */
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div id="setZoomNode">
+        <!-- <span>中心点：</span>
+        <input type="text" name="" id="xNode">
+        <input type="text" name="" id="yNode">
+        <span>级别:</span>
+        <input type="text" name="" id="zoomVal">
+        <button id="btn2">确定</button> -->
+        <div>地图的右上角坐标：<span id="ne"></span></div>
+        <div>地图的左下角坐标：<span id="sw"></span></div>
+        <input type="text" id="x1" placeholder="右上角X轴">
+        <input type="text" id="y1" placeholder="右上角y轴">
+        <input type="text" id="x2" placeholder="左下角x轴">
+        <input type="text" id="y2" placeholder="左下角y轴">
+        <button id="btna">确定</button>
+        <button id="btnb">清楚限制</button>
+    </div>
+
+
+
+    <!-- //javascript -->
+    <script type="text/javascript">
+        var map = new AMap.Map("container", {
+            zoom: 11,
+            center: [116, 39.8]
+        });
+
+        var bounds = map.getBounds();
+        map.setLimitBounds(bounds);
+        // console.log(bounds);
+
+        btna.onclick = function () {
+            var bounds = map.getBounds();
+            // console.log(bbounds)
+            bounds.northeast.Q = Number(x1.value);
+            bounds.northeast.P = Number(y1.value);
+            bounds.southwest.Q = Number(x2.value);
+            bounds.southwest.P = Number(y2.value);
+            map.setLimitBounds(bounds);
+
+        }
+
+        btnb.onclick = function () {
+            map.clearLimitBounds();
+        }
+
+
+        // 移动结束时 move移动  获取地图坐标
+        map.on("moveend", function () {
+            ne.innerHTML = map.getBounds().northeast;
+            sw.innerHTML = map.getBounds().southwest;
+        })
+        // 层级改变时 获取地图坐标
+        map.on("zoomend", function () {
+            ne.innerHTML = map.getBounds().northeast;
+            sw.innerHTML = map.getBounds().southwest;
+        })
+    </script>
+</body>
+
+</html>

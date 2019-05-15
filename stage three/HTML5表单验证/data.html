@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+</style>
+
+<body>
+    <input type="text" placeholder="请输入日期" name="date" class="date" onFocus='inp.type = "date"' onBlur=text() autofocus>
+
+    <script>
+        var inp = document.querySelector(".date");
+        function date() {
+            inp.type = "date";
+        }
+
+        function text() {
+            inp.type = "text";
+        }
+    </script>
+</body>
+
+</html>

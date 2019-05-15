@@ -1,0 +1,60 @@
+远程调试工具Vorlon.JS  看慕课网视频  配合phpstudys 使用  可以在真机上访问我们放在服务器端的页面 在网页控制台调式
+多终端同步工具 在文件夹打开cmd 输入命令行 然后就可以边写代码边自动同步
+browser-sync start ==server ==files="*"
+
+终端检测
+navigator.userAgent   //字符串 里面有设备信息 如android /ipone /ipad 之类的  
+可以用match()  检测是否是移动端 然后做跳转 location.href
+
+<----------------------------------------------------------------H5 标签兼容性
+移动端没问题 
+低版本IE浏览器  用 html5shiv.min.js  可以兼容
+
+
+<----------------------------------------------------------------JS 兼容性
+使用特性检测  而不是浏览器检测
+var requestAnimationFrame = window.requestAnimationFrame ||
+window.webkitRequestAnimationFrame ||
+window.mozRequestAnimationFrame ||
+window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+function (fn) {
+    setTimeout(fn,16);
+};
+requestAnimationFrame(function(){
+    console.log(1);
+});
+
+
+<----------------------------------------------------------------CSS3 兼容性
+不要忘记加前缀 
+modernizr 库 可以检测不支持的特性 写兼容性写法
+
+<----------------------------------------------------------------click 300ms 延迟
+<!-- 原因
+        double click 双击
+    解决办法
+        fastclick -->
+    <script src="js/fastclick.js"></script>
+    <script>
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+            }, false);
+        }
+    </script>
+
+
+<----------------------------------------------------------------单行文字溢出省略   《--------如果父元素使用了flex布局 就在文字外面套一层标签 如span   
+    overflow: hidden;  //溢出隐藏
+    text-overflow: ellipsis; //文字溢出显示省略号
+    white-space: nowrap;    //文本不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。
+   
+<----------------------------------------------------------------多行文字溢出省略(通用写法直接拿用) 不要配合固定的高度 只能在webkit内核浏览器用 移动端一般没问题
+    overflow: hidden;  //溢出隐藏
+    text-overflow: ellipsis; //文字溢出显示省略号
+    white-space: normal !important;    //normal	默认。空白会被浏览器忽略。
+    word-wrap: break-word;          //word-wrap 属性允许长单词或 URL 地址换行到下一行。
+    display: -webkit-box;
+    -webkit-line-clamp: 3;          //规定显示多少行  
+    -webkit-box-orient: vertical;

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../js/swiper/idangerous.swiper2.7.6.css">
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+    }
+
+    .swiper-container,
+    .swiper-wrapper,
+    .swiper-slide {
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-wrapper img {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="../image/图片1 (1).jpg" alt="" class=""></div>
+            <div class="swiper-slide"><img src="../image/图片1 (2).jpg" alt="" class=""></div>
+            <div class="swiper-slide"><img src="../image/图片1 (3).jpg" alt="" class=""></div>
+        </div>
+    </div>
+
+    <script src="../js/swiper/idangerous.swiper2.7.6.min.js"></script>
+    <script>
+        var swiper = new Swiper(".swiper-container", {
+            progress: true,
+            onProgressChange: function (swiper) {
+                for (var i = 0; i < swiper.slides.length; i++) {
+                    var slide = swiper.slides[i];
+                    var progress = slide.progress;
+                    var translate, boxShadow;
+                    if (progress > 0) {
+                        translate = progress * swiper.width;
+                        boxShadowOpacity = 0;
+                    }
+                    else {
+                        translate = 0;
+                        boxShadowOpacity = 1 - Math.min(Math.abs(progress), 1);
+                    }
+                    slide.style.boxShadow = '0px 0px 10px rgba(0,0,0,' + boxShadowOpacity + ')';
+                    swiper.setTransform(slide, 'translate3d(' + (translate) + 'px,0,0)');
+                }
+            },
+            onTouchStart: function (swiper) {
+                for (var i = 0; i < swiper.slides.length; i++) {
+                    swiper.setTransition(swiper.slides[i], 0);
+                }
+            },
+            onSetWrapperTransition: function (swiper, speed) {
+                for (var i = 0; i < swiper.slides.length; i++) {
+                    swiper.setTransition(swiper.slides[i], speed);
+                }
+            }
+        });
+        // Set Z-Indexes
+        for (var i = 0; i < swiper.slides.length; i++) {
+            swiper.slides[i].style.zIndex = i;
+        }
+
+    </script>
+</body>
+
+</html>

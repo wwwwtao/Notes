@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .touch1 {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        background-color: red;
+    }
+</style>
+
+<body>
+
+    <div class="touch1"></div>
+    <script>
+        var touch1 = document.querySelector(".touch1");
+        touch1.addEventListener("touchstart", handleStart);
+        touch1.addEventListener("touchmove", handleMove);
+        touch1.addEventListener("touchend", handleEnd);
+
+        function handleStart(e) {
+            var touchEvent = e.changedTouches[0];
+            var p = document.createElement("p");
+            p.setAttribute("id", "start");
+            var start = document.getElementById("start");
+            p.innerHTML = "touch开始的位置:" + touchEvent.pageX + "," + touchEvent.pageY;
+            if (start) {
+                start.innerHTML = "touch开始的位置:" + touchEvent.pageX + "," + touchEvent.pageY;
+            } else {
+                document.body.appendChild(p);
+            }
+        }
+        function handleMove(e) {
+            var touchEvent = e.changedTouches[0];
+            var p = document.createElement("p");
+            p.setAttribute("id", "move");
+            var move = document.getElementById("move");
+            p.innerHTML = "touch移动的位置:" + touchEvent.pageX + "," + touchEvent.pageY;
+            if (move) {
+                move.innerHTML = "touch移动的位置:" + touchEvent.pageX + "," + touchEvent.pageY;
+            } else {
+                document.body.appendChild(p);
+            }
+        }
+        function handleEnd(e) {
+            var touchEvent = e.changedTouches[0];
+            var p = document.createElement("p");
+            p.setAttribute("id", "end");
+            var end = document.getElementById("end");
+            p.innerHTML = "touch结束的位置:" + touchEvent.pageX + "," + touchEvent.pageY;
+            if (end) {
+                end.innerHTML = "touch结束的位置:" + touchEvent.pageX + "," + touchEvent.pageY;
+            } else {
+                document.body.appendChild(p);
+            }
+        }
+    </script>
+</body>
+
+</html>

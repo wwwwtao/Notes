@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas字体</title>
+    <style>
+        canvas {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="800px" height="800px">您的浏览器不支持canvas
+    </canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext('2d');
+        //此处补充代码
+        var str = "文文文文文文文";
+        ctx.font = "30px 微软雅黑 bold";
+        ctx.textAlign = "center";             //设置文字水平对齐 left center right (那个方向在坐标点上)
+        ctx.textBaseline = "middle";          //设置垂直对齐 top middle bottom 
+        ctx.fillStyle = "blue";
+        ctx.fillText(str,400,400);
+
+        var sw = ctx.measureText(str).width; 
+        ctx.fillText("文本的宽度是："+sw+"px",400,450);
+
+    </script>
+</body>
+
+</html>

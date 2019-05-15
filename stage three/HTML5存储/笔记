@@ -1,0 +1,115 @@
+<---------------------------localStorage 临时储存-------------------------------------->
+
+设置获取存储内容
+getItem(key)
+setItem(key,value)
+对象[key=value
+对象.key = value
+
+删除存储内容
+removeItem(key)
+
+可以直接把所有的key清空
+clear()
+
+储存的个数
+length
+
+<------------储存时效
+localStorage 没有储存时间(无限)
+sessionStorage 网页会话结束时失效(刷新不会失效)
+
+<------------不同的储存容量
+localStorage 容量一般在 2-5Mb左右 
+sessionStorage 存储容量不一 部分浏览器不设限
+
+<------------使用Storage时的注意点
+1.存储容量超出限制 
+  --抛出QuotaExceededError异常 
+  存储值时应使用 try catch 避免异常未捕获 
+2.存储类型的限制
+--只能存储字符串
+--注意类型转换
+3.sessionStorage 失效机制
+--刷新页面不会失效
+--相同url不同标签页不能共享sessionStorage!!
+
+
+<---------------------------HTML5 数据库-------------------------------------->
+             indexedDB
+
+//创建数据库
+indexedDB.open("数据库的名字",版本号)
+就可以找到这个数据库
+
+onsuccess  数据库创建或打开成功
+onerror 打开失败(版本号不能降低)
+onupgradeneeded 版本升级时触发的函数
+
+creatObjectStore 创建一个表
+
+设置自动递增的 主键
+{autoIncrement: true }
+设置主键
+{keyPath:数据中的字段}
+
+readwrite 读写模式
+readonly 只能读不能写
+
+add() 添加    
+get(key) 获取数据
+getAll 获取所有内容  返回一个result数组
+
+put() 继续添加数据
+delete(key) 删除数据
+clear  删除所有数据
+
+onsuccess 成功了执行的回调函数
+onerror  失败了执行的回调函数
+result 可以看到相关的数据() database = e.target.result;
+
+索引
+store.createIndex(表名称，数据key值，{unique:true})
+唯一性
+
+var index = store.index(表的名称)get(key值得名称).onsuccess = function(){
+  e.target.result 找到得数据内容
+}
+
+游标
+var requestNode = store.openCursor(IDBKeyRange.only(200));
+IDBKeyRange.only//参数一是范围
+upperBound //小于等于之前得 true 不包含自己得
+lowerBound //大于等于之前得 true 不包含自己得
+Bound //参数1 大于等于得 参数2 小于等于得 参数3 true,false对应参数1  参数4 true,false对于参数2  true 不包含自己得 false 包含自己得
+
+游标 索引结合使用
+var index = store.index();
+var requestNode = index.openCursor();
+
+update()更新数据
+delete()删除数据
+
+
+
+requestNode.onsuccess = function() {
+  console.log(requestNode.result.value)
+}
+
+-----自查找添加的定义-----
+IndexedDB 中的 IDBDatabase 接口提供一个到 数据库的连接; 你可以使用 IDBDatabase 对象在数据库中打开一个transaction , 然后进行操作或者删除数据库中的对象。这是唯一一个能够访问和管理数据库版本的接口。
+
+在onsuccess中可以得到IDBDatabase对象。
+request.onsuccess = function(e){
+    database = e.target.result;
+    console.log('创建或打开数据库成功') ;
+}
+IndexedDB对象存储空间:
+在建立或者打开数据库后，我们一般的操作是建立表，向表中插入数据，在IndexedDB中，用对象存储空间ObjectStore来代替表的概念，存储空间中的对象就相当于表中插入的数据。在上一步打开数据库的onsuccess中我们可以获得到IDBDatabase对象，创建存储空间就是在通过该对象调用createObjectStore函数。
+
+为对象存储空间添加数据：
+创建存储空间之后，可以用add()或者put()方法为其添加数据，这两个方法都接收所要保存的对象，区别之处在于，使用add()方法，遇到键值相同的对象会返回错误，而put()则不会报错，会重写原有对象。如下代码使用add()方法进行数据添加，代码中包括打开数据库及创建存储对象空间。可在控制台中直接运行。
+
+
+
+ 

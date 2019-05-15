@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        canvas {
+            background-color: #000;
+            opacity: 0.7
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="1200px" height="1000px">
+        您的浏览器不支持canvas
+    </canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        // 在此处补充代码
+
+        ctx.save();
+        //阴影的X偏移
+        ctx.shadowOffsetX = 5;
+        //阴影的Y偏移
+        ctx.shadowOffsetY = 10;
+        //阴影的颜色
+        ctx.shadowColor = "rgba(255, 215, 0, 0.7)";
+        //阴影的模糊值  越大越模糊
+        ctx.shadowBlur = 5;
+        ctx.fillStyle = "yellow";
+        ctx.arc(80, 80, 50, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.restore();
+
+
+        ctx.save();
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 10;
+        ctx.shadowColor = "rgba(255,255,255,0.5)";
+        ctx.shadowBlur = 5;
+
+        var str = "山高月小";
+        ctx.font = "50px  italic";
+        ctx.fillStyle = "white";
+        ctx.fillText(str, 700, 200);
+        ctx.restore();
+
+        ctx.save();
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 10;
+        ctx.shadowColor = "rgba(240,255,255,0.5)";
+        ctx.shadowBlur = 5;
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "rgba(240,255,255)";
+
+        //绘制二次样条曲线
+        ctx.beginPath();
+        ctx.moveTo(0, 1000);
+        ctx.quadraticCurveTo(200, 500, 400, 1000);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(380, 1000);
+        ctx.quadraticCurveTo(380, 700, 600, 1000);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(600, 1000);
+        ctx.quadraticCurveTo(700, 300, 800, 1000);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(760, 1000);
+        ctx.quadraticCurveTo(880, 320, 1200, 1000);
+        ctx.stroke();
+
+        ctx.restore();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script>
+        window.onload = function () {
+            new AMap.Map("container")
+        }
+        var jMap = document.createElement("script");
+        jMap.src = "https://webapi.amap.com/maps?v=1.4.14&key=5ac64dd2f8f358f0779db94b0ae45c92";
+        document.head.appendChild(jMap);
+    </script>
+    <style>
+        #container {
+            width: 800px;
+            height: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+</body>
+
+</html>

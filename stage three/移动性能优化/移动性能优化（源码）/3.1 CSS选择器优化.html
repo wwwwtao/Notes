@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>3.1 CSS选择器优化</title>
+    <link rel="stylesheet" href="css/slider.css">
+    <style>
+        /*不要使用类选择器和ID选择器修饰元素标签，这样多此一举，还会降低效率。*/
+        div#slider.slider {
+
+        }
+
+        /*保持简单，不要使用嵌套过多过于复杂的选择器*/
+        /*浏览器从右向左解析CSS*/
+        /*.slider .slider-item-container .slider-item .slider-link .slider-img {
+            width: 100%;
+        }*/
+        .alex-slider-img {
+            /*嵌套少*/
+            /*权重低 便于使用的时候覆盖*/
+            width: 100%;
+        }
+
+        /*header .slider-img {
+            width: 50%;
+        }
+        header .slider .slider-item-container .slider-item .slider-link .slider-img {
+            width: 50%;
+        }*/
+
+        /*避免通配选择器*/
+        * {
+
+        }
+        ul, li, dl, dt, dd, p {
+            padding: 0;
+            margin: 0;
+        }
+
+        .slider-item-container * {
+
+        }
+
+        /*移除无匹配的样式*/
+        .slider {
+            /*width: 100%;*/
+        }
+
+        /*避免类正则的属性选择器*/
+        [class*="slider-indicator"] {
+
+        }
+        [class~="slider-indicator"] {
+            /*空格分隔*/
+        }
+        [class^="slider-indicator"] {
+            
+        }
+        [class$="slider-indicator"] {
+            
+        }
+    </style>
+</head>
+<body>
+    <div id="slider" class="slider">
+        <div class="slider-item-container">
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/1.jpg" alt="slider" class="img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/2.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/3.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/4.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/5.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+        </div>
+        <div class="slider-indicator-container">
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+        </div>
+    </div>
+</body>
+</html>

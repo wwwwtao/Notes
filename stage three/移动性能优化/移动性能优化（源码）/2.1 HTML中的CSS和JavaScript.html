@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.1 HTML中的CSS和JavaScript</title>
+    <!-- 1. 内联和外部文件引入 -->
+    <style>
+        /*
+        内联
+            优点：
+                减少HTTP请求
+            缺点：
+                1.没办法复用
+                2.使得HTML文件变大，加载时间变长
+                3.代码都写到HTML文件中，不利于后期的维护？
+                    工程化的手段可以解决这个问题
+                        源码到可以上线的代码
+        */
+    </style>
+    <!--
+        通过外部文件引入
+            优点：
+                1.很好的复用代码
+                    有效利用浏览器的静态资源缓存
+                2.代码分离，利于后期维护
+            缺点：
+                增加了HTTP请求
+    -->
+    <link rel="stylesheet" href="css/base.css">
+
+    <!-- 3. 避免重复资源，防止增加多余的请求 -->
+    <!-- <link rel="stylesheet" href="css/base.css"> -->
+    <script>
+        // 内联
+    </script>
+    <!-- 通过外部文件引入 -->
+    <script src="js/flexible.js"></script>
+    <script>
+        // inline flexible
+        // 内联首屏数据请求的代码
+    </script>
+</head>
+<body>
+
+    <div></div>
+    <div></div>
+
+    <link rel="stylesheet" href="css/base.css">
+
+
+    <div></div>
+
+
+    <!-- 2. 放置位置 -->
+    <script src="js/index.js"></script>
+    <script>
+        
+    </script>
+</body>
+</html>

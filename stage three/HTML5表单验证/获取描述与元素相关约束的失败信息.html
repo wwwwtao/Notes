@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="" method="get" id="forms">
+        <input type="text" id="username" required>
+        <input type="submit" value="提交" id="submitBtn">
+    </form>
+
+
+    <script>
+        var form = document.getElementById("forms"),
+            submitBtn = document.getElementById("submitBtn");
+        submitBtn.addEventListener("click", function () {
+            var invalidFields = form.querySelectorAll(":invalid");   /*  :invalid 选择器用于在表单元素中的值是非法时 */
+            //补充完整
+            for (var i = 0; i < invalidFields.length; i++) {
+                console.log(invalidFields[i].validationMessage)
+            }
+        });
+    </script>
+</body>
+
+</html>

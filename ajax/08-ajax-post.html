@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>08-ajax-post</title>
+    <script src="myAjax2.js"></script>
+    <script>
+        window.onload = function (ev) {
+
+            var oBtn = document.querySelector("button");
+            oBtn.onclick = function (ev1) {
+                /*
+                var xhr;
+                if (window.XMLHttpRequest)
+                {// code for IE7+, Firefox, Chrome, Opera, Safari
+                    xhr=new XMLHttpRequest();
+                }
+                else
+                {// code for IE6, IE5
+                    xhr=new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                // var xhr = new XMLHttpRequest();
+                xhr.open("POST","08-ajax-post.php",true);
+                // 注意点: 以下代码必须放到open和send之间
+                xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                xhr.send("userName=zs&userPwd=321");
+                xhr.onreadystatechange = function (ev2) {
+                    if(xhr.readyState === 4){
+                        if(xhr.status >= 200 && xhr.status < 300 ||
+                        xhr.status === 304){
+                            // alert("请求成功");
+                            alert(xhr.responseText);
+                        }else{
+                            alert("请求失败");
+                        }
+                    }
+                }
+                */
+
+                ajax("POST", "08-ajax-post.php",{
+                    "userName":"lnj",
+                    "userPwd":"321"
+                }, 3000, function (xhr) {
+                    alert(xhr.responseText);
+                }, function (xhr) {
+                    alert("请求失败");
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+<button>发送请求</button>
+</body>
+</html>

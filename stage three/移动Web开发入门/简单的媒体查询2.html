@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- <meta name=""> -->
+    <style>
+        #box {
+            width: 100%;
+            margin: 0 auto;
+            background: #ccc;
+            text-align: center;
+        }
+
+        #box>img {
+            display: inline-block;
+            padding: 1.5%;
+            width: 21%;
+            height: 200px;
+        }
+
+        /*此处写代码*/
+        #box>img {
+            width: 100%;
+        }
+
+        @media (min-width:440px) {
+            #box>img {
+                width: 50%;
+            }
+        }
+
+        @media (min-width:780px) {
+            #box>img {
+                width: 33.3333333333%;
+            }
+        }
+
+        @media (min-width:960px) {
+            #box>img {
+                width: 25%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <img src="http://img.mukewang.com/climg/5a45e49100014e5010601059.jpg" alt="">
+        <img src="http://img.mukewang.com/climg/5a45e53b00012e6d09940789.jpg" alt="">
+        <img src="http://img.mukewang.com/climg/5a45e53c0001d04e09940732.jpg" alt="">
+        <img src="http://img.mukewang.com/climg/5a45e49100014e5010601059.jpg" alt="">
+        <img src="http://img.mukewang.com/climg/5a45e53b00012e6d09940789.jpg" alt="">
+        <img src="http://img.mukewang.com/climg/5a45e53c0001d04e09940732.jpg" alt="">
+    </div>
+</body>
+
+</html>

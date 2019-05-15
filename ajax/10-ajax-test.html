@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>10-ajax-test</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+            margin: 50px auto;
+            text-align: center;
+            background: #ccc;
+        }
+        img{
+            width: 200px;
+            height: 200px;
+            display: block;
+            margin: 10px auto 10px;
+            border: 1px solid #000;
+        }
+        p{
+            text-align: center;
+            background: pink;
+        }
+    </style>
+    <script src="myAjax2.js"></script>
+    <script>
+        window.onload = function (ev) {
+            // 1.获取需要设置的元素
+            var oTitle = document.querySelector("#title");
+            var oDes = document.querySelector("#des");
+            var oImg = document.querySelector("img");
+            // 2.获取所有按钮
+            var oBtns = document.querySelectorAll("button");
+            // 3.给按钮添加点击事件
+            oBtns[0].onclick = function () {
+                var self = this;
+                // 4.发送Aajx请求到服务器
+                ajax({
+                    type:"get",
+                    url:"10-ajax-test.php",
+                    data:{"name":this.getAttribute("name")},
+                    timeout: 3000,
+                    success: function (xhr) {
+                        /*
+                        // alert(xhr.responseText);
+                        var res = xhr.responseText.split("|");
+                        // console.log(res);
+                        oTitle.innerHTML = res[0];
+                        oDes.innerHTML = res[1];
+                        oImg.setAttribute("src", res[2]);
+                        */
+
+                        /*
+                        var name = self.getAttribute("name");
+                        var res = xhr.responseXML;
+                        var title = res.querySelector(name+">title").innerHTML;
+                        var des = res.querySelector(name+">des").innerHTML;
+                        var image = res.querySelector(name+">image").innerHTML;
+                        oTitle.innerHTML = title;
+                        oDes.innerHTML = des;
+                        oImg.setAttribute("src", image);
+                        */
+                        var name = self.getAttribute("name");
+                        var str = xhr.responseText;
+                        var obj = JSON.parse(str);
+                        // console.log(obj);
+                        var subObj = obj[name];
+                        // console.log(subObj);
+                        oTitle.innerHTML = subObj.title;
+                        oDes.innerHTML = subObj.des;
+                        oImg.setAttribute("src", subObj.image);
+                    },
+                    error: function (xhr) {
+                        alert(xhr.status);
+                    }
+                });
+            }
+            oBtns[1].onclick = function () {
+
+            }
+            oBtns[2].onclick = function () {
+
+            }
+        }
+    </script>
+</head>
+<body>
+<div>
+    <p id="title">商品标题名称</p>
+    <img src="" alt="">
+    <p id="des">商品描述信息</p>
+    <button name="nz">女装</button>
+    <button name="bb">包包</button>
+    <button name="tx">拖鞋</button>
+</div>
+</body>
+</html>

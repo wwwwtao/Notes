@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .touch1 {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        margin: 0 auto;
+    }
+</style>
+
+<body>
+
+    <div class="touch1"></div>
+    <script>
+        var touch1 = document.querySelector(".touch1");
+        touch1.addEventListener("touchstart", handleStart);
+        touch1.addEventListener("touchmove", handleMove);
+        touch1.addEventListener("touchend", handleEnd);
+
+        function handleStart() {
+            this.style.background = "green";
+        }
+        function handleMove() {
+            this.style.background = "blue";
+        }
+        function handleEnd() {
+            this.style.background = "pink";
+        }
+    </script>
+</body>
+
+</html>

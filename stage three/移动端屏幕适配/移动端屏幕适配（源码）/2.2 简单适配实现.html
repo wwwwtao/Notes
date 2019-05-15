@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.2 简单适配实现</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header-container {
+            height: 2.5rem;
+            background-color: rgba(222, 24, 27, 0.9);
+        }
+    </style>
+    <script>
+        // 1rem = viewWidth / 18.75
+        // console.log(document.documentElement.getBoundingClientRect().width);
+        // console.log(window.innerWidth);
+
+        // var ratio = 18.75;
+        // var viewWidth = document.documentElement.getBoundingClientRect().width || window.innerWidth;
+
+        // document.documentElement.style.fontSize = viewWidth / ratio + 'px';
+
+        // setRemUnit();
+
+        // window.addEventListener('resize', setRemUnit);
+
+        // function setRemUnit() {
+        //     var docEl = document.documentElement;
+        //     var ratio = 18.75;
+        //     var viewWidth = docEl.getBoundingClientRect().width || window.innerWidth;
+
+        //     docEl.style.fontSize = viewWidth / ratio + 'px';
+        // }
+    </script>
+    <script src="js/simple.js"></script>
+</head>
+<body>
+    
+    <header class="header-container"></header>
+
+</body>
+</html>

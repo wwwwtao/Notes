@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"> -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.3 click 300ms延迟</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .box {
+            width: 300px;
+            height: 300px;
+            background-color: red;
+            margin: 0 auto;
+        }
+    </style>
+    <script src="js/fastclick.js"></script>
+    <script>
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+            }, false);
+        }
+    </script>
+</head>
+<body>
+    <!-- 原因
+        double click 双击
+    解决办法
+        fastclick -->
+    <div id="box" class="box"></div>
+
+    <script src="http://192.168.1.5:1337/vorlon.js"></script>
+    <script>
+        var boxEl = document.getElementById('box');
+        var startTime = 0;
+        boxEl.addEventListener('touchstart', function () {
+            startTime = Date.now();
+            console.log('touchstart');
+        }, false);
+        boxEl.addEventListener('click', function () {
+            console.log('click');
+            console.log(Date.now() - startTime);
+        }, false);
+    </script>
+</body>
+</html>

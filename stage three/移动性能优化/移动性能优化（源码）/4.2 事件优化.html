@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>4.2 事件优化</title>
+    <link rel="stylesheet" href="css/slider.css">
+    <style>
+        /*这里的修改只是为了显示的更明显*/
+        .slider-indicator {
+            width: 20px;
+            height: 20px;
+            background-color: #807aff;
+            opacity: 0.8;
+        }
+        body {
+            height: 2000px;
+        }
+    </style>
+</head>
+<body>
+    <div id="slider" class="slider">
+        <div class="slider-item-container">
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/1.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/2.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/3.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/4.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/5.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+        </div>
+        <div class="slider-indicator-container">
+            <span class="slider-indicator slider-indicator-active"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+        </div>
+    </div>
+
+    <script>
+        var sliderEl = document.getElementById('slider'),
+            sliderIndicatorContainer = sliderEl.querySelector('.slider-indicator-container'),
+            sliderIndicators = sliderIndicatorContainer.querySelectorAll('.slider-indicator');
+
+        // 事件绑定
+        // for (var i = 0, num = sliderIndicators.length; i < num; i++) {
+        //     sliderIndicators[i].addEventListener('click', function () {
+        //         console.log('click');
+        //     }, false);
+        // }
+
+        // 动态插入一个新节点
+        var sliderIndicator = document.createElement('span');
+        sliderIndicator.className = 'slider-indicator';
+        sliderIndicatorContainer.appendChild(sliderIndicator);
+        // sliderIndicator.addEventListener('click', function () {
+        //     console.log('click');
+        // }, false);
+
+        // 使用事件代理，避免直接事件绑定
+        // jQuery/Zepto
+        // $(sliderIndicatorContainer).on('click', '.slider-indicator', function () {});
+        sliderIndicatorContainer.addEventListener('click', function (ev) {
+            // console.log(ev.target);
+            if (ev.target && /(^|\s)slider\-indicator($|\s)/.test(ev.target.className)) {
+                console.log('click');
+            }
+        }, false);
+
+        // 事件节流
+        // scroll resize mousemove touchmove
+        var timer = null;
+        window.addEventListener('scroll', function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                console.log('scroll');
+            }, 100);
+            // ....
+        }, false);
+    </script>
+</body>
+</html>

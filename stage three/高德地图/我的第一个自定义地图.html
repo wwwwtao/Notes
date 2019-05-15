@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="../bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet">
+    <script src="https://webapi.amap.com/maps?v=1.4.14&key=5ac64dd2f8f358f0779db94b0ae45c92"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #toolbar {
+            width: 400px;
+            height: 300px;
+            border: 1px solid black;
+            background-color: #fff;
+            box-shadow: 3px 3px 5px black;
+            position: relative;
+            left: 10px;
+            top: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #scout,
+        #Zoom {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        #CityNode,
+        #ZoomNode {
+            height: 33px;
+            margin: 0 10px 0 10px;
+        }
+
+        #scout span,
+        #Zoom span {
+            width: 100px;
+            text-align: right;
+        }
+
+        #remove {
+            height: 32px;
+            width: 120px;
+        }
+
+        .cityInfo {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 地图的容器 -->
+    <div id="container"></div>
+    <!-- 左上角窗口 -->
+    <div id="toolbar">
+        <h2>工具栏</h2>
+        <!-- 搜索城市盒子 -->
+        <div id="scout">
+            <span>搜索城市</span>
+            <input type="text" name="" id="CityNode" placeholder="请输入城市">
+            <button id="btn" class="btn btn-info">确定</button>
+        </div>
+        <!-- 设置显示级别的盒子 -->
+        <div id="Zoom">
+            <span>设置显示级别</span>
+            <input type="text" name="" id="ZoomNode" placeholder="请输入数字">
+            <button id="btntwo" class="btn btn-info">确定</button>
+        </div>
+        <!-- 范围限制按钮 -->
+        <button id="remove" class="btn">解除范围限制</button>
+        <!-- 右下角城市信息 -->
+        <span class="cityInfo">当前所在省/直辖市：</span>
+
+    </div>
+
+    <script>
+        var map = new AMap.Map("container");
+
+        //设定一个（变量） 接受北京的坐标
+        var myBounds = new AMap.Bounds([116.567542, 39.997639], [116.22422, 39.813285]);
+        //设置地图显示的位置-北京
+        map.setBounds(myBounds);
+
+        //变量 获得map的范围即坐标即北京
+        var Bounds = map.getBounds();
+        //限制显示的范围在北京
+        map.setLimitBounds(Bounds);
+
+        //输入框中输入城市名称 ,点击确定按钮 ,地图显示当前输入的城市
+        btn.onclick = function () {
+            map.clearLimitBounds();
+            map.setCity(CityNode.value);
+        }
+
+        //设置显示级别 , 在输入框中输入地图级别 ,点击确定按钮 , 地图显示当前设置的级别。
+        btntwo.onclick = function () {
+            map.setZoom(ZoomNode.value);
+        }
+
+        // 为范围限制的按钮绑定点击事件
+        remove.onclick = function () {
+            if (remove.innerText == "解除范围限制") {
+                map.clearLimitBounds();
+                remove.innerHTML = "锁定地图范围"
+            } else {
+                var Bounds = map.getBounds();
+                map.setLimitBounds(Bounds);
+                remove.innerHTML = "解除范围限制"
+            }
+        }
+
+        // 为地图绑定点击事件 , 点击时通过setCenter()方法 ,把当前点击时的经纬度设置成中心点
+        map.on("click", function (e) {
+            // console.log(e);
+            map.setCenter([e.lnglat.lng, e.lnglat.lat]);
+        })
+
+        //当鼠标在地图上移动时 ，让工具栏的右下角显示当前省/直辖市。
+        var cityInfo = document.querySelector(".cityInfo");
+            map.getCity(function(info){
+                cityInfo.innerHTML = "当前所在省/直辖市：" + info.province;
+            });
+        map.on("moveend", function () {
+            map.getCity(function (info) {
+                cityInfo.innerHTML = "当前所在省/直辖市：" + info.province;
+            })
+        })
+    </script>
+    <script src="../bootstrap-3.3.7/jquery-3.2.1.js"></script>
+    <script src="../bootstrap-3.3.7/js/bootstrap.js"></script>
+</body>
+
+</html>

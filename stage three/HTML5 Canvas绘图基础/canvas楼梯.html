@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas画直线</title>
+    <style>
+        canvas {
+            background-color: lightpink;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="600">
+        您的浏览器不支持canvas
+    </canvas>
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext('2d');
+        ctx.moveTo(0, 100);
+        ctx.lineTo(100, 100);
+        ctx.lineTo(100, 200);
+        ctx.lineTo(200, 200);
+        ctx.lineTo(200, 300);
+        ctx.lineTo(300, 300);
+        ctx.lineTo(300, 400);
+        ctx.lineTo(400, 400);
+        ctx.lineTo(400, 500);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0,500);
+        ctx.lineTo(400,500);
+        ctx.stroke();
+    </script>
+</body>
+
+</html>

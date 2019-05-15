@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>3.1 其他触摸事件介绍</title>
+    <style>
+        img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <img id="box" src="img/touchEvent.png" alt="touchEvent">
+
+    <script src="js/hammer.min.js"></script>
+    <script>
+        var boxEl = document.getElementById('box');
+
+        var hammertime = new Hammer(boxEl);
+        hammertime.on('pan swipe tap doubletap press pinch rotate', function(ev) {
+            console.log(ev.type);
+        });
+    </script>
+</body>
+</html>

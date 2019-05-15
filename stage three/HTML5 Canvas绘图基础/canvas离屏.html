@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas离屏</title>
+    <style>
+        #offCanvas {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="500px" height="800px" id="canvas">您的浏览器不支持canvas</canvas>
+    <canvas width="500px" height="800px" id="offCanvas">您的浏览器不支持canvas</canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        var offCanvas = document.getElementById("offCanvas");
+        var offCtx = offCanvas.getContext("2d");
+        //补充代码
+
+        var img = new Image();
+        img.src = "imgs/li.jpg";
+
+        img.onload = function () {
+            ctx.drawImage(img, 40, 50);
+            ctx.drawImage(offCanvas, 0, 0,offCanvas.width,offCanvas.height,0,0,canvas.width,canvas.height);
+        }
+
+        var str = "==www.imooc.com=";
+        offCtx.font = "30px 微软雅黑";
+        offCtx.textBaseline = "middle"; 
+        offCtx.textAlign = "center";
+        offCtx.fillStyle = "rgba(255,255,255,0.5)";
+        offCtx.fillText(str, 250, 240);
+    </script>
+</body>
+
+</html>

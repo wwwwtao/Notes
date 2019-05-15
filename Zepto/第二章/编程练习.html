@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li class="w-li">前端小白入门</li>
+        <li class="w-li">前端进阶：响应式开发与常用框架</li>
+        <li class="w-li">HTML5与CSS3实现动态网页</li>
+        <li class="w-li">HTML5&CSS3进阶与常用框架</li>
+        <li class="w-li">JavaScript基础入门</li>
+        <li class="w-li">进击JavaScript核心</li>
+    </ul>
+    <script src="https://cdn.bootcss.com/zepto/1.1.7/zepto.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            /* JS父级事件代理写法 只给父元素绑定了点击事件  */
+            var lis = document.getElementsByClassName("w-li");
+            $("ul").on("click", function (e) {
+                if (e.target && /(^|\s)w\-li($|\s)/.test(e.target.className)) {
+                    // $("li").removeClass("red");  //zepto 删除类名
+                    for (i = 0; num = lis.length, i < num; i++) {
+                        lis[i].classList.remove("red");
+                    }
+                    e.target.classList.add("red");
+                }
+            })
+
+            /* 纯zepto写法  简洁  可是给每个li绑定了事件 */
+            // $("ul li").on("click",function(){
+            //     $(this).addClass("red").siblings().removeClass("red");
+            // })
+        })
+    </script>
+</body>
+
+</html>

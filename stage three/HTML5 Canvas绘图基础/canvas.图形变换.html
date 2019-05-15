@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvasL</title>
+    <style>
+        canvas {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="600px" height="600px">您的浏览器不支持</canvas>
+    <script>
+        // 在此处写出代码
+        var canvas = document.querySelector("canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "yellow";
+        ctx.translate(200,300);
+        ctx.rotate(Math.PI/3);
+        ctx.scale(0.5,0.5);
+        ctx.fillRect(100,100,200,300);
+    </script>
+</body>
+
+</html>

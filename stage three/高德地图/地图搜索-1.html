@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=1.4.14&key=5ac64dd2f8f358f0779db94b0ae45c92"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #setZoomNode {
+            width: 200px;
+            height: 500px;
+            position: absolute;
+            z-index: 99;
+            right: 20px;
+            top: 20px;
+            border: 1px solid black;
+            box-shadow: 0 0 5px black;
+            background-color: #fff;
+        }
+
+        #node li {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div id="setZoomNode">
+        <input type="text" id="searchText">
+        <ul id="node"></ul>
+    </div>
+
+
+
+    <!-- //javascript -->
+    <script type="text/javascript">
+        var map = new AMap.Map("container", {
+            zoom: 11,
+            center: [116, 39.8]
+        });
+        // plugin 加载插件 Autocomplete 地图加载完毕触发的回调函数
+        AMap.plugin("AMap.Autocomplete", function () {
+            //input中内容改变触发的oninput
+            searchText.oninput = function () {
+                //每次重新输入都先清空node列表
+                node.innerHTML = "";
+                if (this.value == "") {
+                    return;
+                }
+                // search 搜索  返回data为搜索出来的数据
+                new AMap.Autocomplete().search(this.value, function (status, data) {
+                    // 把数据遍历添加到node列表中
+                    for (var i = 0; i < data.tips.length; i++) {
+                        // 创建节点oLi
+                        var oLi = document.createElement("li");
+                        //节点中插入文本 也就是搜索出来的位置数据data中的地名
+                        oLi.innerHTML = data.tips[i].name;
+                        // 把data数据中的坐标取出来
+                        oLi.P = data.tips[i].location.P;
+                        oLi.Q = data.tips[i].location.Q;
+                        // 把oLi节点添加到node节点后面
+                        node.appendChild(oLi);
+                        oLi.onclick = function () {
+                            // 通过点击事件设置地图的中心点坐标
+                            map.setCenter([this.Q, this.P]);
+                        }
+                    }
+                })
+            }
+        })
+
+
+
+    </script>
+</body>
+
+</html>

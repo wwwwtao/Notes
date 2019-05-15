@@ -1,0 +1,15 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#container {
+    background: #fff;
+}
+
+#canvas {
+    position: absolute;
+    left: 50%;
+    top: 50px;
+    margin-left: -400px;
+}

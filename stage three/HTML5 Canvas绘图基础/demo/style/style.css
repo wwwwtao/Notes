@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+}
+.left-div {
+  width: 30%;
+  height: 100%;
+  float: left;
+  background: #a4a296;
+}
+.line {
+  text-align: center;
+  margin-top: 30px;
+}
+.line:first-child {
+  margin-top: 200px;
+}
+.line span {
+  color: white;
+}
+.line input {
+  width: 300px;
+  height: 30px;
+  border-radius: 15px;
+  padding-left: 15px;
+  outline: none;
+  border: none;
+}
+.line button {
+  width: 100px;
+  height: 30px;
+  outline: none;
+  border: none;
+  background: #222;
+  color: #DDD;
+  cursor: pointer;
+  position: relative;
+  border-radius: 15px;
+}
+.line button:hover {
+  background: #000;
+  color: #FFF;
+}
+.line button:active {
+  left: 1px;
+  top: 1px;
+}
+.right-div {
+  width: 70%;
+  height: 100%;
+  float: left;
+  background: #eee9d3;
+  text-align: center;
+  position: relative;
+}
+.right-div canvas {
+  position: absolute;
+  top: 200px;
+  left: 50%;
+  margin-left: -300px;
+}
+#cardCanvas {
+  display: none;
+}

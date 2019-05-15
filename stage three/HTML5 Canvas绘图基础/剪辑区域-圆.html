@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        canvas{background-color:lightblue;}
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800px" height="800px">
+        您的浏览器不支持canvas
+    </canvas>
+    <script>
+        var canvas=document.getElementById("canvas");
+        var ctx=canvas.getContext("2d");
+        //在此处补充代码
+        ctx.arc(400,400,200,0,2*Math.PI);
+        ctx.clip();
+
+        ctx.fillStyle = "green";
+        ctx.fillRect(200,200,200,200);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(400,200,200,200);
+        ctx.fillStyle = "Skyblue";
+        ctx.fillRect(200,400,200,200);
+        ctx.fillStyle = "red";
+        ctx.fillRect(400,400,200,200);
+    </script>
+</body>
+</html>

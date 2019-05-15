@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        ul {
+            cursor: pointer;
+        }
+        .blue {
+            background: blue;
+        }
+        .red {
+            background: red;
+        }
+        .yellow {
+            background: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="menu">
+        <li>Web前端攻城狮</li>
+        <li>前端小白入门</li>
+        <li>前端进阶：响应式开发与常用框架</li>
+        <li>HTML5与CSS3实现动态网页</li>
+        <li>HTML5&CSS3进阶与常用框架</li>
+        <li>JavaScript基础入门</li>
+        <li>进击JavaScript核心</li>
+    </ul>
+    <script src="https://cdn.bootcss.com/zepto/1.1.7/zepto.min.js"></script>
+    <script>
+        /*此处写代码*/
+        $("#menu li").on("click",function(ev){
+            $(this).removeClass();
+            $(this).addClass("yellow").siblings().removeClass();
+            $(this).next().addClass("red");
+            $(this).prev().addClass("blue");
+        })
+    </script>
+</body>
+
+</html>

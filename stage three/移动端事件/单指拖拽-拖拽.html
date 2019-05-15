@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        height: 2000px;
+        background: skyblue;
+    }
+
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .backtop {
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+        text-align: center;
+        /* position: absolute; */
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        color: #fff;
+        font-size: 30px;
+        -webkit-tap-highlight-color: transparent;
+        transform: translate3d(x, y, 0);
+        /* 移动端用3d变换会开启gpu加速 性能会高 */
+        /* right: 20px;
+        bottom: 20px; */
+        /*  如果使用定位改变了初始的位置 那么移动的边界处的数值也要进行更改 */
+        /* text-decoration: none;     */
+    }
+</style>
+
+<body>
+
+    <a href="" id="backtop" class="backtop">&uarr;</a>
+
+    <script>
+        function drag(el, options) {
+            options.x = typeof options.x !== "undefined" ? options.x : true;
+            options.y = typeof options.y !== "undefined" ? options.y : false;
+            if (!options.x && !options.y) return;
+
+            var curPoint = {                            //主要是保存translate3d中的x，y 这样每次拖拽不会让translate3d中的x，y归0 逻辑有点黑洞 反正不加这个每次translate3d 移动的时候会从第一个位置算起 
+                x: 0,
+                y: 0
+            }
+            var startPoint = {};                        //按下手指头时候的坐标点
+            var isTouchMove = false;                    //设置一个 当进行了拖动的时候才会触发touchend事件的变量
+            var viewWidth = document.documentElement.clientWidth || window.innerWidth;  //视口宽度
+            var viewHeight = document.documentElement.clientHeight;                     //视口高度
+            var width = el.offsetWidth;                 //元素自身宽度
+            var height = el.offsetHeight;               //元素自身高度    
+
+            el.addEventListener("touchstart", touchStart);
+            el.addEventListener("touchmove", touchMove);
+            el.addEventListener("touchend", touchEnd);
+
+            function touchStart(e) {
+                var touch = e.changedTouches[0];
+                startPoint.x = touch.pageX;
+                startPoint.y = touch.pageY;
+            }
+            function touchMove(e) {
+                isTouchMove = true;           //设置一个 当进行了拖动的时候才会触发touchend事件的变量
+                e.preventDefault();           //清除默认事件 也就是在拖拽按钮的时候滚动条不滑动
+                var touch = e.changedTouches[0];    //获取手指头坐标元素
+                var diffPoint = {};
+                var movePoint = {
+                    x: 0,
+                    y: 0
+                }
+                diffPoint.x = touch.pageX - startPoint.x;   //获取移动与点击时坐标的差值
+                diffPoint.y = touch.pageY - startPoint.y;
+                if (options.x) {
+                    movePoint.x = diffPoint.x + curPoint.x; //加上原始的translate3d中保存的原偏移量的值
+                    // movePoint.x = (movePoint.x >= 20) ? 20 : (movePoint.x <= -(viewWidth - width - 20)) ? -(viewWidth - width - 20) : movePoint.x;
+                    movePoint.x = (movePoint.x <= 0) ? 0 : (movePoint.x >= viewWidth - width) ? viewWidth - width : movePoint.x;  //设置偏移边界
+                }
+                if (options.y) {
+                    movePoint.y = diffPoint.y + curPoint.y;
+                    // movePoint.y = (movePoint.y >= 20) ? 20 : (movePoint.y <= -(viewHeight - height - 20)) ? -(viewHeight - height - 20) : movePoint.y;
+                    movePoint.y = (movePoint.y <= 0) ? 0 : (movePoint.y >= viewHeight - height) ? (viewHeight - height) : movePoint.y;
+                }
+                move(el, movePoint.x, movePoint.y);  //进行偏移
+
+            }
+            function move(el, x, y) {
+                x = x || 0,
+                    y = y || 0
+                el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+            }
+            function touchEnd(e) {
+                if (!isTouchMove) return;
+                var touch = e.changedTouches[0];
+                curPoint.x += touch.pageX - startPoint.x;
+                curPoint.y += touch.pageY - startPoint.y;
+                isTouchMove = false;
+            }
+
+        }
+    </script>
+    <script>
+        var backtop = document.getElementById("backtop");
+        drag(backtop, {
+            x: true,
+            y: true
+        })   //调用这个方法
+    </script>
+</body>
+
+</html>

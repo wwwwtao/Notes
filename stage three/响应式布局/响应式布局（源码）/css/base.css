@@ -1,0 +1,28 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-size: 14px;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    font-size: 14px;
+    color: #363636;
+    text-decoration: none;
+}
+a:hover {
+    color: #1428a0;
+}
+
+img {
+    vertical-align: top;
+    width: 100%;
+    border: none;
+}

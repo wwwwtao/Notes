@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>电子名片生成器</title>
+  <link href="style/style.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="left-div">
+    <div class="line">
+      <input id="name" type="text" placeholder="姓名" />
+    </div>
+    <div class="line">
+      <input id="address" type="text" placeholder="地址" />
+    </div>
+    <div class="line">
+      <input id="job" type="text" placeholder="职业" />
+    </div>
+    <div class="line">
+      <input id="slogan" type="text" placeholder="口号" />
+    </div>
+    <div class="line">
+      <button id="generateBtn">生成名片</button>
+    </div>
+  </div>
+  <div class="right-div">
+    <canvas id="cardCanvas">
+      您的浏览器不支持Canvas，请升级浏览器
+    </canvas>
+    <canvas id="animCanvas">
+      您的浏览器不支持Canvas，请升级浏览器
+    </canvas>
+  </div>
+  <script src="script/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2.1 什么是栅格系统-1</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+       .grid {
+            background-image: url(img/grid.png);
+            -webkit-background-size: 100% 100%;
+            background-size: 100% 100%;
+       }
+       .container {
+            height: 100%;
+       }
+       .none {
+            display: none;
+       }
+    </style>
+    <link rel="stylesheet" href="css/grid.css">
+</head>
+<body class="grid">
+    <div class="container grid none"></div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.1 简单适配原理</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header-container {
+            width: 100%;
+            /*% em rem vw/vh*/
+            /*1rem = html font-size*/
+            /*1rem=25px*/
+            /*750px 1rem=750px*/
+            /*height: 100px / 750px rem*/
+            /*height: 0.13333333333333333333333333333333rem;*/
+
+            /*375px 1rem=375px*/
+            /*height: 50 / 375 = 0.13333333333333333333333333333333rem;*/
+            /*height: 2rem;*/
+
+            /*750px 1rem=750 / 18.75 = 40px*/
+            /*height: 100 / 40 = 2.5rem;*/
+            /*height: 2.5rem;*/
+            height: 2.5rem;
+            background-color: rgba(222, 24, 27, 0.9);
+        }
+
+        html {
+            /*1rem = viewWidth / 18.75*/
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-container"></header>
+
+</body>
+</html>

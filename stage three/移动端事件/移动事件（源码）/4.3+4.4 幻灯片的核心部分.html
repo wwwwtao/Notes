@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>4.3 幻灯片的核心部分</title>
+    <link rel="stylesheet" href="css/slider.css">
+</head>
+<body>
+    <div id="slider" class="slider">
+        <div class="slider-item-container">
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/1.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/2.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/3.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/4.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/5.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+        </div>
+        <!-- <div class="slider-indicator-container">
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+        </div> -->
+    </div>
+
+    <button id="prev">prev</button>
+    <button id="next">next</button>
+
+    <script src="js/slider.js"></script>
+    <!-- <script>
+        function Slider(el, options) {
+            // 处理参数，优先使用用户传递的参数，没传的使用默认参数
+            var defaults = {
+                initIndex: 0,
+                speed: 300,
+                hasIndicator: false
+            };
+            // 实际使用的参数
+            this.options = {};
+            this.options.initIndex = typeof options.initIndex !== 'undefined' ? options.initIndex : defaults.initIndex;
+            this.options.speed = typeof options.speed !== 'undefined' ? options.speed : defaults.speed;
+            this.options.hasIndicator = typeof options.hasIndicator !== 'undefined' ? options.hasIndicator : defaults.hasIndicator;
+
+            this.el = el;
+            this.itemContainer = el.querySelector('.slider-item-container');
+            this.items = this.itemContainer.children;
+            // 每次切换的距离(一张幻灯片的宽度)
+            this.distancePerSlide = this.items[0].offsetWidth;
+
+            // 索引
+            this.minIndex = 0;
+            this.maxIndex = this.items.length - 1;
+            // this.index = this.options.initIndex;
+            this.index = this._adjustIndex(this.options.initIndex);
+
+            // 移动到指定索引
+            this.move(this.getDistanceByIndex(this.index));
+
+            // 是否需要指示器indicator
+            if (this.options.hasIndicator) {
+                this._createIndicators();
+                this._setIndicatorActive(this.index);
+            }
+        }
+        // 切换到指定索引的幻灯片
+        Slider.prototype.to = function (index) {
+            this.index = index;
+
+            this._setTransitionSpeed(this.options.speed);
+            this.move(this.getDistanceByIndex(this.index));
+
+            var self = this;
+            this.itemContainer.addEventListener('transitionend', function () {
+                // self._setTransitionSpeed(0);
+            }, false);
+
+            if (this.options.hasIndicator) {
+                this._setIndicatorActive(this.index);
+            }
+        };
+        Slider.prototype._setTransitionSpeed = function (speed) {
+            this.itemContainer.style.transitionDuration = speed + 'ms';
+        };
+        // 切换到上一张幻灯片
+        Slider.prototype.prev = function () {
+            this.to(this.index - 1);
+        };
+        // 切换到下一张幻灯片
+        Slider.prototype.next = function () {
+            this.to(this.index + 1);
+        };
+        // 修正索引值，让它保持在最小和最大索引值之间
+        Slider.prototype._adjustIndex = function (index) {
+            if (index < this.minIndex) {
+                index = this.minIndex;
+            } else if (index > this.maxIndex) {
+                index = maxIndex;
+            }
+
+            return index;
+        };
+        Slider.prototype.move = function (distance) {
+            this.itemContainer.style.transform = 'translate3d(' + distance + 'px, 0, 0)';
+        };
+        Slider.prototype.getDistanceByIndex = function (index) {
+            return -index * this.distancePerSlide;
+        };
+        Slider.prototype._createIndicators = function () {
+            var indicatorContainer = document.createElement('div');
+            var html = '';
+
+            indicatorContainer.className = 'slider-indicator-container';
+            for (var i = 0; i <= this.maxIndex; i++) {
+                html += '<span class="slider-indicator"></span>';
+            }
+            indicatorContainer.innerHTML = html;
+            this.el.appendChild(indicatorContainer);
+        };
+        Slider.prototype._setIndicatorActive = function (index) {
+            this.indicators = this.indicators || this.el.querySelectorAll('.slider-indicator');
+            for (var i = 0; i < this.indicators.length; i++) {
+                this.indicators[i].classList.remove('slider-indicator-active');
+            }
+
+            this.indicators[index].classList.add('slider-indicator-active');
+        };
+    </script> -->
+    <script>
+        var slider = new Slider(document.getElementById('slider'), {
+            initIndex: 0, // 初始显示第几张幻灯片，从0开始
+            speed: 300, // 幻灯片的切换速度
+            hasIndicator: true // 是否需要指示器indicator
+        });
+
+        document.getElementById('prev').addEventListener('click', function () {
+            // 切换上一张幻灯片
+            slider.prev();
+        }, false);
+        document.getElementById('next').addEventListener('click', function () {
+            // 切换下一张幻灯片
+            slider.next();
+        }, false);
+    </script>
+</body>
+</html>

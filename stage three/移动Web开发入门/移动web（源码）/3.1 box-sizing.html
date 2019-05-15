@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>3.1 box-sizing</title>
+    <style>
+        /*css reset*/
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        .box {
+            display: block;
+            width: 150px;
+            height: 150px;
+            background-color: red;
+
+            width: 50%;
+            float: left;
+
+            box-sizing: border-box;
+
+            border: 1px solid #000;
+            padding: 5px;
+        }
+        .box1 {
+            /*width/height代表内容的宽高*/
+            box-sizing: content-box;
+            padding: 10px;
+            border: 10px solid #ccc;
+        }
+        .box2 {
+            /*width/height代表整个盒子的宽高*/
+            box-sizing: border-box;
+            padding: 10px;
+            border: 10px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 
+        content-box
+            盒模型宽/高 = width/height + padding + border
+        border-box
+            盒模型宽/高 = width/height
+    -->
+    <img src="img/3.1-1.jpg" alt="box-sizing" class="box">
+    <img src="img/3.1-2.jpg" alt="box-sizing" class="box">
+    <!-- <img src="img/3.1-1.jpg" alt="box-sizing" class="box box1">
+    <img src="img/3.1-1.jpg" alt="box-sizing" class="box box2"> -->
+
+</body>
+</html>

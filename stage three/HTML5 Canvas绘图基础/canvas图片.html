@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas图片</title>
+    <style>
+        canvas {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="800px" height="800px">您的浏览器不支持canvas
+    </canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext('2d');
+        //在此处补充代码
+        var img = new Image();
+        img.src = "imgs/logo.png";
+
+        ctx.arc(400, 400, 100, 0, 2 * Math.PI);
+        ctx.fill();
+        img.onload = function () {
+            ctx.drawImage(img, 335, 375);
+        }
+    </script>
+</body>
+
+</html>

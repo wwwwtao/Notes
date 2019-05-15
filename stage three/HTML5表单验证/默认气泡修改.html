@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .oneline {
+            line-height: 1.5;
+            margin: 10px auto;
+        }
+
+        .oneline label {
+            width: 100px;
+            text-indent: 15px;
+            font-size: 14px;
+            font-family: "Microsoft Yahei";
+            display: inline-block;
+        }
+
+        .oneline .sinput {
+            width: 60%;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid #e2e2e2;
+            outline: none;
+        }
+
+        .oneline input[type="submit"] {
+            margin-left: 20px;
+            width: 80px;
+            height: 30px;
+            border: 0;
+            background-color: #5899d0;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 6px;
+            outline: none;
+            transition: all .3s;
+        }
+
+        .oneline input[type="submit"]:active {
+            transform: translateY(2px)
+        }
+
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px white inset;
+            border: 1px solid #CCC !important;
+        }
+
+        .error-messages {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="forms">
+        <div class="oneline">
+            <label for="name">用户名:</label>
+            <input id="name" class="sinput" name="name" type="text" required>
+        </div>
+        <div class="oneline">
+            <label for="email">Email:</label>
+            <input id="email" class="sinput" name="email" type="email" required>
+        </div>
+        <div class="oneline">
+            <input type="submit" id="submits" value="提交">
+        </div>
+    </form>
+    <script>
+            var forms = document.getElementById("forms");
+            replaceValidationUI(forms);
+        function replaceValidationUI(form) {
+
+            //清除了默认气泡
+            form.addEventListener("invalid", function (event) {
+                event.preventDefault();
+            }, true);
+            form.addEventListener("submit", function (event) {
+                if (!this.checkValidity()) {
+                    event.preventDefault();
+                }
+            }, true);
+            
+            form.insertAdjacentHTML("afterBegin", "<ul class='error-messages'></ul>"); // 添加了ul 放来存放错误提示
+            var submitBtn = document.getElementById("submits");
+            submitBtn.addEventListener("click", function (e) {
+                var invalidFields = form.querySelectorAll(":invalid"),       //所有不符合条件的input对象
+                    errorMessages = form.querySelector(".error-messages"),   //取得上面那个ul
+                    listHtml = "",
+                    label;
+
+                for (var i = 0; i < invalidFields.length; i++) {
+                    label = form.querySelector("label[for=" + invalidFields[i].id + "]");  /* 这里面是个属性选择器每一次循环都选中了未符合条件的input的label */
+                    // console.log(label)    <label for="name">用户名:</label> <label for="email">Email:</label>
+                    listHtml += "<li>" +
+                        label.innerHTML +
+                        " " +
+                        invalidFields[i].validationMessage +
+                        "</li>";
+                }
+
+                // 把错误的信息放到错误容器里面
+                errorMessages.innerHTML = listHtml;
+
+                if (invalidFields.length > 0) {
+                    invalidFields[0].focus();
+                }
+            })
+
+        }
+    </script>
+</body>
+
+</html>

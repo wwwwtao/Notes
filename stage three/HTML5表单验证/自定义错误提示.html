@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+</head>
+
+<body>
+    <form action="" method="get">
+        <input type="url" oninput="checkit(this)">
+        <input type="submit" value="提交">
+    </form>
+    <script>
+        // var a = document.getElementsByTagName("input"); a[0] === oninput里面的this
+        function checkit(obj) {
+            var it = obj.validity;
+            if (it.typeMismatch == true) {
+                obj.setCustomValidity("请输入带http://的正确地址！")    //setCustomValidity是input的方法 所有要用obj 而不是it
+            } else {
+                obj.setCustomValidity("")
+            }
+        }
+    </script>
+</body>
+
+</html>

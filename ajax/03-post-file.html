@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>03-post-file</title>
+</head>
+<body>
+<!--
+注意:
+1.上传文件一般使用POST提交
+2.上传文件必须设置enctype="multipart/form-data"
+
+3.上传的文件在PHP中可以通过$_FILES获取
+4.PHP中文件默认会上传到一个临时目录, 接收完毕之后会自动删除
+-->
+<!--
+默认情况下服务器对上传文件的大小是有限制的, 如果想修改上传文件的限制可以修改php.ini文件
+file_uploads = On   ; 是否允许上传文件 On/Off 默认是On
+upload_max_filesize = 2048M       ; 上传文件的最大限制
+post_max_size = 2048M             ; 通过Post提交的最多数据
+
+max_execution_time = 30000      ; 脚本最长的执行时间 单位为秒
+max_input_time = 30000          ; 接收提交的数据的时间限制 单位为秒
+memory_limit = 2048M            ; 最大的内存消耗
+-->
+<form action="03-post-file.php" method="post" enctype="multipart/form-data">
+    <input type="file" name="upFile"><br>
+    <input type="submit" value="上传"><br>
+</form>
+</body>
+</html>

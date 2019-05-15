@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>11-ajax-xml</title>
+    <script src="myAjax2.js"></script>
+    <script>
+        window.onload = function (ev) {
+
+            var oBtn = document.querySelector("button");
+            oBtn.onclick = function (ev1) {
+                ajax({
+                    type:"get",
+                    url:"11-ajax-xml.php",
+                    success: function (xhr) {
+                        // console.log(xhr.responseXML);
+                        // console.log(document);
+                        var res = xhr.responseXML;
+                        console.log(res.querySelector("name").innerHTML);
+                        console.log(res.querySelector("age").innerHTML);
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.status);
+                    }
+                })
+            }
+        }
+    </script>
+</head>
+<body>
+<button>发送请求</button>
+</body>
+</html>

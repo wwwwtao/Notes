@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas动画</title>
+    <style>
+        canvas {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="800px" height="600px" id="canvas">您的浏览器不支持canvas</canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        //补充代码
+
+        var postX = 100;
+        var postY = 0;
+        var zz = 1;
+        setInterval(() => {
+            if (postY + 100 >= canvas.height) {
+                zz = -1;
+            } else
+                if (postY <= 0) {
+                    zz = 1;
+                }
+            postY += 10 * zz;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(postX, postY, 100, 100);
+        }, 100);
+    </script>
+</body>
+
+</html>

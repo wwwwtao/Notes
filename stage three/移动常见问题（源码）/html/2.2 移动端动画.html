@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.2 移动端动画</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            /*position: absolute;
+            transition: left margin-left 1s;*/
+            /*transition: transform 1s;*/
+        }
+    </style>
+</head>
+<body>
+    <button id="btn">start</button>
+    <div id="box" class="box"></div>
+
+    <script>
+        // var boxEl = document.getElementById('box'),
+        //     btnEl = document.getElementById('btn');
+        // var dest = window.innerWidth - 100;
+
+        // btnEl.addEventListener('click', function () {
+        //     move(boxEl, dest);
+        // }, false);
+
+        // function move(el, position) {
+        //     el.style.transform = 'translate3d(' + position +'px, 0, 0)';
+        // }
+
+        var requestAnimationFrame = window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            function (fn) {
+                setTimeout(fn, 16);
+            };
+        var boxEl = document.getElementById('box'),
+            btnEl = document.getElementById('btn');
+        var dest = window.innerWidth - 100,
+            speed = 10,
+            position = 0;
+
+        btnEl.addEventListener('click', function () {
+            requestAnimationFrame(step);
+        }, false);
+
+        function move(el, position) {
+            el.style.transform = 'translate3d(' + position +'px, 0, 0)';
+        }
+
+        function step() {
+            if (position < dest) {
+                position += speed;
+                move(boxEl, position);
+                requestAnimationFrame(step);
+            } else {
+                position = dest;
+                move(boxEl, position);
+            }
+        }
+
+    </script>
+</body>
+</html>

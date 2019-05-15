@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 200px;
+            position: relative;
+        }
+
+        #mail {
+            width: 180px;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid #999;
+            outline: 0;
+            transition: all 0.3s;
+            text-indent: 36px;
+            border-radius: 5px;
+        }
+
+        .mail {
+            height: 30px;
+            line-height: 30px;
+            position: absolute;
+            left: 2px;
+            top: 1px;
+            transition: all 0.3s;
+        }
+
+        #mail:focus,
+        #mail:hover {
+            text-indent: 2px;
+        }
+
+        #mail:focus+span.mail,
+        #mail:hover+span.mail {
+            transform: translateX(-120%);
+        }
+
+        input:valid~label::after {
+            content: "这是一个正确的邮箱！"
+        }
+
+        input:invalid~label::after {
+            content: "你的邮箱错误"
+        }
+
+        #mail:valid {
+            border: 1px solid green;
+        }
+
+        #mail:invalid {
+            border: 1px solid red;
+        }
+
+        /* 更改placeholder属性文字颜色 */
+        /* input::-webkit-input-placeholder{
+            color:red;
+        } */
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <input type="email" id="mail" required placeholder="输入邮箱">
+        <span class="mail">邮箱</span>  
+        <label for="mail"></label>
+    </div>
+
+</body>
+
+</html>

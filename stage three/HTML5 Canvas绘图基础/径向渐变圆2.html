@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas渐变</title>
+    <style>
+        canvas {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="800px" height="800px">您的浏览器不支持</canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        //在此处补充代码
+        var a = ctx.createRadialGradient(590, 400, 0, 400, 400, 200);
+        a.addColorStop(0, "#b4acac");
+        a.addColorStop(0.2, "#c70c0c");
+        a.addColorStop(0.8, "#7f7e7e");
+        a.addColorStop(1, "#191919");
+        ctx.fillStyle = a;
+        ctx.arc(400, 400, 200, 0, 2 * Math.PI);
+        ctx.fill();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/grid.css">
+    <!-- <link rel="stylesheet" href="css/myindex.css"> -->
+</head>
+<style>
+    /* 布局 start  */
+
+    /* header */
+    .header-container {
+        background: #fff;
+        border-bottom: 1px solid #dadada;
+    }
+
+    .header-btn-container,
+    .header-nav-container,
+    .header-logo-container {
+        height: 64px;
+    }
+
+    .header-logo-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .header-btn-container {
+        display: flex;
+        /* align-items: center; */
+    }
+
+    /* nav */
+    .nav-container {
+        height: 0;
+        overflow: hidden;
+        background: #dadada;
+        transition: height 0.5s;
+    }
+
+    .nav-container-extended {
+        height: 123px;
+    }
+
+    .nav-container li {
+        border-bottom: 1px solid #2b292a;
+    }
+
+    /* 布局 end */
+
+    /* 组件 start */
+
+    /* btn-toggle */
+    .btn-toggle {
+        padding: 10px;
+        margin-left: -64px;
+        height: 100%;
+        background-color: transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        z-index: 10;
+    }
+
+    .btn-toggle-bar {
+        display: block;
+        width: 24px;
+        height: 4px;
+        background-color: white;
+        border-radius: 2px;
+    }
+
+    .btn-toggle-bar+.btn-toggle-bar {
+        margin-top: 4px;
+    }
+
+
+    /* 组件 end */
+
+    /* 内容 start  */
+
+    /* header */
+    .header-logo {
+        display: flex;
+        align-items: center;
+        /* justify-content: center; */
+        width: 230px;
+        height: 100%;
+    }
+
+    .header-nav,
+    .header-nav-item,
+    .header-nav-link {
+        height: 100%;
+    }
+
+    .header-nav {
+        display: flex;
+        font-size: 14px;
+    }
+
+    .header-nav-item {
+        margin-left: 24px;
+    }
+
+    .header-nav-link {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .nav-link {
+        height: 40px;
+        line-height: 40px;
+        font-weight: bold;
+    }
+
+    /* 内容 end */
+</style>
+
+<body>
+    <header class="header-container">
+        <div class="container">
+            <div class="row">
+                <div class="header-btn-container col-2 d-md-none">
+                    <canvas id="canvas" width="64px" height="64px"></canvas>
+                    <button type="button" class="btn-toggle">
+                        <span class="btn-toggle-bar"></span>
+                        <span class="btn-toggle-bar"></span>
+                    </button>
+                </div>
+                <div class="header-nav-container col-md-3 d-none d-md-block">
+                    <ul class="header-nav">
+                        <li class="header-nav-item"><a href="./响应式页面.html" class="header-nav-link">首页</a></li>
+                        <li class="header-nav-item"><a href="###" class="header-nav-link">关于</a></li>
+                        <li class="header-nav-item"><a href="###" class="header-nav-link">商务合作</a></li>
+                    </ul>
+                </div>
+                <div class="header-logo-container col-4 col-push-2 col-md-push-1">
+                    <div>
+                        <a href="./响应式页面.html" class="header-logo"><img src="img/logo.png" alt="imooc.com"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav id="nav" class="nav-container d-md-none">
+        <ul class="container">
+            <li><a href="" class="nav-link">首页</a></li>
+            <li><a href="" class="nav-link">关于</a></li>
+            <li><a href="" class="nav-link">商务合作</a></li>
+        </ul>
+    </nav>
+
+
+
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext('2d');
+
+        ctx.arc(0, 64, 64, 0, 2 * Math.PI);
+        // ctx.save();
+        // ctx.clip();
+        ctx.fillStyle = "red";
+        ctx.fill();
+        // ctx.restore();
+
+        var nav = document.getElementById("nav");
+        var navExtendedClassName = 'nav-container-extended'
+
+        document.querySelector(".btn-toggle").onclick = function () {
+            if (nav.classList.contains(navExtendedClassName)) {
+                nav.classList.remove(navExtendedClassName);
+            } else {
+                nav.classList.add(navExtendedClassName);
+            }
+        }
+    </script>
+</body>
+
+</html>

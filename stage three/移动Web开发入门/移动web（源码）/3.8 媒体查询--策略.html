@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>3.8 媒体查询--策略</title>
+    <style>
+        /*css reset*/
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            padding-top: 200px;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        .row {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .col {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-color: rgba(86, 61, 124, 0.15);
+            border: 1px solid rgba(86, 61, 124, 0.2);
+        }
+
+        /*
+            断点
+                xs: < 576px
+                sm: 576px ~ 768px
+                md: 768px ~ 992px
+                lg: 992px ~ 1200px
+                xl: > 1200px
+            断点怎么来的
+                改变屏幕大小，当页面显示不正常的时候，你就需要设置断点了
+                经验值
+                    预设一些
+        */
+        /*@media (max-width: 576px) {
+            .col {
+                width: 100%;
+            }
+        }
+        @media (min-width: 577px) and (max-width: 768px) {
+            .col {
+                width: 50%;
+            }
+        }
+        @media (min-width: 769px) and (max-width: 992px) {
+            .col {
+                width: 25%;
+            }
+        }
+        @media (min-width: 993px) and (max-width: 1200px) {
+            .col {
+                width: 16.6666666667%;
+            }
+        }
+        @media (min-width: 1201px) {
+            .col {
+                width: 8.333333333%;
+            }
+        }*/
+
+        /*pc first*/
+        /*.col {
+            width: 8.333333333%;
+        }
+        @media (max-width: 1200px) {
+            .col {
+                width: 16.6666666667%;
+            }
+        }
+        @media (max-width: 992px) {
+            .col {
+                width: 25%;
+            }
+        }
+        @media (max-width: 768px) {
+            .col {
+                width: 50%;
+            }
+        }
+        @media (max-width: 576px) {
+            .col {
+                width: 100%;
+            }
+        }*/
+
+        /*mobile first*/
+        .col {
+            width: 100%;
+        }
+        @media (min-width: 576px) {
+            .col {
+                width: 50%;
+            }
+        }
+        @media (min-width: 768px) {
+            .col {
+                width: 25%;
+            }
+        }
+        @media (min-width: 992px) {
+            .col {
+                width: 16.6666666667%;
+            }
+        }
+        @media (min-width: 1200px) {
+            .col {
+                width: 8.33333333%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+        <div class="col">
+            <img src="img/3.8-1.png" alt="">
+        </div>
+    </div>
+</body>
+</html>

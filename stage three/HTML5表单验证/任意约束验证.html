@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="">
+        <input type="text" id="username" value="12312" required pattern="^\d{5}">
+    </form>
+    <script>
+        var names = document.getElementById("username");
+        //补充完整！
+        if (names.checkValidity()) {
+            alert("符合所有验证条件")
+        } else {
+            alert("不符合所有验证条件")
+        }
+    </script>
+</body>
+
+</html>

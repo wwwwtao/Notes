@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>阴影</title>
+    <style>
+        canvas {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="800px" height="800px">
+        您的浏览器不支持canvas
+    </canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        //在此处补充代码
+
+        ctx.shadowOffsetX = 15;
+        ctx.shadowOffsetY = 15;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = "rgba(255, 215, 0, 0.7)";
+
+        ctx.fillStyle = "rgba(255,69,0)";
+        ctx.arc(400, 400, 50, 0, 2 * Math.PI);
+        ctx.fill();
+    </script>
+</body>
+
+</html>

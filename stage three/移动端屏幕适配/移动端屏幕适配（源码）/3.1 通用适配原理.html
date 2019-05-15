@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=0.3333333, maximum-scale=0.3333333, minimum-scale=0.3333333, user-scalable=no"> -->
+    <title>3.1 通用适配原理</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header-container {
+            width: 100%;
+            height: 2.5rem;
+            background-color: rgba(222, 24, 27, 0.9);
+            /*1px边框*/
+            border-bottom: 1px solid #000;
+        }
+    </style>
+    <script>
+        (function () {
+            'use strict';
+
+            setRemUnit();
+
+            window.addEventListener('resize', setRemUnit);
+
+            function setRemUnit() {
+                var docEl = document.documentElement;
+                var ratio = 18.75;
+                var viewWidth = docEl.getBoundingClientRect().width || window.innerWidth;
+
+                docEl.style.fontSize = viewWidth / ratio + 'px';
+            }
+        })();
+    </script>
+</head>
+<body>
+
+    <header class="header-container"></header>
+
+</body>
+</html>

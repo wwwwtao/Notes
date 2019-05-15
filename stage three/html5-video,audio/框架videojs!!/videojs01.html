@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="video-js.min.css">
+    <script src="video.min.js"></script>
+</head>
+
+<body>
+    <video id="my-video" class="video-js vjs-big-play-centered" controls data-setup="{}" width="960px" height="400px"
+        poster="../data/poster.jpg" preload="auto">
+        <source src="../data/imooc.mp4">
+    </video>
+
+    <script>
+        var myVideo = videojs("my-video");
+
+        // myVideo.currentTime(100);
+        // myVideo.volume(0.5);
+
+        /*   onclick = function () {
+            console.log(myVideo.currentTime());
+            console.log(myVideo.duration());
+          } */
+
+      /*   //ready 视频可以播放了 类似与canplay 
+            myVideo.ready(function () {
+                this.play();
+                //返回下载了多少
+                console.log(myVideo.buffered());
+                //声音
+                console.log(myVideo.volume());
+                // 宽高 width（） height（）
+            })  */
+
+            //监听了暂停 volumechange--音量变化 timeupdate--视频状态变化 seeking--视频位置改变
+        /* myVideo.on("pause", function () {
+            console.log("点击了暂停")
+        }) */
+    </script>
+</body>
+
+</html>

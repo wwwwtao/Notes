@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>4.1 DOM操作优化</title>
+    <link rel="stylesheet" href="css/slider.css">
+    <style>
+        /*这里的修改只是为了显示的更明显*/
+        .slider-indicator {
+            width: 20px;
+            height: 20px;
+            background-color: #807aff;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div id="slider" class="slider">
+        <div class="slider-item-container">
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/1.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/2.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/3.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/4.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/5.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+        </div>
+        <!-- <div class="slider-indicator-container">
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+        </div> -->
+    </div>
+
+    <div id="slider2" class="slider">
+        <div class="slider-item-container">
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/1.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/2.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/3.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/4.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/5.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+        </div>
+        <div class="slider-indicator-container">
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+        </div>
+    </div>
+
+    <script>
+        // 尽量使用id选择器
+        createIndicators(document.getElementById('slider'), 1);
+        // createIndicators(document.getElementById('slider2'));
+
+        function createIndicators(sliderEl, activeIndex) {
+            // 合理缓存DOM对象
+            var sliderItemContainer = sliderEl.querySelector('.slider-item-container'),
+                sliderItem = sliderItemContainer.querySelectorAll('.slider-item'),
+                indicatorContainer = document.createElement('div');
+            var html = '';
+
+            activeIndex = activeIndex || 0;
+
+            indicatorContainer.className = 'slider-indicator-container';
+
+            var indicatorItemFragment = document.createDocumentFragment();  //创建文档碎片 这个不废性能
+            var spanEl = document.createElement('span');                //创建一个复用的节点
+            // spanEl.innerHTML = '123';
+
+            // 减少操作DOM的次数
+            for (var i = 0, num = sliderItem.length; i < num; i++) {
+                // indicatorContainer.innerHTML += '<span class="slider-indicator"></span>';
+                // html += '<span class="slider-indicator"></span>';
+                var indicatorItem = spanEl.cloneNode(true);   //复制节点  带true  复制内容
+                indicatorItem.className = 'slider-indicator';
+
+                // 不要直接修改style，通过添加class修改
+                if (i === activeIndex) {
+                    indicatorItem.className += ' slider-indicator-active';
+                    // indicatorItem.style.backgroundColor = '#007aff';
+                    // indicatorItem.style.opacity = 1;
+                    // indicatorItem.style.opacity = 1;
+                    // indicatorItem.style.opacity = 1;
+                    // indicatorItem.style.opacity = 1;
+                    // indicatorItem.style.opacity = 1;
+                    // indicatorItem.style.opacity = 1;
+                    // 重排 重绘
+                }
+
+                indicatorItemFragment.appendChild(indicatorItem);
+            }
+
+            // indicatorContainer.innerHTML = html;
+            indicatorContainer.appendChild(indicatorItemFragment);  //文档碎片统一渲染
+            sliderEl.appendChild(indicatorContainer);
+        }
+    </script>
+    <!--
+        总结
+            DOM操作很奢侈，很耗性能
+                加快单次DOM操作
+                    尽量使用id选择器
+            减少DOM操作的次数
+                合理缓存DOM对象/操作
+                缓存 DOM.length
+                    每次.length都要计算，用一个变量保存这个值
+                使用DocumentFragment优化多次的appendChild
+                使用一次innerHTML
+                不要直接修改style，通过添加class修改
+    -->
+</body>
+</html>

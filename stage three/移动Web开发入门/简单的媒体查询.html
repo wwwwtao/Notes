@@ -1,0 +1,49 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        p {
+            color: red;
+            text-align: center;
+        }
+
+        /*此处写代码*/
+        p {
+            color: blue;
+        }
+
+        @media (min-width:576px) {
+            p {
+                color: red;
+            }
+        }
+
+        @media (min-width:768px) {
+            p {
+                color: black;
+            }
+        }
+
+        @media (min-width:992px) {
+            p {
+                color: green;
+            }
+        }
+
+        @media (min-width:1200px) {
+            p {
+                color: salmon;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <p>
+        我的颜色会随着屏幕大小的变化而变化。
+    </p>
+</body>
+
+</html>

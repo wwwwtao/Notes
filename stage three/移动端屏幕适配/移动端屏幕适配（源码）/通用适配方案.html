@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"> -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+
+    .header-container {
+        width: 100%;
+        /* % em rem vw/vh */
+        /* 1rem = html font-size */
+        height: 2.5rem;
+        background: rgba(222, 24, 27, 0.9);
+    }
+
+    .main-container {
+        padding: 2.5rem 0;
+        background: #eee;
+    }
+
+    .slider-container {
+        height: 9.15rem;
+        background-color: green;
+    }
+
+    .nav-container {
+        height: 8.475rem;
+        background-color: blue;
+    }
+
+    .recommend-container {
+        height: 50rem;
+        background-color: pink;
+    }
+
+    .tabbed-container {
+        height: 2.5rem;
+        background-color: white;
+    }
+
+    .tabbed-container,
+    .header-container {
+        position: fixed;
+        z-index: 1000;
+        width: 100%;
+        left: 0;
+    }
+
+    .header-container {
+        top: 0;
+    }
+
+    .tabbed-container {
+        bottom: 0;
+    }
+</style>
+<script>
+
+    (function () {
+        'use strict';
+        var docEI = document.documentElement;        //获取到了html
+        var viewportEI = document.querySelector('meta[name="viewport"]'); //获取meta标签
+        var dpr = window.devicePixelRatio || 1;     //获取到了dpr
+        dpr = dpr >= 3 ? 3 : (dpr >= 2 ? 2 : 1)     //计算dpr
+        var maxWidth = 540,
+            minWidth = 320;
+
+
+        docEI.setAttribute('data-dpr', dpr);
+
+        var scale = 1 / dpr;            //根据dpr计算处缩放比
+        var content = 'width=device-width, initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no'  //把缩放比放入meta中content属性中
+
+        if(viewportEI){
+            viewportEI.setAttribute("content",content);
+        }else{
+            viewportEI = document.createElement("meta");
+            viewportEI.setAttribute("name","viewport");
+            viewportEI.setAttribute("content",content);
+            document.head.appendChild(viewportEI);
+        }
+
+
+        setRemUnit();
+        window.addEventListener('resize', setRemUnit);
+        // 1rem = viewWidth/18.75
+        function setRemUnit() {
+            var ratio = 18.75;
+            var viewWidth = docEI.getBoundingClientRect().width || window.innerWidth;
+            if(maxWidth && viewWidth/dpr > maxWidth){
+                viewWidth = maxWidth*dpr;
+            }else if(minWidth && viewWidth/dpr < minWidth){
+                viewWidth = minWidth*dpr;
+            }
+
+            docEI.style.fontSize = viewWidth / ratio + 'px';
+        }
+    })();
+
+</script>
+<!-- <script src="js/simple.js"></script> -->
+
+
+<body>
+    <header class="header-container"></header>
+
+    <div class="main-container">
+        <div class="slider-container"></div>
+        <nav class="nav-container"></nav>
+        <div class="recommend-container"></div>
+    </div>
+
+    <div class="tabbed-container"></div>
+
+</body>
+
+</html>

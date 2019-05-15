@@ -1,0 +1,75 @@
+
+<--------------------------------关于HTML5表单属性看慕课网教辅！！！！！！！！！！！！！！！！！！------------>
+
+
+novalidate 不验证表单 
+formnovalidate 不验证按钮
+required 必填
+pattern 正则
+file 上传文件类型
+autocomplete 输入提示 记住填写历史的。
+下拉数据选择是通过list和dataList来实现的
+
+<---------------------------------html5约束验证API  表单-------------------------------->
+document.getElementById("id") === id  //true
+1.willValidaye 属性              willValidate表示如果元素的约束没有被符合则值为 false。 被符合 true
+2.validity 属性 
+3.validationMessage 属性         validationMessage用于获取描述与元素相关约束的失败信息。  :invalid 选择器用于在表单元素中的值是非法时
+4.checkValidity() 方法           checkValidity()方法表示如果元素没有满足它的任意约束，返回false，其他情况返回 true。  !!!
+5.setCustomValidity() 方法       setCustomValidity()设置自定义验证信息。
+
+ValidityState对象下的属性：
+valid:true//当前输入是否有效
+badInput: false //输入无效，如number框输入abc
+patternMismatch: false //正则表达式验证失败
+rangeOverflow:  false //输入值超过max的限定
+rangeUnderflow: false //输入值小于min的限定
+tooLong : false //输入的字符数超过maxlength    在浏览器中恒等于false
+tooShort :   false //输入的字符数小于minlength
+stepMismatch : false //输入的数字不符合step限制 step规定表单元素的合法数字间隔。   step="0.01" 提交表单时有效小数位到小数点后两位 step="3" 点击上下箭头的时候加减是3
+typeMismatch : false //输入值不符合email、url的验证
+valueMissing : false //未输入值，违反了required要求 
+customError :  false //是否存在自定义错误
+
+上述属性值的特性：
+  (1)只要有一个验证方面错误，某个属性就为true，valid值为false
+  (2)只有没有任何验证错误，所有的属性都为false，valid才能为true
+  (3)上述的每个错误在浏览器内部都有一个预定义的错误提示消息
+  (4)所有的错误消息中，只要存在“自定义的错误消息”，浏览器只显示自定义的错误消息，优先级高于浏览器预定义的错误消息
+  (5)当前没有自定义错误消息，所以customError :  false 
+
+设置自定义错误消息的方法：
+input.setCustomValidity('错误提示消息');
+//这个相当于将input.validity.customError:true
+
+取消自定义错误消息的方法：
+input.setCustomValidity("");
+//这个相当于将input.validity.customError:false
+
+search类型搜索框默认的小X号 美化 或 去掉 （删除搜索内容的）
+input[type="search"]::-webkit-search-cancel-button{            //input[type="text"]是css获取表单元素的方法。
+    -webkit-appearance: none;                                  //去除webkit内核中表单的默认样式，一般用 -webkit-appearance: none。 
+}
+
+去除表单输入类型为数字时出现的上下箭头
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button{
+    -webkit-appearance: none;                                     
+}
+
+
+<---------------------------------html5常用的伪类选择器和css选择器 表单-------------------------------->
+1.  :required 和 :optional  可以获取必填的 和 非必填的。
+
+2.  :in-range 和 :out-of-range  可以获取在范围之内的 和 不在范围之内的，通长和type="number"的max和min相对应 
+
+3.  :vaild 和 :invalid 是获取符合验证条件的 和 不符合验证条件的
+
+4.  :read-only 和 :read-write 获取只读的选项 和 可以读写的
+
+对支持oninput的浏览器用oninput。其它浏览器（IE6/7/8）使用onpropertychange(IE专有)
+onchange事件虽然触发值会发生变化，但不是立刻触发，要鼠标失去焦点时才能触发。
+oninput 只要发生改变就触发
+oninvalid 验证不通过时
+onfocus是在获得焦点的时候触发 。
+onBlur 失去焦点时触发

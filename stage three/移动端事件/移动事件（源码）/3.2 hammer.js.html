@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>3.2 hammer.js</title>
+    <style>
+        .box {
+            width: 150px;
+            height: 150px;
+            background-color: red;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="box" class="box"></div>
+
+    <script src="js/hammer.min.js"></script>
+    <script>
+        var boxEl = document.getElementById('box');
+
+        var hammer = new Hammer(boxEl);
+        hammer.on('swipe pan tap doubletap press pinch rotate', function (ev) {
+            // console.log(ev.type);
+            console.log(ev);
+        });
+
+        // hammer.on('swipeleft', function (ev) {
+        //     console.log('next');
+        // });
+        // hammer.on('swiperight', function (ev) {
+        //     console.log('prev');
+        // });
+    </script>
+</body>
+</html>

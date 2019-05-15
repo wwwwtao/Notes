@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    html {
+        font-size: 20px;
+    }
+
+    .touch {
+        width: 100%;
+        height: 5rem;
+        background: red;
+        text-align: center;
+        line-height: 5rem;
+        font-size: 1.5rem;
+    }
+</style>
+
+<body>
+    <script src="移动事件（源码）/js/hammer.min.js"></script>
+    <div id="touch" class="touch"></div>
+
+    <script>
+        var touch = document.getElementById("touch");
+        var hammer = new Hammer(touch);
+
+        hammer.on("tap", function () {
+            touch.innerHTML = "tap 事件被触发"
+        })
+        hammer.on('panleft', function () {
+            touch.innerHTML = "panleft 事件被触发"
+        })
+        hammer.on("panright", function () {
+            touch.innerHTML = "panright 事件被触发"
+        })
+        hammer.on("press", function () {
+            touch.innerHTML = "press 事件被触发"
+        })
+    </script>
+</body>
+
+</html>

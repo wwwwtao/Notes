@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.2 touch事件的event对象</title>
+    <style>
+        body {
+            height: 2000px;
+        }
+        .box {
+            width: 150px;
+            height: 150px;
+            background-color: red;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="box" class="box"></div>
+
+    <script>
+        var boxEl = document.getElementById('box');
+
+        boxEl.addEventListener('touchstart', handleStart, false);
+        boxEl.addEventListener('touchmove', handleMove, false);
+        boxEl.addEventListener('touchend', handleEnd, false);
+
+        function handleStart(ev) {
+            console.log('touchstart', ev);
+            // console.log(ev.touches, ev.targetTouches, ev.changedTouches);
+            var touch = ev.changedTouches[0];
+
+            console.log(touch.pageX, touch.pageY);
+        }
+        function handleMove(ev) {
+            console.log('touchmove');
+        }
+        function handleEnd(ev) {
+            console.log('touchend', ev);
+            // console.log(ev.touches, ev.targetTouches, ev.changedTouches);
+        }
+    </script>
+</body>
+</html>

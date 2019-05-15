@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>3.2 CSS属性和其他优化</title>
+    <link rel="stylesheet" href="css/slider.css">
+    <style>
+        /*提取公用部分*/
+        .slider,
+        .slider-item-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*合写*/
+        .slider {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-right: 20px;
+            margin-left: 20px;
+
+            margin: 10px 20px 10px 20px;
+            margin: 10px 20px;
+            margin: 10px 20px 10px;
+
+            background-color: #fff;
+
+            font-size: 12px;
+            font: ;
+        }
+
+        /*避免使用CSS @import引用加载CSS*/
+
+        /*使用CSS3动画，代替DOM动画*/
+
+        /*优先考虑flex 不滥用float*/
+        flex float
+        
+    </style>
+</head>
+<body>
+    <div id="slider" class="slider">
+        <div class="slider-item-container">
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/1.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/2.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/3.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/4.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+            <div class="slider-item">
+                <a href="###" class="slider-link">
+                    <img src="img/5.jpg" alt="slider" class="slider-img">
+                </a>
+            </div>
+        </div>
+        <div class="slider-indicator-container">
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+            <span class="slider-indicator"></span>
+        </div>
+    </div>
+</body>
+</html>

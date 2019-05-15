@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+    <style>
+        canvas {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800">
+        您的浏览器不支持canvas
+    </canvas>
+
+    <script>
+        //在此处写出代码
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext('2d');
+        //头部
+        ctx.fillStyle = "#ffdab9";
+        ctx.fillRect(300, 200, 200, 100);
+        //左右耳
+        ctx.fillStyle = "#ffd700";
+        ctx.fillRect(270, 220, 30, 40);
+        ctx.fillRect(500, 220, 30, 40);
+        //嘴巴
+        ctx.fillStyle = "#f00";
+        ctx.fillRect(370, 260, 60, 20);
+
+        //两只眼睛
+        ctx.beginPath();
+        ctx.arc(330, 230, 10, 0, 2 * Math.PI);
+        ctx.fillStyle = "black";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(470, 230, 10, 0, 2 * Math.PI);
+        ctx.fill();
+
+        //天线
+        ctx.beginPath();
+        ctx.moveTo(350, 200);
+        ctx.lineTo(350, 195);
+        ctx.lineTo(300, 95);
+        ctx.lineTo(300, 100);
+        ctx.moveTo(450, 200);
+        ctx.lineTo(450, 195);
+        ctx.lineTo(500, 95);
+        ctx.lineTo(500, 100);
+        ctx.fillStyle = "#fbc127";
+        ctx.fill();
+
+        ctx.beginPath();
+        // 身子
+        ctx.fillStyle = "#ffb6c1";
+        ctx.fillRect(330, 300, 140, 180);
+        // 左手
+        ctx.fillStyle = "#20b2aa";
+        ctx.fillRect(100, 350, 230, 20);
+        // 右手  x坐标就是身子x坐标加身子宽
+        ctx.fillRect(470, 350, 230, 20);
+        // 左脚  左右脚y坐标是身子y坐标加高
+        ctx.fillRect(350, 480, 20, 230);
+        // 右脚
+        ctx.fillRect(430, 480, 20, 230);
+    </script>
+</body>
+
+</html>

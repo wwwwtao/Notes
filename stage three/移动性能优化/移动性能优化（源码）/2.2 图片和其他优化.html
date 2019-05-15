@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.2 图片和其他优化</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+    <!-- 
+        大、多
+            HTTP请求大
+                图片压缩处理
+                使用更高压缩比格式的图片
+                    webp
+                尽量少用图片
+                    使用图标字体代替图片图标
+                    CSS画图
+            HTTP请求多
+                合理使用base64内嵌图片
+                合并静态资源图片
+                    雪碧图
+    -->
+    <img src="img/1.jpg" alt="">
+
+    <!-- 减少DOM元素的嵌套层级 -->
+    <div>
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <div>
+                            <div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 避免空连接href、src -->
+    <a href="javascript:;">go</a>
+    <img src="img/1.jpg" alt="">
+    <link rel="stylesheet" href="">
+    <script src=""></script>
+    <iframe src="" frameborder="0"></iframe>
+
+    <!-- 尽量避免使用table/iframe等慢元素 -->
+    <!-- ul/li -->
+    <table>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+    </table>
+    <iframe src="" frameborder="0"></iframe>
+
+    <!-- 主要内容和侧边栏的位置 -->
+    <a href="https://search.jd.com/Search?keyword=%E5%89%8D%E7%AB%AF&enc=utf-8&wq=%E5%89%8D%E7%AB%AF&pvid=fde524f7ad4f4046aaa80e58e2103687">京东搜索页面</a>
+</body>
+</html>

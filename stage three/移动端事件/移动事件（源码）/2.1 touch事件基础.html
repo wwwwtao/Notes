@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>2.1 touch事件基础</title>
+    <style>
+        .box {
+            width: 150px;
+            height: 150px;
+            background-color: red;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="box" class="box"></div>
+
+    <script>
+        var boxEl = document.getElementById('box');
+
+        // boxEl.ontouchstart = handleStart;
+        // boxEl.ontouchmove = handleMove;
+        // boxEl.ontouchend = handleEnd;
+        // boxEl.ontouchcancel = handleCancel;
+
+        boxEl.addEventListener('touchstart', handleStart, false);
+        boxEl.addEventListener('touchmove', handleMove, false);
+        boxEl.addEventListener('touchend', handleEnd, false);
+
+        function handleStart() {
+            console.log('touchstart');
+        }
+        function handleMove() {
+            console.log('touchmove');
+        }
+        function handleEnd() {
+            console.log('touchend');
+        }
+    </script>
+</body>
+</html>

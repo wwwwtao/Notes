@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>响应式布局</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <header class="header-container">
+        <div class="container">
+            <div class="row">
+                <div class="header-logo-container col-8 col-md-3">
+                    <a href="./index.html" class="header-logo">
+                        <img src="img/logo.svg" alt="logo">
+                    </a>
+                </div>
+                <div class="header-btn-container col-4 d-md-none">
+                    <button type="button" class="btn-toggle" id="btn-toggle">
+                        <span class="btn-toggle-bar"></span>
+                        <span class="btn-toggle-bar"></span>
+                        <span class="btn-toggle-bar"></span>
+                    </button>
+                </div>
+                <nav class="header-nav-container col-md-9 d-none d-md-block">
+                    <ul class="header-nav">
+                        <li class="header-nav-item">
+                            <a href="###" class="header-nav-link">手机&amp;平板</a>
+                        </li>
+                        <li class="header-nav-item">
+                            <a href="###" class="header-nav-link">电视&amp;影音</a>
+                        </li>
+                        <li class="header-nav-item">
+                            <a href="###" class="header-nav-link">生活家电</a>
+                        </li>
+                        <li class="header-nav-item">
+                            <a href="###" class="header-nav-link">电脑/办公/存储</a>
+                        </li>
+                        <li class="header-nav-item">
+                            <a href="###" class="header-nav-link">网上商城</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-container d-md-none" id="nav">
+        <ul class="container">
+            <li><a href="###" class="nav-link">手机&amp;平板</a></li>
+            <li><a href="###" class="nav-link">电视&amp;影音</a></li>
+            <li><a href="###" class="nav-link">生活家电</a></li>
+            <li><a href="###" class="nav-link">电脑/办公/存储</a></li>
+            <li><a href="###" class="nav-link">网上商城</a></li>
+        </ul>
+    </nav>
+
+    <div class="slider-container">
+        <div class="container">
+            <div class="row">
+                <div class="slider-text-container col-md-5 col-md-push-7">
+                    <h3 class="slider-title">Galaxy S9｜S9+</h3>
+                    <h4 class="slider-subtitle">冰蓝 焕新上市</h4>
+                    <div class="slider-btns">
+                        <a href="###" class="btn-rounded">了解更多</a>
+                        <a href="###" class="btn-rounded">立即购买</a>
+                    </div>
+                </div>
+                <div class="col-md-7 col-md-pull-5">
+                    <img src="img/1.png" alt="cellphone">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="###" class="product-item">
+                        <img src="img/2-1.jpg" alt="cellphone" class="product-img">
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="###" class="product-item">
+                        <img src="img/2-2.jpg" alt="cellphone" class="product-img">
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="###" class="product-item">
+                        <img src="img/2-3.jpg" alt="cellphone" class="product-img">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="backtop-container d-md-none">
+        <a href="#" class="btn-backtop">回到顶部</a>
+    </div>
+
+    <div class="helper-container">
+        <div class="container">
+            <div class="helper-info-container">
+                <p>* Galaxy A9s具备后置四摄功能，Galaxy A6s为后置双摄产品。</p>
+                <p>* Galaxy S9 | S9+广告中手机背面图是Galaxy S9+，Galaxy S9为背面单摄像头产品。</p>
+                <p>* 本网站的产品图片以及型号、数据、功能、性能、规格参数等仅供参考，三星有可能对上述内容进行改进，具体信息请参照产品实物、产品说明书。</p>
+                <p>* 除非经特殊说明，本网站中所涉及的数据均为三星内部测试结果，涉及的对比均为与三星产品相比较。</p>
+            </div>
+            <div class="row">
+                <div class="helper-backtop-container col-md-2 col-md-offset-10 d-none d-md-block">
+                    <a href="#" class="btn-backtop">回到顶部</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-md-3">
+                    <h3 class="helper-list-title">网站地图</h3>
+                    <ul class="helper-list">
+                        <li><a href="###">关于三星</a></li>
+                        <li><a href="###">投资者关系</a></li>
+                        <li><a href="###">新闻中心</a></li>
+                        <li><a href="###">人才招聘</a></li>
+                        <li><a href="###">三星开发者网站</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="helper-list-title">三星商店</h3>
+                    <ul class="helper-list">
+                        <li><a href="###">网上商城</a></li>
+                        <li><a href="###">最新活动</a></li>
+                        <li><a href="###">授权体验店</a></li>
+                        <li><a href="###">全产品专卖店</a></li>
+                        <li><a href="###">三星视频空间</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="helper-list-title">服务支持</h3>
+                    <ul class="helper-list">
+                        <li><a href="###">在线服务</a></li>
+                        <li><a href="###">邮件咨询</a></li>
+                        <li><a href="###">联系我们</a></li>
+                        <li><a href="###">服务中心查询</a></li>
+                        <li><a href="###">三星专卖店招募</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h3 class="helper-list-title">官方分享</h3>
+                    <ul class="helper-list">
+                        <li>
+                            <a href="###" class="btn-share btn-share-weixin"></a>
+                            <a href="###" class="btn-share btn-share-weibo"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <ul>
+                        <li class="footer-item">
+                            <a href="###" class="footer-link">服务条款</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="###" class="footer-link">重要声明</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="###" class="footer-link">隐私政策</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <a href="###" class="footer-link">中国/中文 &gt;</a>
+                </div>
+            </div>
+            <div>
+                <p>此网页最好使用IE10浏览器、Chrome浏览器、Safari浏览器或其他新式浏览器进行浏览</p>
+                <p>京ICP备05068163号 京公网安备110105011756号</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var nav = document.getElementById('nav');
+        var navExtendedClassName = 'nav-container-extended';
+
+        document.getElementById('btn-toggle').onclick = function() {
+            // nav.className += ' ' + navExtendedClassName;
+            if (nav.classList.contains(navExtendedClassName)) { // 收起
+                nav.classList.remove(navExtendedClassName);
+            } else { // 展开
+                nav.classList.add(navExtendedClassName);
+            }
+        };
+    </script>
+</body>
+</html>

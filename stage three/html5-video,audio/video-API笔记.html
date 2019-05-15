@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <video id="myVideo" width="500px"></video><br>
+    <button id="playNode">播放</button><br>
+    <button id="stopNode">暂停</button><br>
+    <input type="range" name="" min="0" max="100" value="50" id="range"><br>
+    <button id="gogogo">快进7s</button><br>
+    <div id="timeNode">播放时间：</div>
+    <button id="loopNode">不循环播放</button>
+    <!-- 倍数按钮 -->
+    <div id="RateNode">
+        <button>0.5</button>
+        <button>1</button>
+        <button>2</button>
+    </div>
+    <!-- 全屏按钮 -->
+    <input type="button" id="fullscreenNode" value="全屏">
+    <!-- 刷新video按钮 -->
+    <input type="button" id="reloadNode" value="刷新视频播放器">
+    <script type="text/javascript">
+        //选择video标签
+        var VideoNode = document.getElementById("myVideo");
+
+        // 给一个暂停video的事件
+        stopNode.onclick = function () {
+            VideoNode.pause();
+        };
+
+        // 给一个播放video的事件
+        playNode.onclick = function () {
+            VideoNode.play();
+        };
+
+        //快进
+        gogogo.onclick = function () {
+            VideoNode.currentTime = VideoNode.currentTime + 7;
+        };
+
+        //音量设置条
+        range.oninput = function () {
+            VideoNode.volume = this.value / 100;
+        }
+
+        //循环播放按钮
+        loopNode.onclick = function () {
+            if (VideoNode.loop == false) {
+                this.innerHTML = "循环播放";
+                VideoNode.loop = true;
+            } else {
+                this.innerHTML = "不循环播放";
+                VideoNode.loop = false;
+            }
+            // console.log(VideoNode.loop)
+        };
+
+        //几个倍速按钮   RateNode.children是一个数组 
+        RateNode.children[0].onclick = function () {
+            VideoNode.playbackRate = 0.5;
+            console.log(VideoNode.playbackRate);
+        };
+        RateNode.children[1].onclick = function () {
+            VideoNode.playbackRate = 1;
+            console.log(VideoNode.playbackRate);
+        };
+        RateNode.children[2].onclick = function () {
+            VideoNode.playbackRate = 2;
+            console.log(VideoNode.playbackRate);
+        };
+
+        //canplay ! 视频已经加载好 可以开始播放了 
+        // VideoNode.addEventListener("canplay", function () {
+        //     console.log("视频已经加载好，可以开始播放了");
+        // });
+
+        //load   !  刷新播放器的事件 强制让播放器刷新
+        reloadNode.onclick = function () {
+            VideoNode.src = "data/imooc.ogv";
+            VideoNode.load();
+        }
+
+        //timeupdate  !  监听视频播放的状态
+        VideoNode.addEventListener("timeupdate", function () {
+            let allTime = parseInt(VideoNode.duration / 60) + ":" + parseInt(VideoNode.duration % 60);
+            let nowTime = parseInt(VideoNode.currentTime / 60) + ":" + parseInt(VideoNode.currentTime % 60);
+            timeNode.innerHTML = "播放时间：" + nowTime + "/" + allTime;
+        });
+
+        //requestFullscreen  !  让video标签变成全屏 但是必须要在用户的事件中调用  moz---mozRequestFullScreen webkit--webkitRequestFullscreen
+        fullscreenNode.onclick = function () {
+            if (VideoNode.webkitRequestFullscreen) {
+                VideoNode.webkitRequestFullscreen();          //谷歌浏览器的用法
+            } else if (VideoNode.mozRequestFullScreen) {
+                VideoNode.mozRequestFullScreen();            //火狐浏览器的用法 除前缀webkit 和moz 的差别外 还有 Screen要大写
+            } else if (VideoNode.msRequestFullScreen) {        //ie 未测试
+                VideoNode.msRequestFullScreen();
+            }
+        }
+
+        //volumechange  !  当音量更改时  使用时必须用 on
+        // VideoNode.onvolumechange = function () {
+        //     console.log("1");
+        // }
+
+        //seeking ! 当用户开始拖动进度条就会出发事件  触发频率比seeked高 使用时必须用 on  
+        // VideoNode.onseeking = function () {
+        //     console.log("seeking..");
+        // };
+
+        //seeked  !  当用户移动视频的进度条并且<strong>已经完成操作时</strong>会触发的事件 使用时必须用 on
+        // VideoNode.onseeked = function () {
+        //     console.log("seeked...");
+        // }
+
+        //readyState !  属性返回视频的就绪状态  0：没有关于视频就绪的信息 1:有数据但快不足以支撑了 2：当前的数据可以用 但没有数据来播放下一帧了 3：数据正在缓冲 当前以及至少下一帧是可用的 4: 视频已可以开始播放 
+        // setTimeout(function () {
+        //     console.log(VideoNode.readyState);
+        // }, 500);
+
+        //playbackRate  !  设置/返回视频播放的速度  倍数
+        // console.log(VideoNode.playbackRate);
+        // setTimeout(function () {
+        //     VideoNode.playbackRate = 5;              //！！！！刷新网页失效了  据自己推断可能是刚刷新网页造成的 （如 video未加载） 延时器验证确实如此
+        // }, 1000);
+        // console.log(VideoNode.playbackRate);
+
+        // loop !  设置/返回播放结束后是否重新播放
+        // console.log(VideoNode.loop);
+        // VideoNode.loop = true;
+
+        // ended  !  返回是否已经播放完成  没结束返回false  可以进行事件监听 
+        // console.log(VideoNode.ended);
+        //  ended---作用     监听ended事件   
+        // VideoNode.addEventListener("ended" , function () {
+        //     console.log("视频播放结束了");
+        //     VideoNode.play();  //又开始播放
+        // });
+
+        // currentSrc  ! 返回音视频的src （在加载完成能播放之后才能返回）
+        // setTimeout(function () {
+        //     console.log(VideoNode.currentSrc);
+        // }, 100);
+
+        // networkState ! 返回目前视频的网络状态  
+        // console.log(VideoNode.networkState);  // 0:未初始化  1:视频已经取好资源，但是未使用网络   2:浏览器正在下载(缓冲)  3：没找到资源(在以开始的请看下 因为video未加载出来 所以会出现3这个状态)    
+
+        // muted  ! 设置video静音   但是这个属性不会出现在video标签上
+        // VideoNode.muted = true;
+
+        // controls ! 设置控件 控制器  (给video标签 设置controls属性)
+        VideoNode.controls = true;
+
+        // volume ! 设置音量  0-1为音量区间
+        // VideoNode.volume = 0.5;
+
+        // src  ! 控制视频的来源
+        VideoNode.src = "data/imooc.mp4";
+
+        // currentTime ! 设置/返回当前视频长度 以秒为单位  ******
+        // setInterval(function () {
+        //     console.log( VideoNode.currentTime);
+        // }, 1000)
+        //直接设置当前播放时间为30S
+        // VideoNode.currentTime = 30;
+
+        //duration ! 返回视频的长度 以秒为单位
+        // setTimeout(function () {
+        //     var min = parseInt(VideoNode.duration/60);
+        //     var sec = parseInt(VideoNode.duration%60);
+        //     console.log(min+":",sec)
+        // }, 1000)
+
+        //pause() ! 控制video 让其暂停
+        // setTimeout(function () {
+        //     VideoNode.pause();
+        // }, 3000)
+
+        //play() ! 控制video标签 让其播放 chrome下不允许自动带声音的播放
+        // window.onclick = function () {
+        //     VideoNode.play();                                
+        // }
+
+    </script>
+</body>
+
+</html>
