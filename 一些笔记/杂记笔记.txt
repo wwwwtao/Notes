@@ -123,3 +123,10 @@ w3c的方法是e.preventDefault()，IE则是使用e.returnValue = false;
 
 getElementsByName() 方法可返回带有指定名称的对象的集合。//name属性
 getElementsByTagName() 方法可返回带有指定标签名的对象的集合。 //标签名
+
+ajax 替换数据(仿真美团项目用到的方法)
+1.先定义一个模板
+2.获取到所有数据 (取到需要用到的)
+3.forEach(function(x,index)) 可以遍历数据 。。
+4.replace() 遍历过程中替换关键数据  记得把替换后的数据保存下来
+5.append到页面某个元素里面去
