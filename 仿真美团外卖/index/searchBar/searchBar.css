@@ -1,0 +1,10 @@
+.search-bar {
+    width: 100%;
+    height: 1.066667rem;
+
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
