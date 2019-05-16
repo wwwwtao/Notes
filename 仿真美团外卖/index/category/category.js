@@ -37,7 +37,7 @@
     function addClick() {
         // 用on委托给父元素 item的点击事件 
         $(".category-content").on("click",".category-item",function(){
-            alert(1);
+            alert($(this).index());
         })
     }
 
