@@ -26,7 +26,7 @@
                 items += str;
             })
             // 全部append到页面上去
-            $(".category-content").append(items);
+            $(".category-content").append($(items));
         })
     }
 
