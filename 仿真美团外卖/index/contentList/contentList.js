@@ -62,6 +62,23 @@
      * param {} data
      */
     function getOthers(data) {
+        var Array = data.discounts2;
+
+        var str = "";
+
+        Array.forEach(function(item,index){
+
+            var _str = '<div class="other-info">'+
+                            '<img src=$icon_url  class="other-tag" />'+
+                            '<p class="other-content">$info</p>'+
+                        '</div>';
+
+            _str=_str.replace("$icon_url",item.icon_url)
+                        .replace("$info",item.info)
+
+            str+=_str;
+        })
+        return str;
     }
 
     /**
@@ -79,6 +96,7 @@
 
                 .replace("$brand", getBrand(item))
                 .replace("$monthNum", getMonthNum(item))
+                .replace("$others", getOthers(item))
 
             $(".list-wrap").append($(str));
         })
