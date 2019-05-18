@@ -97,6 +97,7 @@
                 .replace("$brand", getBrand(item))
                 .replace("$monthNum", getMonthNum(item))
                 .replace("$others", getOthers(item))
+                .replace("$wm_poi_score", new StarScore(item.wm_poi_score).getStars())
 
             $(".list-wrap").append($(str));
         })
