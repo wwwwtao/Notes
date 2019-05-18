@@ -130,3 +130,5 @@ ajax 替换数据(仿真美团项目用到的方法)
 3.forEach(function(x,index)) 可以遍历数据 。。
 4.replace() 遍历过程中替换关键数据  记得把替换后的数据保存下来
 5.append到页面某个元素里面去
+
+window.location.pathname; //页面文件名  比如:index/index.html
