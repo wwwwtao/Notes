@@ -1,37 +1,47 @@
 (function () {
 
     // 商家详情模板字符串
-    var itemTmpl = '<div class="r-item-content">'+
-                        '<img class="item-img" src=$pic_url />'+
-                        '$brand'+
-                        '<div class="item-info-content">'+
-                            '<p class="item-title">$name</p>'+
-                            '<div class="item-desc clearfix">'+
-                                '<div class="item-score">$wm_poi_score</div>'+
-                                '<div class="item-count">月售$monthNum</div>'+
-                                '<div class="item-distance">&nbsp;$distance</div>'+
-                                '<div class="item-time">$mt_delivery_time&nbsp;|</div>'+
-                            '</div>'+
-                            '<div class="item-price">'+
-                                '<div class="item-pre-price">$min_price_tip</div>'+
-                            '</div>'+
-                            '<div class="item-others">'+
-                                '$others'+
-                            '</div>'+
-                        '</div>'+
-                    '</div>';
+    var itemTmpl = '<div class="r-item-content">' +
+        '<img class="item-img" src=$pic_url />' +
+        '$brand' +
+        '<div class="item-info-content">' +
+        '<p class="item-title">$name</p>' +
+        '<div class="item-desc clearfix">' +
+        '<div class="item-score">$wm_poi_score</div>' +
+        '<div class="item-count">月售$monthNum</div>' +
+        '<div class="item-distance">&nbsp;$distance</div>' +
+        '<div class="item-time">$mt_delivery_time&nbsp;|</div>' +
+        '</div>' +
+        '<div class="item-price">' +
+        '<div class="item-pre-price">$min_price_tip</div>' +
+        '</div>' +
+        '<div class="item-others">' +
+        '$others' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
+    // 页码
+    var page = 0;
+    // 是否在加载中
+    var isLoading = false;
 
     /** 
      *  获取商家列表数据
      * param
      */
     function getList() {
-        $.get('../json/homelist.json', function (data) {
-            console.log(data);
-            var list = data.data.poilist || [];
+        isLoading = true;
+        setTimeout(() => {
+            $.get('../json/homelist.json', function (data) {
+                console.log(data);
+                var list = data.data.poilist || [];
 
-            initContentList(list);
-        })
+                initContentList(list);
+                isLoading = false;
+            })
+            page++;
+        }, 1000);
     }
 
     /**
@@ -66,17 +76,17 @@
 
         var str = "";
 
-        Array.forEach(function(item,index){
+        Array.forEach(function (item, index) {
 
-            var _str = '<div class="other-info">'+
-                            '<img src=$icon_url  class="other-tag" />'+
-                            '<p class="other-content">$info</p>'+
-                        '</div>';
+            var _str = '<div class="other-info">' +
+                '<img src=$icon_url  class="other-tag" />' +
+                '<p class="other-content">$info</p>' +
+                '</div>';
 
-            _str=_str.replace("$icon_url",item.icon_url)
-                        .replace("$info",item.info)
+            _str = _str.replace("$icon_url", item.icon_url)
+                .replace("$info", item.info)
 
-            str+=_str;
+            str += _str;
         })
         return str;
     }
@@ -102,6 +112,33 @@
             $(".list-wrap").append($(str));
         })
     }
+
+    //事件节流定时器
+    var timer = null;
+    window.addEventListener("scroll", function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            var clientHeight = document.documentElement.clientHeight || window.innerHeight;
+            var scrollHeight = document.documentElement.scrollHeight;
+
+            // 事件提前量
+            var paoDis = 30;
+            if ((scrollTop + clientHeight) >= (scrollHeight - 30)) {
+                //最多加载3页
+                if (page < 3) {
+                    //是否正在加载中
+                    if (isLoading) {
+                        return
+                    }
+                    getList();
+                } else {
+                    $(".loading").html("加载完成")
+                }
+            }
+        }, 100)
+
+    })
 
 
 
