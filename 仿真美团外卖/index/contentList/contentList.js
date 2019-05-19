@@ -123,8 +123,8 @@
             var scrollHeight = document.documentElement.scrollHeight;
 
             // 事件提前量
-            var paoDis = 30;
-            if ((scrollTop + clientHeight) >= (scrollHeight - 30)) {
+            var proDis = 30;
+            if ((scrollTop + clientHeight) >= (scrollHeight - proDis)) {
                 //最多加载3页
                 if (page < 3) {
                     //是否正在加载中

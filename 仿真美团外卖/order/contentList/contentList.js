@@ -17,6 +17,9 @@
         '$getComment' +
         ' </div>';
 
+    var page = 0;
+    var isLoading = false;
+
     /**
     * 渲染评价按钮
     * @param {}
@@ -86,6 +89,7 @@
                 .replace("$poi_name", item.poi_name)
                 .replace("$status_description", item.status_description)
                 .replace("$getProduct", getProduct(item))
+                .replace('$getComment', getComment(item))
             str = str + _str;
         })
         $(".order-list").append($(str));
@@ -96,13 +100,47 @@
     * param
     */
     function getList() {
-        $.get('../json/orders.json', function (data) {
-            console.log(data);
-            var list = data.data.digestlist || [];
+        isLoading = true;
+        setTimeout(function () {
+            $.get('../json/orders.json', function (data) {
+                console.log(data);
+                var list = data.data.digestlist || [];
 
-            initContentList(list);
-        })
+                initContentList(list);
+                isLoading = false;
+            })
+            page++;
+        }, 1000)
     }
+
+    //事件节流定时器
+    var timer = null;
+    window.addEventListener("scroll", function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            $(".wrap").css("padding-bottom", "1.333333rem")  //因为不是向上滑动事件 所以到底的时候触发不了 除非往上滑 再往下滑 才会继续触发事件
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            var clientHeight = document.documentElement.clientHeight || window.innerHeight;
+            var scrollHeight = document.documentElement.scrollHeight;
+
+            // 事件提前量
+            var preDis = 30;
+            if ((scrollTop + clientHeight) >= (scrollHeight - preDis)) {
+                //最多加载3页
+                if (page < 3) {
+                    //是否正在加载中
+                    if (isLoading) {
+                        return
+                    }
+                    getList();
+                } else {
+                    $(".loading").html("加载完成")
+                    $(".wrap").css("padding-bottom", "0.333333rem")
+                }
+            }
+        }, 50)
+
+    })
 
     function init() {
         getList();
