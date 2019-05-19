@@ -17,14 +17,90 @@
         '$getComment' +
         ' </div>';
 
+    /**
+    * 渲染评价按钮
+    * @param {}
+    */
+    function getComment(data) {
+        var evaluation = !data.is_comment;
+
+        if (evaluation) {
+            return '<div class="evaluation clearfix">' +
+                '<div class="evaluation-btn">评价</div>' +
+                '</div>'
+        }
+
+        return '';
+    }
+
 
     /*
-    * 请求数据渲染
+    * 渲染总计菜品
+    * param {}
+    */
+    function getTotalPrice(data) {
+        var str = '<div class="product-item">' +
+            '<span>...</span>' +
+            '<div class="p-total-count">' +
+            '总计' + data.product_count + '个菜，实付' +
+            '<span class="total-price">¥' + data.total + '</span>' +
+            '</div>' +
+            '</div>';
+        return str;
+    }
+
+    /*
+    * 渲染具体商品
+    * param {}
+    */
+
+    function getProduct(data) {
+        var list = data.product_list || [];
+
+        list.push({ type: 'more' });
+        console.log(list);
+        var str = "";
+        list.forEach(function (item) {
+            if (item.type === 'more') {
+                str += getTotalPrice(data)
+            } else {
+                str += '<div class="product-item">'
+                    + item.product_name +
+                    '<div class="p-conunt">x' +
+                    +item.product_count +
+                    '</div>' +
+                    '</div>';
+            }
+        })
+        return str;
+    }
+
+    /*
+    * 渲染列表
+    * param
+    */
+    var str = "";
+    function initContentList(list) {
+        list.forEach(function (item, index) {
+            var _str = itemTmpl.replace("$poi_pic", item.poi_pic)
+                .replace("$poi_name", item.poi_name)
+                .replace("$status_description", item.status_description)
+                .replace("$getProduct", getProduct(item))
+            str = str + _str;
+        })
+        $(".order-list").append($(str));
+    }
+
+    /*
+    * 请求数据
     * param
     */
     function getList() {
-        $.get('../json/orders.json',function(data){
+        $.get('../json/orders.json', function (data) {
             console.log(data);
+            var list = data.data.digestlist || [];
+
+            initContentList(list);
         })
     }
 
