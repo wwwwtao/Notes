@@ -1,8 +1,8 @@
 (function () {
-    var itemTmpl = '<a class="$key btn-item href="#" >' +
+    var itemTmpl = '<a class="$key btn-item" href="../$key/$key.html">' +
         '<div class="tab-icon"></div>' +
         '<div class="btn-name">$text</div>' +
-        '</a>';
+        '</a>'
 
 
 
@@ -19,8 +19,8 @@
         }];
 
         var str = "";
-        items.forEach(function (item, index) {
-            str += itemTmpl.replace("$key", item.key)
+        items.forEach(function (item) {
+            str += itemTmpl.replace(/\$key/g, item.key)
                 .replace("$text", item.text)
         })
         $(".bottom-bar").append($(str));
@@ -31,7 +31,7 @@
         var page = arr[arr.length - 1].replace('.html', '');
 
         //将根据key值 设置a元素的active类 选中页面
-        $('a.'+page).addClass('active');
+        $('a.' + page).addClass('active');
     }
 
     init();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>美团外卖源码 - 副本</name>
+	<name>美团外卖源码 - 副本 - 副本</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,7 +16,16 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1556187564022</id>
+			<id>1556188125371</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-node_modules</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1556188463532</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
