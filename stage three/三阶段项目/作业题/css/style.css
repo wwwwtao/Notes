@@ -34,13 +34,13 @@
     position: relative;
     background: #7EA6B1;
     text-align: center;
-    height: 5rem;
+    height: 3rem;
 }
 
 .header-nav-tit {
     display: inline-block;
     height: 100%;
-    line-height: 5rem;
+    line-height: 3rem;
     color: white;
     font-size: .8rem;
     margin-left: 1.5rem;
@@ -92,12 +92,16 @@
     justify-content: center;
 }
 
-.header-nav2-item {
+.header-nav2-item a{
     height: 5rem;
     line-height: 5rem;
     margin: 0 .5rem;
     font-size: .8rem;
     color: #757575;
+}
+
+.header-nav2-item a:hover {
+    color: #afafaf;
 }
 
 .header-active {
@@ -140,6 +144,12 @@
     outline: none;
     border: none;
     background: white;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.session-btn:hover {
+    background-color: skyblue;
 }
 
 /* 第一区域图片 和 按钮 end */
@@ -251,13 +261,23 @@
     align-items: center;
 }
 
-.five-container img {
+.five-container .five-imgitem {
     width: 31%;
     height: 45%;
+    overflow: hidden;
+}
+.five-container .five-imgitem img {
+    width: 100%;
+    height: 100%;
+    transition: 0.7s;
+}
+
+.five-container .five-imgitem img:hover {
+    transform: scale(1.5);
 }
 
 @media (max-width: 766px) {
-    .five-container img {
+    .five-container .five-imgitem {
         width: 45%;
         height: 33%;
         margin: .2rem .05rem 0 .05rem;
