@@ -46,6 +46,7 @@
                           '<div class="minus"></div>'+
                           '<div class="count">$chooseCount</div>'+
                           '<div class="plus"></div>'+
+                      '</div>'+
                       '</div>';
       var totalPrice = 0;
 

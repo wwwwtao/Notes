@@ -27,7 +27,7 @@
     function changeShippingPrice(str){
         $strBottom.find('.shipping-fee').text(str);
     }
-        function changeTotalPrice(str){
+    function changeTotalPrice(str){
         $strBottom.find('.total-price-span').text(str);
     }
 
@@ -37,16 +37,20 @@
      * param 
      */
     function renderItems(){
+        
         $strTop.find('.choose-item').remove();
+        
         var list = window.food_spu_tags || [];
+
         var tmpl = '<div class="choose-item">'+
                         '<div class="item-name">$name</div>'+
                         '<div class="price">¥<span class="total">$price</span></div>'+
-                    '<div class="select-content">'+
+                        '<div class="select-content">'+
                             '<div class="minus"></div>'+
                             '<div class="count">$chooseCount</div>'+
                             '<div class="plus"></div>'+
-                        '</div>';
+                    '</div>'+
+                    '</div>';
         var totalPrice = 0;
 
         list.forEach(function(item){
@@ -67,8 +71,6 @@
                     var $row = $(row);
 
                     $row.data('itemData',_item);
-
-
 
                     $strTop.append($row);
                 }
@@ -159,6 +161,8 @@
 
         });
     }
+
+    
 
 
     function init(data){
