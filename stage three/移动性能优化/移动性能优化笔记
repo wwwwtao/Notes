@@ -86,7 +86,7 @@
                 ( 尽量使用id选择器  合理使用选择器层级)
 
                 减少DOM操作的次数
-                合理缓存DOM对象/操作
+                合理缓存DOM对象/操作  cloneNode(true);   //复制节点  带true  复制内容
 
                 缓存 DOM.length   
                 每次.length都要计算，用一个变量保存这个值

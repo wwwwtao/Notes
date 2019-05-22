@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <script>
+        // 生成10个按钮 每次点击弹出 1- 10 
+        var btn = document.createElement("button");  //创建一个button标签 节点
+        
+        var btns = document.createDocumentFragment(); //创建文档碎片
+        var i = 0;
+        for (i = 1; i <= 10; i++) {
+            (function (i) {
+                var _btn = btn.cloneNode();     //复制节点
+                _btn.innerText = i;
+                _btn.onclick = function () {
+                    alert(i);
+                }
+                btns.appendChild(_btn);     //添加到文档碎片中
+            })(i);
+        }
+        document.body.appendChild(btns);
+
+        var btns = document.createDocumentFragment();    //创建了同名新的文档碎片 let const 不允许这样哦 
+        for (let i = 1; i <= 10; i++) {
+            let _btn = btn.cloneNode();         //复制节点
+            _btn.innerText = i;
+            _btn.onclick = function () {
+                alert(i);
+            }
+            btns.appendChild(_btn);     //添加到文档碎片中
+        }   
+        document.body.appendChild(btns);
+
+    </script>
+</body>
+
+</html>
