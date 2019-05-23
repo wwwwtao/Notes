@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+//补充代码
+//提取start的line，然后在提出end对象中line；
+let node = {
+    type: 'Identifier',
+    name: 'ES',
+    loc: {
+        start: ["line","column"],
+        end: {
+            line: 1,
+            column: 4
+        }
+    }
+};
+let {loc: {start: [line],end: {line: lineend}}} = node;
+console.log(line);
+console.log(lineend);
+    </script>
+</body>
+
+</html>

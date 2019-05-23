@@ -20,7 +20,7 @@ let [a, b, c] = [1, 2, 3];
 console.log(a);  //1
 
 对象的解构赋值
-let { foo, bar } = { foo: "aaa", bar: "bbb" };
+let { foo, bar } = { foo: "aaa", bar: "bbb" };      //变量名和属性名要一致
 console.log(foo);  //"aaa"
 
 字符串的解构赋值
