@@ -6,6 +6,7 @@
 (function(window, document) {
 
   let Msg = function(options) {
+    // console.log(this);
     this._init(options);
   }
 
@@ -82,7 +83,7 @@
     }
 
     const cancel = function(e) {
-      _this.cancel && _this.cancel.call(_this, e);
+      _this.cancel && _this.cancel.call(_this, e);  //有自己的方法 就调用自己的方法 然后再隐藏
       hideMsg();
     }
 

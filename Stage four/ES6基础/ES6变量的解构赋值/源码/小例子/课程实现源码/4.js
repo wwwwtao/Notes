@@ -8,6 +8,6 @@ demo.style.height = '400px';
 document.body.appendChild(demo);
 // demo.style.background = '#f0f';
 
-setTimeout(function() {
+requestAnimationFrame(function() {
 	demo.style.background = '#f0f';
 });
