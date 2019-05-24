@@ -20,11 +20,8 @@
 // ------------------------------------------
 
 // const getUserInfo = (id = 1) => {
-// 	// AJAX ....
-
 // 	const name = 'xiaoming';
 // 	const age = 10;
-
 // 	return {
 // 		name,
 // 		age,
@@ -46,9 +43,9 @@
 // 	'FDASFHGFgfdsgsd$#$%^&*%$#': 3
 // };
 
-const key = 'age';
+// const key = 'age';
 
-const xiaoming = {
-	name: 'xiaoming',
-	[`${key}123`]: 14
-};
+// const xiaoming = {
+// 	name: 'xiaoming',
+// 	[`${key}123`]: 14
+// };
