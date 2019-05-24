@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <script type="text/javascript">
+
+        // 补充代码
+// ES6 对正则表达式添加了u修饰符，含义为“Unicode 模式”，用来正确处理大于\uFFFF的 Unicode 字符。
+
+// 这两个 Unicode 字符的编码不同，但是字型很相近，所以用i来修饰。  第一个是大写的K  第二个不是 要加i 而且要加u才能匹配到
+        console.log(/K/.test('\u004B'))
+        console.log(/K/iu.test('\u212A'))
+    </script>
+</body>
+
+</html>

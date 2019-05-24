@@ -26,12 +26,31 @@
         // console.log(insert(2).into([1, 3]).after(1));
         // 补充代码 使用箭头函数对齐进行改写
 
-        const insert = (value) => info = (array) => after = (afterValue) {
-            array.splice(array.indexOf(afterValue) + 1, 0, value);
-            return array;
+        const insert = (value) => {
+            return {
+                into: (array) => {
+                    return {
+                        after: (afterValue) => {
+                            array.splice(array.indexOf(afterValue) + 1, 0, value);
+                            return array;
+                        }
+                    }
+                }
+            }
         }
-        console.log(insert(2).into([1, 3]).after(1));
+        insert(2).into([1, 3]).after(1);
 
+
+        
+        let foo = value => array => afterValue => {
+
+            array.splice(array.indexOf(afterValue) + 1, 0, value);
+
+            return array;
+
+        }
+
+        let v2 = foo(2)([1, 3])(1);
     </script>
 </body>
 
