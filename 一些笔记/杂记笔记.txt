@@ -44,11 +44,8 @@ outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的
 
 insertAdjacentHTML 方法：在指定的地方插入html标签语句
 1.     beforeBegin: 插入到标签开始前
-
 2.     afterBegin:插入到标签开始标记之后
-
 3.     beforeEnd:插入到标签结束标记前
-
 4.     afterEnd:插入到标签结束标记后
 
 对象到数字的转换过程如下：
@@ -127,7 +124,7 @@ getElementsByTagName() 方法可返回带有指定标签名的对象的集合。
 ajax 替换数据(仿真美团项目用到的方法)
 1.先定义一个模板
 2.获取到所有数据 (取到需要用到的)
-3.forEach(function(x,index)) 可以遍历数据 。。
+3.forEach(function(item,index)) 可以遍历数据 。。
 4.replace() 遍历过程中替换关键数据  记得把替换后的数据保存下来
 5.append到页面某个元素里面去
 
@@ -135,4 +132,5 @@ window.location.pathname; //页面文件名  比如:index/index.html
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DOM动态渲染元素的时候会等同步任务执行完毕之后再去渲染 
 因为修改style会引发重排 重绘 所以有些浏览器为了性能优化会把所有修改style的同步任务执行完 然后再动态添加元素 
-所有修改style加个异步任务(定时器 可以不定时)就是再元素渲染出来之后再更改样式(比如颜色的渐变) requestAnimationFrame用这个性能更好
+所有修改style加个异步任务(定时器 可以不定时)就是再元素渲染出来之后再更改样式(比如颜色的渐变) 
+requestAnimationFrame用这个性能更好

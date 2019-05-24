@@ -114,20 +114,3 @@
   window.$Msg = Msg;
 
 })(window, document);
-
-// '<div class="msg__wrap">\
-  // <div class="msg-header">\
-  //   <span>确认删除</span>\
-  //   <span class="msg-header-close-button">×</span>\
-  // </div>\
-  // <div class="msg-body">\
-  //   <div class="msg-body-icon">\
-  //     <div class="msg-body-icon-wrong"></div>\
-  //   </div>\
-  //   <div class="msg-body-content">是否删除</div>\
-  // </div>\
-  // <div class="msg-footer">\
-  //   <button class="msg-footer-btn msg-footer-cancel-button">算了吧</button>\
-  //   <button class="msg-footer-btn msg-footer-confirm-button">好的</button>\
-  // </div>\
-// </div>'
