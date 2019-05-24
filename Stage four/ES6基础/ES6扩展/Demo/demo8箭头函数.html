@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        /* function insert(value) {
+            return {
+                into: function (array) {
+                    return {
+                        after: function (afterValue) {
+                            array.splice(array.indexOf(afterValue) + 1, 0, value); 
+                            //因为删除0位 所以给位置1插入value 直接修改原数组 返回值为空数组
+                            // console.log(array.indexOf(afterValue)) //0 查找1在array中的位置为0
+                            return array;
+                        }
+                    };
+                }
+            };
+        } */
+
+        // console.log(insert(2).into([1, 3]).after(1));
+        // 补充代码 使用箭头函数对齐进行改写
+
+        const insert = (value) => info = (array) => after = (afterValue) {
+            array.splice(array.indexOf(afterValue) + 1, 0, value);
+            return array;
+        }
+        console.log(insert(2).into([1, 3]).after(1));
+
+    </script>
+</body>
+
+</html>
