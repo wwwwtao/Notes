@@ -85,15 +85,15 @@
 
 // Object.keys
 
-// console.log(Object.keys(obj));
+// console.log(Object.keys(obj));  // [a,b,c,d] 把所有可枚举的key放入数组 
 
 // // Object.values
 
-// console.log(Object.values(obj));
+// console.log(Object.values(obj)); // [1,2,3,4]	把所有可枚举的values放入数组 
 
 // // Object.entries
 
-// console.log(Object.entries(obj));
+// console.log(Object.entries(obj)); 	// [['a',1],['b',2],['c',3],['d',4]] 所有可枚举的key values对 变成数组 放入数组
 
 // for - of
 

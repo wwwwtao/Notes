@@ -1,0 +1,34 @@
+******************************* promise *************************************
+// 方法 用于请求数据(模拟)
+function f() {
+	return new Promise(resolve => {
+		setTimeout(function() {
+			resolve();
+		}, 1000);
+	})
+}
+
+f()
+	.then(function() {
+		console.log(1);
+		return f();
+	})
+	.then(function() {
+		console.log(2);
+		return f();
+	})
+	.then(function() {
+		console.log(4);
+		return f();
+	})
+	.then(function() {
+		console.log(3);
+		return f();
+	})
+	.then(function() {
+		console.log(5);
+		return f();
+	})
+	.then(function() {
+		console.log(6);
+	});
