@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+    <script type="text/javascript">
+
+        function cook() {
+            console.log('开始做饭。');
+            var p = new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    console.log('做饭完毕！');
+                    resolve('鸡蛋炒饭');
+                }, 1000);
+            });
+            return p;
+        }
+
+        function eat(data) {
+            console.log('开始吃饭：' + data);
+            var p = new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    console.log('吃饭完毕!');
+                    resolve('一块碗和一双筷子');
+                }, 1000);
+            });
+            return p;
+        }
+        function wash(data) {
+            console.log('开始洗碗：' + data);
+            var p = new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    console.log('洗碗完毕!');
+                    resolve('干净的碗筷');
+                }, 1000);
+            });
+            return p;
+        }
+        //补充代码
+        cook()
+            .then(function (data) {
+                return eat(data)
+            })
+            .then(data => {
+                return wash(data)
+            })
+            .then((data) => {
+                console.log(data);
+            })
+    </script>
+</body>
+
+</html>

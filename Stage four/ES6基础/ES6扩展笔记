@@ -126,7 +126,7 @@ const xiaoming = {
 
  Object.setPrototypeOf(obj,obj1)  obj: 要修改的对象 obj1: 修改对象的新原型
  Object.getPrototypeOf()
- super    从本质上讲，this是一个指向本对象的指针, 然而super是一个Java关键字 只有在简洁表示法才能用
+ super    从本质上讲，this是一个指向本对象的指针, 然而super是一个Java关键字 只有在简洁表示法才能用 ！！！！！
  super可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。  可以拿到原型上的属性
 /***************************************************************/
 

@@ -16,12 +16,12 @@
 //   resolve('耶!')
 // });
 
-// // 直接返回传递进去的promise
+// // 直接返回传递进去的promise  p===poruomiesi
 // let p = Promise.resolve(poruomiesi);
 
 // p.then(data => void console.log(data));
 
-// console.log(p === poruomiesi); 
+// console.log(p === poruomiesi);   //true
 
 // // ---------------------------------------
 // // 传递一个thenable
