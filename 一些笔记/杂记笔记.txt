@@ -19,6 +19,8 @@ var arr = ['a', 'b', 'c', 'd'];
 
     ‘+’选择器则表示某元素后相邻的兄弟元素，也就是紧挨着的，是单个的。
     而‘~’选择器则表示某元素后所有同级的指定元素，强调所有的。
+    
+    html5shiv.js
 
     parentNode 属性可返回某节点的父节点。
 
@@ -60,6 +62,15 @@ Absolution：元素会脱离文档流，定位是相对于离它最近的且不�
 Relative：元素仍处于文档流中，定位是相对于原本自身的位置，若没有设置宽度，则宽度为父元素的宽度，该元素的大小会影响父元素的大小。
 
 setAttribute() 方法添加指定的属性，并为其赋指定的值。
+
+position:sticky 的生效是有一定的限制的，总结如下：
+须指定 top, right, bottom 或 left 四个阈值其中之一，才可使粘性定位生效。否则其行为与相对定位相同。
+并且 top 和 bottom 同时设置时，top 生效的优先级高，left 和 right 同时设置时，left 的优先级高。
+设定为 position:sticky 元素的任意父节点的 overflow 属性必须是 visible，否则 position:sticky 不会生效。这里需要解释一下：
+如果 position:sticky 元素的任意父节点定位设置为 overflow:hidden，则父容器无法进行滚动，所以 position:sticky 元素也不会有滚动然后固定的情况。
+如果 position:sticky 元素的任意父节点定位设置为 position:relative | absolute | fixed，则元素相对父元素进行定位，而不会相对 viewprot 定位。
+如果真的希望用上这个属性，可以采用一些开源库来实现兼容。
+推荐 fixed-sticky 。
 
 text-overflow 属性规定当文本溢出包含元素时发生的事情。clip 修剪文本	ellipsis 显示省略符号来代表被修剪的文本。 string 使用给定的字符串来代表被修剪的文本。
 
@@ -135,3 +146,5 @@ window.location.pathname; //页面文件名  比如:index/index.html
 因为修改style会引发重排 重绘 所以有些浏览器为了性能优化会把所有修改style的同步任务执行完 然后再动态添加元素 
 所有修改style加个异步任务(定时器 可以不定时)就是再元素渲染出来之后再更改样式(比如颜色的渐变) 
 requestAnimationFrame用这个性能更好
+
+http状态码为2xx或304时 成功

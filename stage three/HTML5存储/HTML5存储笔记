@@ -3,7 +3,7 @@
 设置获取存储内容
 getItem(key)
 setItem(key,value)
-对象[key=value
+对象[key=value]
 对象.key = value
 
 删除存储内容

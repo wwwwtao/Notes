@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <script>
+
+        let arr = [[1, 2, 3], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10,'w']
+        //数组扁平化 方法一 
+        let arr1 = arr.toString().split(",").map(item => Number(item));
+        // 去重 然后升序 
+        let arr2 = [...new Set(arr1)].sort((a, b) => a - b);
+
+        //数组扁平化 方法二 
+        // function flatten(arr) {
+        //     return arr.reduce((a, b) => {
+        //         console.log(a, b)
+        //         if (b instanceof Array) {
+        //             return a.concat(arguments.callee(b));
+        //         }
+        //         return a.concat(b);
+        //     }, [])
+        // }
+        //数组扁平化 方法二 reduce方法高级写法 三元运算符
+        function flatten(arr) {
+            return arr.reduce((a, b) => {
+                return a.concat((b instanceof Array) ? arguments.callee(b) : b);
+            }, [])
+        }
+
+
+        console.log([1,2,3].map(parseInt)); // 1,NaN,NaN 
+        // 是由于parseInt(string, radix) 的参数radix必须介于2~36之间，而且字符串string中的数字不能大于radix才能正确返回数字结果值。
+        //由于map的回调函数的参数index索引值作了parseInt的基数radix，导致出现超范围的radix赋值和不合法的进制解析，才会返回NaN。
+
+    </script>
+</body>
+
+</html>
