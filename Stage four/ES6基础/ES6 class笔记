@@ -19,7 +19,67 @@ constructor中定义的属性可以称为实例属性（即定义在this对象�
 
 类的所有实例共享一个原型对象 ，所以proto属性是相等的  由此，也可以通过proto来为类增加方法。使用实例的proto属性改写原型，会改变Class的原始定义，影响到所有实例，所以不推荐使用！
 
-类”的内部可以使用get和set关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为。
 
 Class 的静态方法 
 加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用,如果静态方法包含this关键字，这个this指的是类，而不是实例。
+目前没有静态属性 只能类名.属性名创建
+
+
+类”的内部可以使用get和set关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为和做额外操作
+ES6 getter/setter
+class Person {
+	constructor() {
+		this._name = '';
+	}
+	get name() {
+		console.log('正在访问name');
+		return `我的名字是${ this._name }`;
+	}                                               //不要用逗号哦 和对象字面量不一样哦
+	set name(val) {
+		console.log('正在修改name');
+		this._name = val;
+	}
+}
+
+
+ES5 getter/setter
+1. 在对象字面量中书写get/set方法
+const obj = {
+	_name: '',          //加_ 用get,set获取和设置name   get,set方法名是name,返回和设置_name
+	get name() {
+		console.log('123');
+		return this._name;
+	},
+	set name(val) {
+		this._name = val;
+	}
+}
+2. Object.defineProperty
+var obj = {
+	_name: ''
+};
+Object.defineProperty(obj, 'name', {
+	get: function() {
+		console.log('正在访问name');
+		return this._name;
+	},
+	set: function(val) {
+		console.log('正在修改name');
+		this._name = val;
+	}
+});
+
+name属性与new.target属性
+
+函数的name属性，返回该函数的函数名。
+
+new.target属性  指向 !new关键字,后面的类   没有new,值就会等于undefined   在class或者ES5的构造函数中存在  
+语法糖                                  //校验是不是使用new 来进行调用的
+function Car() {
+	// if (new.target !== Car) {
+	// 	throw Error('必须使用new关键字调用Car');
+	// }
+	if (!(this instanceof Car)) {   //如果this的原型上没有Car 就不是使用new关键字调用的Car()
+		throw Error('必须使用new关键字调用Car');
+	}
+}
