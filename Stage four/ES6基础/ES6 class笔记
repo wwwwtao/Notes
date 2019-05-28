@@ -6,17 +6,15 @@ class Person{                   //定义了一个名字为Person的类
         this.age=age;
     }
     //方法在这呢
-    say(){                      //这是一个类的方法，注意千万不要加上function
+    say(){                      //	1.在类中声明方法的时候，千万不要给该方法加上function关键字	2.方法之间不要用逗号分隔，否则会报错
         return "我的名字叫" + this.name+"今年"+this.age+"岁了";
     }
 }
-1.在类中声明方法的时候，千万不要给该方法加上function关键字
-2.方法之间不要用逗号分隔，否则会报错
+
 
 constructor方法如果没有显式定义，会隐式生成一个constructor方法。所以即使你没有添加构造函数，构造函数也是存在的。
 constructor方法默认返回实例对象this，但是也可以指定constructor方法返回一个全新的对象，让返回的实例对象不是该类的实例。
 constructor中定义的属性可以称为实例属性（即定义在this对象上），constructor外声明的属性都是定义在原型上的，可以称为原型属性（即定义在class上)。
-
 类的所有实例共享一个原型对象 ，所以proto属性是相等的  由此，也可以通过proto来为类增加方法。使用实例的proto属性改写原型，会改变Class的原始定义，影响到所有实例，所以不推荐使用！
 
 
@@ -69,7 +67,7 @@ Object.defineProperty(obj, 'name', {
 	}
 });
 
-name属性与new.target属性
+ES6 name属性与new.target属性
 
 函数的name属性，返回该函数的函数名。
 
@@ -83,3 +81,33 @@ function Car() {
 		throw Error('必须使用new关键字调用Car');
 	}
 }
+
+在ES5中模拟类   new和构造函数的原理
+function Constructor(fn, args) {	//传入函数 和函数的参数 
+ //创建空对象 空对象的原型是函数的prototype								
+	var _this = Object.create(fn.prototype);
+ //this赋值为空对象 并传入参数执行
+	var res = fn.apply(_this, args);
+ // return 值为对象就返回res 否则返回this(之前的空对象)
+	return res ? res : _this;
+}
+
+ES6继承 extends关键字
+
+class FEEngineer extends Human { 			//继承父类的属性和方法	构造时传入父类的属性 然后用super()可以调用 进行修改
+	constructor(name, age, sex, hobby, skill, salary) {	//就算不修改父类的属性也要调用super() 继承父类的属性
+		super(name, age, sex, hobby);
+		this.skill = skill;
+		this.salary = salary;
+	}
+}
+
+// super  
+ 从本质上讲，this是一个指向本对象的指针, 然而super是一个Java关键字 只有在简洁表示法才能用 ！！！！！  
+ super可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。  可以拿到原型上的属性
+ 
+在调用super() 父类的this 始终是子类的this 
+1. 作为父类构造函数调用  在子类构造函数中使用super(),相当于把this传给父类,然后跑一遍
+2. 作为对象的方式调用	1. 非静态方法中访问super -> 父类原型		2. 在静态方法中访问super -> 父类
+
+多态:同一个接口 在不同情况下做不一样的事情

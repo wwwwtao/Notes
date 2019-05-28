@@ -39,7 +39,6 @@ P.prototype.test = function() {
 }
 
 function C() {
-	P.call(this);
 	this.name = 'child';
 	this.age = 11;
 }
