@@ -44,7 +44,7 @@ class Transform {
 		if (!this._queue.length) return;
 
 		// 先进先出
-		setTimeout(() => {
+		requestAnimationFrame(() => {
 			const info = this._queue.shift();
 			this.el.style.transition = `all ${ info.time / 1000 }s`;
 			this.el.style.transform = this._getTransform(info);

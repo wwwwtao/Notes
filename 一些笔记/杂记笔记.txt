@@ -148,3 +148,5 @@ window.location.pathname; //页面文件名  比如:index/index.html
 requestAnimationFrame用这个性能更好
 
 http状态码为2xx或304时 成功
+
+Css  linear-gradient() 函数用于创建一个线性渐变的 "图像"。

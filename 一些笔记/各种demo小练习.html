@@ -41,6 +41,11 @@
         // 是由于parseInt(string, radix) 的参数radix必须介于2~36之间，而且字符串string中的数字不能大于radix才能正确返回数字结果值。
         //由于map的回调函数的参数index索引值作了parseInt的基数radix，导致出现超范围的radix赋值和不合法的进制解析，才会返回NaN。
 
+
+        function foo({x,y=0}){
+            console.log(x,y)
+        }
+        foo();
     </script>
 </body>
 
