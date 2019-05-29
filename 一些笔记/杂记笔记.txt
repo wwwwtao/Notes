@@ -20,28 +20,25 @@ var arr = ['a', 'b', 'c', 'd'];
     ‘+’选择器则表示某元素后相邻的兄弟元素，也就是紧挨着的，是单个的。
     而‘~’选择器则表示某元素后所有同级的指定元素，强调所有的。
     
-    html5shiv.js
-
     parentNode 属性可返回某节点的父节点。
 
-           select 元素可创建单选或多选菜单。
+    select 元素可创建单选或多选菜单。
 <select&> 元素中的 <option> 标签用于定义列表中的可用选项。
 
 outline （轮廓）是绘制于元素周围的一条线，位于边框边缘的外围，可起到突出元素的作用。
 
-
-          line-height 带单位和不带单位的区别
+  line-height 带单位和不带单位的区别
 带单位的行高有继承性 继承了父元素的行高计算值   子元素12px  父元素14px  行高28px
 不带单位直接继承 例如行高2倍 子元素12px  行高24px
 
-           text-indent 属性规定文本块中首行文本的缩进。 注释：允许使用负值。如果使用负值，那么首行会被缩进到左边。   (可以用em)
+  text-indent 属性规定文本块中首行文本的缩进。 注释：允许使用负值。如果使用负值，那么首行会被缩进到左边。   (可以用em)
 注意：在 CSS 2.1 之前，text-indent 总是继承计算值，而不是声明值。
 
-           continue ：跳过本次循环剩余的代码，继续执行下一次循环。 循环控制语句
+  continue ：跳过本次循环剩余的代码，继续执行下一次循环。 循环控制语句
 
-           contenteditable 一段可编辑的段落 true表示可编辑
+  contenteditable 一段可编辑的段落 true表示可编辑
 
-           disabled 属性规定禁用按钮。被禁用的按钮既不可用，也不可点击。
+  disabled 属性规定禁用按钮。被禁用的按钮既不可用，也不可点击。
 
 
 insertAdjacentHTML() 方法：在指定的地方插入html标签语句 该方法接受两个参数，第一个是指定位置，第二个是待解析的字符串。
@@ -55,7 +52,6 @@ insertAdjacentHTML() 方法：在指定的地方插入html标签语句 该方法
 空数组 == false     true == 1
 如果对象具有valueof（）方法，后者返回一个原始值，则JavaScript将这个原始值转换为数字并返回；否则，如果对象具有toString（）方法，后者返回一个原始值，JavaScript将这个字符串转换为数字并返回；否则，报错。数组继承了默认的valueOf()方法，但是数组、函数和正则表达式调用此方法后，只返回对象本身，因此转换为数字，还会继续调用toString（）方法，空数组调用toString（）返回空字符串，转换为数字为0，new Array(1)同样因为虽然长度为1，但值为undefined，转换为数字仍未0.
 
-Math.abs //绝对值
 
 Absolution：元素会脱离文档流，定位是相对于离它最近的且不是static定位的父元素而言，若该元素没有设置宽度，则宽度由元素里面的内容决定，且宽度不会影响父元素，定位为absolution后，原来的位置相当于是空的，下面的的元素会来占据。
 
@@ -149,4 +145,23 @@ requestAnimationFrame用这个性能更好
 
 http状态码为2xx或304时 成功
 
-Css  linear-gradient() 函数用于创建一个线性渐变的 "图像"。
+Css  background: linear-gradient(direction, color-stop1, color-stop2, ...); 函数用于创建一个线性渐变的 "图像"。
+
+background-position的属性值介绍
+background-position后可跟2个值，2个值用空格间隔开，第一个值，固定代表水平方向（横向）左、中、右距离，第二个值，固定代表垂直上、下距离。
+
+
+
+Hammer.js 用于检测触摸手势的 JavaScript 库
+fastclick.js 解决click300ms延迟
+Swiper 快速切换插件  轮播图
+ES6转换ES5 Babel  
+html5--html5shiv.js
+css3--selectivizr-min.js
+
+
+display属性inline  
+浏览器会解析文档中两个inline型标签之间的空白符为间隙,该间隙大小不可控,不同浏览器大小不一致
+为其父级设置font-size:0;并在子级中恢复字体大小,恢复的原因是font-size具有继承性
+
+元素宽度由子元素撑开  overflow: auto  作滑动列表

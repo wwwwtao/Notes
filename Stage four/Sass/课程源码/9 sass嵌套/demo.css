@@ -1,0 +1,71 @@
+/*if*/
+p {
+  color: red;
+}
+
+.div {
+  color: red;
+}
+
+/*for*/
+.item1 {
+  width: 1px;
+}
+
+.item2 {
+  width: 2px;
+}
+
+.item3 {
+  width: 3px;
+}
+
+.item1 {
+  width: 1px;
+}
+
+.item2 {
+  width: 2px;
+}
+
+/*for list*/
+.item1 {
+  width: 1px;
+}
+
+.item2 {
+  width: 2px;
+}
+
+.item3 {
+  width: 3px;
+}
+
+.item4 {
+  width: 4px;
+}
+
+.item5 {
+  width: 5px;
+}
+
+/*while*/
+.item6 {
+  width: 6px;
+}
+
+.item4 {
+  width: 4px;
+}
+
+.item2 {
+  width: 2px;
+}
+
+/*each*/
+.div {
+  top: 1px;
+  left: 2px;
+  bottom: 3px;
+  right: 4px;
+}

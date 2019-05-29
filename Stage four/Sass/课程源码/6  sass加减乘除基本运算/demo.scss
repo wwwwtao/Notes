@@ -1,0 +1,45 @@
+﻿$num1:100px;
+$num2:200px;
+
+
+$width: $num1 + $num2;
+
+$color1: #010203;
+$color2: #040506;
+$color3: #a69e61;
+
+$str:'hello.jpeg';
+
+
+.div {
+    width: $width;
+}
+
+/* 加减乘除 */
+.div {
+    font: 10px/8px;
+    font: (10px/8);
+    font: (10px*8);
+    width: $width/2;
+    margin-left: (5px + 8px/2);
+}
+
+/*颜色运算*/
+.div {
+    color: $color1 + $color2;
+}
+
+.div {
+    color: mix($color1, $color2);
+    color: red($color1);
+    color: red($color3);
+    color: green($color3);
+    color: blue($color3);
+    color: rgb(red($color3),green($color3),blue($color3));
+}
+
+/*字符串*/
+
+.div {
+    background-image: url('images/'+$str);
+}

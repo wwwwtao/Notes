@@ -1,0 +1,11 @@
+$num1: 100px;
+$num2: 100px;
+$color: red;
+.div1 {
+    width: $num1;
+    height: $num2;
+    background-color: $color;
+    &:hover {
+        width: $num1 + $num2;
+    }
+}

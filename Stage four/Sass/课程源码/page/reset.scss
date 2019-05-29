@@ -1,0 +1,60 @@
+html,
+body,
+div,
+span,
+object,
+button,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+a,
+code,
+em,
+img,
+q,
+small,
+strong,
+dd,
+dl,
+dt,
+li,
+ol,
+ul,
+fieldset,
+form,
+label,
+table,
+tbody,
+tr,
+th,
+td,
+input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+body {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+ul,
+li {
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
+}
+@charset "utf-8";
+html {
+  background: #fff;
+  font-family: 'STHeiti', 'Microsoft YaHei', 'Helvetica', 'Arial', sans-serif;
+  -webkit-text-size-adjust: none;
+  word-break: break-word;
+}

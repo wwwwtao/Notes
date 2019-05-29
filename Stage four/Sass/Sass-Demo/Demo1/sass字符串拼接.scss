@@ -1,0 +1,11 @@
+$width: 200px;
+$height: 200px;
+
+$str: 'imooc.png';
+
+.div1{
+    width: $width;
+    height: $height;
+
+    background: url('./img/#{$str}');
+}

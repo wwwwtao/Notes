@@ -1,0 +1,19 @@
+$width:300px;
+$height:300px;
+
+$color:#e03434;
+
+$baseWidth:200px;
+
+$baseWidth:100px !default;
+
+.div1{
+	width:$width;
+	height:$height;
+	background-color:$color;
+}
+.div2{
+	width:$baseWidth;
+	height:$baseWidth;
+	background-color:$color;
+}

@@ -1,0 +1,20 @@
+@charset "UTF-8";
+/*一般mixin*/
+/*嵌套mixin*/
+/*参数mixin*/
+.div {
+  width: 100px;
+  padding: 10px;
+  display: inline-block;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 500;
+  color: red;
+  background-color: red;
+}
+
+.div {
+  border-color: blue;
+  border-width: 2px;
+  border-style: dashed;
+}
