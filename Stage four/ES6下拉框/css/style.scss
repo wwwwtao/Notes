@@ -1,0 +1,39 @@
+$pcolor: skyblue;
+@mixin center {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+p {
+    color: $pcolor;
+    text-align: center;
+}
+
+.myselect_box {
+    @include center;
+    width: 300px;
+    height: 200px;
+}
+
+.native_select_box {
+    @include center;
+    width: 100px;
+    height: 100px;
+    top: 300px;
+}
+
+.myselect {
+    height: 40px;
+}
+
+
+.tit {
+    font-weight: bold;
+}

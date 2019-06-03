@@ -27,7 +27,7 @@ func(1,2); // 3
                         retuen this.prop;   (此处的this 指向o)
                     }
                 }
-            //console.log(o.f());     //logs 37   只要将函数作为对象的方法 像 o.f() 这样调用的话 this就会指向对象
+                //console.log(o.f());     //logs 37   只要将函数作为对象的方法 像 o.f() 这样调用的话 this就会指向对象
 
                             !   !   !   !   !                < -- 对象原型链上的this -- >           !   !   !   !   !
             

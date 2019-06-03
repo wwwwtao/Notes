@@ -7,7 +7,7 @@
     缺点 ： IE6/7/8 判断 null 会返回"[object Object]"          牛逼 牛逼
 
 typeof  只能判断基本类型  
-数组 和 null 都会返回"object"
+数组 和 null 都会返回"object"  function会返回 function
 
 obj instanceof Object  判断类型 返回true  或者 false  
 但是不同window  或 iframe 间不能用 

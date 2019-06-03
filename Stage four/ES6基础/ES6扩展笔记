@@ -116,9 +116,7 @@ const xiaoming = {
 
 4.部分新的方法和属性
  Object.is()   等价全等 ===  接受两个参数    区别在于: +0 -0会返回false, NaN会返回true  ,这两个和===返回的结果是相反的
-
  Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。 和扩展运算符一样是浅拷贝
-
  Object.keys()  //把所有可枚举的key放入数组 
  Object.values()    //把所有可枚举的values放入数组 
  Object.entries()       //把所有可枚举的key values对 变成数组 放入数组
@@ -126,6 +124,7 @@ const xiaoming = {
 
  Object.setPrototypeOf(obj,obj1)  obj: 要修改的对象 obj1: 修改对象的新原型
  Object.getPrototypeOf()
+ 
  super    从本质上讲，this是一个指向本对象的指针, 然而super是一个Java关键字 只有在简洁表示法才能用 ！！！！！
  super可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。  可以拿到原型上的属性
 /***************************************************************/
