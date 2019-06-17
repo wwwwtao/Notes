@@ -71,7 +71,7 @@ set()：设置
 
 10、Object.setPrototypeOf(obj, proto)
 
-功能：设置目标对象的原型为另一个对象或null，返回该目标对象
+功能：设置目标对象的原型为另一个对象或null，返回该目标对象 
 
 11、Object.keys(obj)
 

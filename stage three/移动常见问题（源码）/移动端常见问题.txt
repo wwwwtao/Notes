@@ -40,7 +40,7 @@ modernizr 库 可以检测不支持的特性 写兼容性写法
         if ('addEventListener' in document) {
             document.addEventListener('DOMContentLoaded', function() {
                 FastClick.attach(document.body);
-            }, false);
+            }, false);res.data
         }
     </script>
 
