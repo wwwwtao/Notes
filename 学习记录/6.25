@@ -1,3 +1,7 @@
+
+--------------------------------------VueX------------------------------------------                                
+
+
 这是一个将数据存在state,通过dispatch来修改state中数据的过程：
 this.$store.dispatch('inc',11111)派遣
 
@@ -17,8 +21,8 @@ http://img.mukewang.com/climg/5cce5ee70001244804710587.jpg
 (3)actions来调用mutations中increment的方法，从而能双向的修改increment中的count、num值
 ，意思就是说mutations中increment的count、num修改了，state中的count、num也会修改
 (4)在页面中使用this.$store.dispatch('inc',100000);
-    调用actions的inc函数中的commit
-    commit从而调用了mutations中的increment,
+                调用actions的inc函数中的commit
+                commit从而调用了mutations中的increment,
 
 this.$store.dispatch('inc',11111)派遣
 commit()委任
