@@ -47,6 +47,3 @@ js风格  var re = new RegExp("a");
 
 
 
-
-
-       
