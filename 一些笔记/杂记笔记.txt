@@ -165,3 +165,33 @@ display属性inline
 为其父级设置font-size:0;并在子级中恢复字体大小,恢复的原因是font-size具有继承性
 
 元素宽度由子元素撑开  overflow: auto  作滑动列表
+
+我们知道setTimeout这个函数，是经过指定时间后，把要执行的任务加入到Event Queue中，
+又因为是单线程任务要一个一个执行，如果前面的任务需要的时间太久，那么只能等着，导致真正的延迟时间远远大于3秒。 根据HTML的标准，最低是4毫秒
+
+唯一需要注意的一点是，对于setInterval(fn,ms)来说，我们已经知道不是每过ms秒会执行一次fn，
+而是每过ms秒，会有fn进入Event Queue。一旦setInterval的回调函数fn执行时间超过了延迟时间ms，那么就完全看不出来有时间间隔了
+
+
+setTimeout(function(){
+		    console.log('1')
+		});
+ 
+		new Promise(function(resolve){
+		    console.log('2');
+        resolve();
+		}).then(function(){
+		    console.log('3')
+		});
+		    console.log('4')
+
+执行结果 2 4 3 1
+1.这段代码作为宏任务，进入主线程。
+2.先遇到setTimeout，那么将其回调函数注册后分发到宏任务Event Queue。
+3.接下来遇到了Promise，new Promise立即执行，then函数分发到微任务Event Queue。 //执行2
+4.遇到console.log()，立即执行。                                           //执行4
+5.好啦，整体代码script作为第一个宏任务执行结束，看看有哪些微任务？我们发现了then在微任务Event Queue里面，执行。   ！！！！！！！！！！！！！    注意这里执行了3  因为第一轮的setTimeout 和 new Promise作为宏任务都执行完了 该执行微任务了 先大后小
+6.ok，第一轮事件循环结束了，我们开始第二轮循环，当然要从宏任务Event Queue开始。我们发现了宏任务Event Queue中setTimeout对应的回调函数，立即执行。 ！！！！！！！！！ 这里才执行 1  因为第二轮（都是从）从宏任务Event Queue开始
+结束。
+
+自我总结：先大后小然后异步 先执行宏任务，有异步就挂起，然后执行微任务，完毕之后执行异步(Event Queue)
