@@ -1,6 +1,6 @@
 
 --------------------------------------VueX------------------------------------------                                
-
+https://class.imooc.com/course/qadetail/113694
  
 这是一个将数据存在state,通过dispatch来修改state中数据的过程：
 this.$store.dispatch('inc',11111)派遣
