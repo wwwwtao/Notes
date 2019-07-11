@@ -61,7 +61,9 @@ this.$route.params.shopid
 
 4、url的表现形式(url中没带参数)
 
+query  传递的参数在问号后面 键值对的形式
+params 传递的参数在路径后面 直接显示值  (如果路由中的path后面参数不写,那么就不会在地址栏上显示  而且刷新页面参数会消失,写上参数刷新页面 参数不会消失)
 
+另外，二者还有点区别，
+注意:params传参，只能用name来引入路由!!!   (如果这里写成了path，接收参数页面会是undefined！！！)
 
-
-JSON.stringify()的作用是将 JavaScript 值转换为 JSON 字符串，而JSON.parse()可以将JSON字符串转为一个对象

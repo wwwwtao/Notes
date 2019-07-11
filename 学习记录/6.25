@@ -17,12 +17,15 @@ http://img.mukewang.com/climg/5cce5ee70001244804710587.jpg
 
 执行过程就是:
 (1)state存了项目中公用的数据
+
 (2)mutations,里面装着一些改变数据方法的集合,例如count++等
-(3)actions来调用mutations中increment的方法，从而能双向的修改increment中的count、num值
-，意思就是说mutations中increment的count、num修改了，state中的count、num也会修改
+
+(3)actions来调用mutations中increment的方法，从而能双向的修改increment中的count、num值,
+   意思就是说mutations中increment的count、num修改了，state中的count、num也会修改
+
 (4)在页面中使用this.$store.dispatch('inc',100000);
-                调用actions的inc函数中的commit
-                commit从而调用了mutations中的increment,
+    ①调用 actions 的 inc 函数中的 commit
+    ② commit 从而调用了 mutations 中的 increment 
 
 this.$store.dispatch('inc',11111)派遣
 commit()委任
@@ -31,35 +34,20 @@ commit()委任
 
 export default new Vuex.Store({
 
-    state: {                      //(1)state存了项目中公用的数据
-    moduleList: [],
-        }
+    state:{      //(1)state存了项目中公用的数据
+		count:0,
+		num:1
+	},
 
-    updateProductServes(state, productServes) {    //(2)mutations,里面装着一些改变数据方法的集合,例如count++等
-      state.productServes = productServes
-        },
+	mutations:{     //(2)mutations,里面装着一些改变数据方法的集合,例如count++等
+		increment(state,num){
+			state.count++,
+			state.num=num
+		}
+	},
 
-    actions: {                      //(3)actions来调用mutations中increment的方法
-    updateProductServes({
-      commit,
-      state
-        }, routes) {
-        return axios.all([getModuleList()]).then(axios.spread((moduleList) => {
-            console.log(moduleList)
-            if (moduleList.data.length) {
-            let menuList = moduleList.data.sort(sortMenu('order'))
-            commit('updateModuleList', menuList)
-            commit('updateProductServes', menuList)
-            // commit('menuSubServes', menuSubList)
-            setRouterMeta(routes, menuList)
-            const {
-                sidebarType,
-                parentId
-            } = state.routeMeta
-            if (sidebarType === sidebarTypes.normal) {
-                const routeModule = getRouteModuleById(state.moduleList, parentId)
-                if (routeModule) commit('changeNormalSidebar', routeModule)
-            }
-            }
-        }))
-        },
+	actions:{    //(3)actions来调用mutations中increment的方法
+		inc({commit},obj){
+			commit('increment',obj)
+		}
+	}
