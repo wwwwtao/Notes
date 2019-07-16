@@ -1,1 +1,7 @@
 https://cn.vuejs.org/v2/api/#keep-alive
+
+在进入/离开的过渡中，会有 6 个 class 切换。
+
+开始 v-enter            v-leave
+过程 v-enter-active     v-leave-active
+结束 v-enter-to         v-leave-to

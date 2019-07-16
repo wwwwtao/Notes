@@ -195,3 +195,8 @@ setTimeout(function(){
 结束。
 
 自我总结：先大后小然后异步 先执行宏任务，有异步就挂起，然后执行微任务，完毕之后执行异步(Event Queue)
+
+为元素绑定属性有3种方式的写法
+类名： v-bind:class="focus"
+类名数组：v-bind:class="['focus', 'shine']"
+样式对象：v-bind:classs="{'focus': true/false, 'shine': true/flase }"，这种方式会根据样式名作为键的值来决定是否采用，如果值为：false，则不采用该样式，否则应用该样式。
