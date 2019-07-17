@@ -1,0 +1,11 @@
+------开发文档------
+https://developers.weixin.qq.com/miniprogram/dev/framework/
+
+小程序配置 app.json
+app.json 是当前小程序的全局配置，包括了小程序的所有页面路径、界面表现、网络超时时间、底部 tab 等
+
+编辑器的配置 project.config.json 
+
+<!-- <view> 基本等于 <div>  容器 分割文档 -->
+
+<!-- <image>默认width:300px height:225px -->

@@ -8,18 +8,66 @@
     <title>Document</title>
 </head>
 
+<!-- <style>
+    .nav {
+        width: 100%;
+        height: 70px;
+
+        display: flex;
+        align-items: center;
+    }
+
+    .nav li {
+        height: 100%;
+
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+    }
+    .active {
+        border-bottom: 1px solid red;
+    }
+</style> -->
+<script src="./jquery.min.js"></script>
+<!-- <script>
+
+    $(document).ready(function () {
+        $('.nav').on("mouseover", "li", function () {
+            $(".active").removeClass("active");
+            $(this).css("border-bottom", "1px solid red");
+        })
+
+        $(".nav").on("mouseout", "li", function () {
+            $("li").eq(0).addClass("active");
+            $(this).css("border-bottom", "");   
+        })
+    });
+
+
+</script> -->
+
 <body>
+    <!-- <ul class="nav">
+        <li class="active">1</li>
+        <li>2</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+    </ul> -->
 
 
     <script>
-        /* 
+        /*
                 let arr = [[1, 2, 3], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10,'w']
-                //数组扁平化 方法一 
+                //数组扁平化 方法一
                 let arr1 = arr.toString().split(",").map(item => Number(item));
-                // 去重 然后升序 
+                // 去重 然后升序
                 let arr2 = [...new Set(arr1)].sort((a, b) => a - b);
-        
-                //数组扁平化 方法二 
+
+                //数组扁平化 方法二
                 // function flatten(arr) {
                 //     return arr.reduce((a, b) => {
                 //         console.log(a, b)
@@ -36,15 +84,15 @@
                     }, [])
                 }
                 // Array.prototype.flat() 数组扁平化
-        
-        
-                console.log([1,2,3].map(parseInt)); // 1,NaN,NaN 
+
+
+                console.log([1,2,3].map(parseInt)); // 1,NaN,NaN
                 // 是由于parseInt(string, radix) 的参数radix必须介于2~36之间，而且字符串string中的数字不能大于radix才能正确返回数字结果值。
                 //由于map的回调函数的参数index索引值作了parseInt的基数radix，导致出现超范围的radix赋值和不合法的进制解析，才会返回NaN。
          */
-        /* 
+        /*
                 function foo({x,y=0}){
-                    console.log(x,y)        
+                    console.log(x,y)
                 }
                 foo();      //报错 x,y没定义 */
 
@@ -59,8 +107,8 @@
         // console.log(r2.exec(s))
 
 
-        
-        
+
+
     </script>
 </body>
 
