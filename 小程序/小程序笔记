@@ -45,10 +45,16 @@ https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/event.html#
 
 
  <import src="item.wxml"/>
-import 有作用域的概念，即只会 import 目标文件中定义的 template，而不会 import 目标文件 import 的 template
-如：C import B，B import A，在C中可以使用B定义的template，在B中可以使用A定义的template，但是C不能使用A定义的template
+import 有作用域的概念，即只会 import 目标文件中定义的 template，而不会 import 目标文件 import 的 template 如：C import B，B import A，在C中可以使用B定义的template，在B中可以使用A定义的template，但是C不能使用A定义的template
  <include src="header.wxml"/>
-include
 include 可以将目标文件除了 <template/> <wxs/> 外的整个代码引入，相当于是拷贝到 include 位置
 
 小程序数据没有直接传递 而是在标签上定义自定义属性,放入数据如id(以 data- 开头) 然后在回调里面拿事件对象event 再去事件对象上拿自定义属性上的数据
+
+小程序缓存 Sync同步
+wx.setStorageSync('key','value') //写入缓存  修改缓存  
+wx.get 获取 remove 删除某个 clear 清除全部缓存
+
+
+wx.showToast({title:'提示消息'}) 显示消息提示框
+wx.showModal(Object object) 显示模态对话框
