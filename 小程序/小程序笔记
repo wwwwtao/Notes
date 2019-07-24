@@ -25,6 +25,7 @@ https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/event.html#
     })
   }
  wx.redirectTo({     页面跳转不会有返回键，执行onUnload函数 (生命周期函数--监听页面卸载)
+ wx.switchTab({})    跳转到带Tabbar得页面要用这个跳转函数
 
 
  any require(string path)
