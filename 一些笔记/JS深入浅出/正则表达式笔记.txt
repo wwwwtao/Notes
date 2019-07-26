@@ -12,7 +12,7 @@ re.test(str)  检验是否符合正则规则 符合返回ture  !!字符串一部
 re.exec(str)  返回数组 没有匹配项返回null  两个额外属性 index input  index表示匹配项在字符串中的位置 input表示正则表达式的字符串 
 
 perl风格 var re = /a/;
-js风格  var re = new RegExp("a");
+js风格   var re = new RegExp("a");
 
         var re = new RegExp("a","i"); 
         var re = /a/i;                  //加了i忽略大小写 
