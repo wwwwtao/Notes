@@ -1,0 +1,36 @@
+
+数据结构是一级对象嵌套二级对象，发现一级对象数据渲染不报错，二级数据渲染报错
+
+html
+<template>
+ <div v-if="!loading">
+ <!----你的html代码------>
+ </div>
+</template>
+
+Js
+export default {
+  name: 'detail',
+  data() {
+   return {
+    loading: false,
+    card:{},
+   }
+  },
+  created() {
+   this.fetchData();
+  },
+   methods: {
+   fetchData() {
+   this.loading = true;
+   let that=this;
+    this.ajax.get(url, { params: { id: "yourId" } })
+     .then(function (response) {
+      that.loading = false;
+     }, function (error) {
+      console.log(error);
+     })
+   }
+  }
+
+
