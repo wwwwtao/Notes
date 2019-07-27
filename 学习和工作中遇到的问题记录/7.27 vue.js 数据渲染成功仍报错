@@ -1,6 +1,10 @@
 
 数据结构是一级对象嵌套二级对象，发现一级对象数据渲染不报错，二级数据渲染报错
 
+原因  
+ mouthed 的时候 dutyLeader 还只是个空数组
+ dutyLeader: [], //值班记录表格数据
+
 html
 <template>
  <div v-if="!loading">
