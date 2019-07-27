@@ -1,0 +1,22 @@
+//判断值班日期是不是今天和昨天
+    Editable(data) {
+      var d = new Date(data); //传入的时间 格式成date对象 Fri Jul 26 2019 08:00:00 GMT+0800 (中国标准时间)
+      var todaysDate = new Date(); //今天时间
+      var today = new Date(
+        todaysDate.getFullYear(),
+        todaysDate.getMonth(),
+        todaysDate.getDate()
+      ).getTime(); //今天凌晨
+      var yestday = new Date(today - 24 * 3600 * 1000).getTime(); //昨天时间
+
+      if (d.setHours(0, 0, 0, 0) == todaysDate.setHours(0, 0, 0, 0)) {
+        // console.log("今天");
+        return false;
+      }else if (d.getTime() < today && yestday <= d.getTime()) {
+        // console.log("昨天");
+        return false;
+      } else {
+        // console.log('不是今天和昨天');
+        return true;
+      }
+    },
