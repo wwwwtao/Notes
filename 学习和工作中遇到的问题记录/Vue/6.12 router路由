@@ -63,7 +63,6 @@ http://localhost:8080/#/mtindex/detail?shopid=1
 2、传参数（ params相对应的是name  query相对应的是path）
 this.$router.push({
       name: 'detail', params:{shopid: item.id}
-
         });
 
 3、获取参数
