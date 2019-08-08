@@ -1,10 +1,8 @@
 《--------------------------------JS类型检测
 
-    true == 1 ;
-    Object.prototype.toString.apply([1,2])!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!可以判断出了 null 之外 所有 所有 的数据类型 
+    Object.prototype.toString.apply([1,2])
     return  a === null ? '[object Null]':Object.prototype.toString.apply(a); //hack ie678
-
-    缺点 ： IE6/7/8 判断 null 会返回"[object Object]"          牛逼 牛逼
+    缺点 ： IE6/7/8 判断 null 会返回"[object Object]"  判断不了NaN(NaN属于Number 用isNaN())       
 
 function.apply(obj,args)方法能接收两个参数   可以指定function 的this
 obj：这个对象将代替Function类里this对象
