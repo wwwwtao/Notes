@@ -60,26 +60,21 @@
 
 
     <script>
-        // (1) 创建一个新对象；
-        // (2) 将构造函数的作用域赋给新对象（因此 this 就指向了这个新对象） ；
-        // (3) 执行构造函数中的代码（为这个新对象添加属性） ；
-        // (4) 返回新对象。
-        function Constructor(fn, args) {	//传入函数 和函数的参数
-            //创建空对象 空对象的原型是函数的prototype
-            var _this = Object.create(fn.prototype);
-            //this赋值为空对象 并传入参数执行
-            var res = fn.apply(_this, args);
-            // return 值为对象就返回res 否则返回this(之前的空对象)
-            return res ? res : _this;
-        }
-        function Dog(age) {
-            console.log(age)
-        };
-        let dog1 = new Dog("110")
-        console.log(dog1)
 
-        let dog = Constructor(Dog, '我是通过实例打印出来的')
-        console.log(dog)
+        var timer = null;
+        function a() {
+            console.log('aaa')
+        }
+
+        function aaaa(fn) {
+            console.log('1')
+            fn()
+            console.log('2')
+        }
+
+
+        aaaa(a());
+
 
         /* function.apply(obj,args)方法能接收两个参数   可以指定function 的this
             obj：这个对象将代替Function类里this对象
