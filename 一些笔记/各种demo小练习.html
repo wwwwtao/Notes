@@ -40,7 +40,7 @@
 
         $(".nav").on("mouseout", "li", function () {
             $("li").eq(0).addClass("active");
-            $(this).css("border-bottom", "");   
+            $(this).css("border-bottom", "");
         })
     });
 
@@ -60,6 +60,33 @@
 
 
     <script>
+        // (1) 创建一个新对象；
+        // (2) 将构造函数的作用域赋给新对象（因此 this 就指向了这个新对象） ；
+        // (3) 执行构造函数中的代码（为这个新对象添加属性） ；
+        // (4) 返回新对象。
+        function Constructor(fn, args) {	//传入函数 和函数的参数
+            //创建空对象 空对象的原型是函数的prototype
+            var _this = Object.create(fn.prototype);
+            //this赋值为空对象 并传入参数执行
+            var res = fn.apply(_this, args);
+            // return 值为对象就返回res 否则返回this(之前的空对象)
+            return res ? res : _this;
+        }
+        function Dog(age) {
+            console.log(age)
+        };
+        let dog1 = new Dog("110")
+        console.log(dog1)
+
+        let dog = Constructor(Dog, '我是通过实例打印出来的')
+        console.log(dog)
+
+        /* function.apply(obj,args)方法能接收两个参数   可以指定function 的this
+            obj：这个对象将代替Function类里this对象
+            args：这个是数组，它将作为参数传给Function（args-->arguments） */
+
+
+
         /*
                 let arr = [[1, 2, 3], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10,'w']
                 //数组扁平化 方法一
@@ -105,31 +132,31 @@
         // console.log(r1.exec(s))
         // console.log(r2.exec(s))
         // console.log(r2.exec(s))
-        var a = Object.prototype.toString.apply(new Date())
-        var b = Object.prototype.toString.apply(window);
-        var c = Object.prototype.toString.apply((function(){}));
-        var d = Object.prototype.toString.apply([1,2]);
-        var e = Object.prototype.toString.apply(null);
-        var g = Object.prototype.toString.apply(undefined);
+        // var a = Object.prototype.toString.apply(new Date())
+        // var b = Object.prototype.toString.apply(window);
+        // var c = Object.prototype.toString.apply((function(){}));
+        // var d = Object.prototype.toString.apply([1,2]);
+        // var e = Object.prototype.toString.apply(null);
+        // var g = Object.prototype.toString.apply(undefined);
 
-        var f = Object.prototype.toString.apply(NaN)
-        console.log(a);
-        console.log(b);
-        console.log(c);
-        console.log(d);
-        console.log(e);
-        console.log(g);
+        // var f = Object.prototype.toString.apply(NaN)
+        // console.log(a);
+        // console.log(b);
+        // console.log(c);
+        // console.log(d);
+        // console.log(e);
+        // console.log(g);
 
-        console.log(f);
-        console.log(Object.is(NaN,NaN));
+        // console.log(f);
+        // console.log(Object.is(NaN,NaN));
 
         // class MyPromise {
         //     constructor(fn) {
-        //         // 设定两种结果回调队列 
+        //         // 设定两种结果回调队列
         //         this.resolveQueue = [];
         //         this.rejectQueue = [];
         //         this.message = null; // 用于传递状态改变时的消息，状态只会改变一次，所以共用此变量
-        //         // 设定初始状态 
+        //         // 设定初始状态
         //         this._status = 'PENDING';
         //         if (typeof (fn) !== 'function') { throw Error('MyPromise 必须传递一个解析函数'); return; }
         //         // 启动解析
@@ -153,12 +180,12 @@
         //         return this;
         //     }
 
-        //     // 改变 为失败状态 
+        //     // 改变 为失败状态
         //     _reject(err) {
         //         if (this._status !== 'PENDING') return this; // 状态只能够由 PENDING 出发
         //         this.message = err;
         //         this._status = 'REJECTED';
-        //         // 执行失败队列中的方法  
+        //         // 执行失败队列中的方法
         //         this.rejectQueue.forEach(cb => {
         //             this._excute(cb)
         //         });
@@ -174,15 +201,15 @@
         //         if (status === 'REJECTED') {
         //             this._excute(rejectFunc)
         //         }
-        //         // 若状态悬而未决，则先推入缓存队列，等待后续执行  
+        //         // 若状态悬而未决，则先推入缓存队列，等待后续执行
         //         if (status === 'PENDING') {
         //             this.resolveQueue.push(resolveFunc);
         //             this.rejectQueue.push(rejectFunc);
         //         }
         //         return this;
         //     }
-        //     // 根据环境进行判断，使用不同的方式实现微任务  
-        //     // 参考 Vue  this.$nextTick 的源码实现，使用策略退化的机制实现微任务的处理 
+        //     // 根据环境进行判断，使用不同的方式实现微任务
+        //     // 参考 Vue  this.$nextTick 的源码实现，使用策略退化的机制实现微任务的处理
         //     _excute(cb) {
         //         this._callback = cb || function () { };  // 空处理
         //         // 策略 1️⃣ 如果浏览器支持 MutationObserver
@@ -227,7 +254,7 @@
         //             port2.onmessage(_ => {
         //                 this._callback(this.message);
         //             })
-        //             return; // 拦截式 
+        //             return; // 拦截式
         //         }
         //         // 策略 4️⃣ 最后退化到使用 setTimeout 去实现
         //         setTimeout(_ => {
@@ -275,7 +302,7 @@
         //             },
         //             set(newVal) {
         //                 statusVal = newVal;
-        //                 // 判断总的是否已经改变  
+        //                 // 判断总的是否已经改变
         //                 if (combinePro._status !== 'PENDING') return;
         //                 if (newVal === 'RESOLVED') {
         //                     combinePro.message = this.message;

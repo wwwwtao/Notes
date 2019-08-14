@@ -15,7 +15,7 @@ prototype
 
 3、valueOf()
 
-功能：返回指定对象的原始值。 
+功能：返回指定对象的原始值。
 给一个对象一元运算符 的时候 先去找valueOf() 然后toString()  是基本类型就返回了 没有就报错了
 
 静态方法
@@ -23,9 +23,9 @@ prototype
 
 功能：把一个或多个源对象的可枚举、自有属性值复制到目标对象中，返回值为目标对象。
 
-2、Object.create(proto [,propertiesObject])
+2、Object.create(proto, [propertiesObject])
 
-功能：创建一个对象，其原型为prototype，同时可添加多个属性。 
+功能：创建一个对象，其原型为proto，同时可添加多个特性。
 
 propertiesObject参数详解：
 
@@ -71,7 +71,7 @@ set()：设置
 
 10、Object.setPrototypeOf(obj, proto)
 
-功能：设置目标对象的原型为另一个对象或null，返回该目标对象 
+功能：设置目标对象的原型为另一个对象或null，返回该目标对象
 
 11、Object.keys(obj)
 
@@ -86,5 +86,5 @@ Object.keys()和Object.getOwnPropertyNames()的相同之处都是获取目标对
 
 undefined表示变量声明但未初始化时的值，
 
-null表示准备用来保存对象，还没有真正保存对象的值。从逻辑角度看，null值表示一个空对象指针。  
+null表示准备用来保存对象，还没有真正保存对象的值。从逻辑角度看，null值表示一个空对象指针。
 
