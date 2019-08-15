@@ -3,9 +3,6 @@
 安装依赖后运行电子书：
 浏览器打开 `http://localhost:8080/ts-axios/` 即可。
 
-doc 文档中也有大量demo 示例 笔记md
-
-
 
 #------------------------------在vscode中用使用TS------------------------------
 ①在项目目录终端中 tsc --init 生成 tsconfig.json  改 "outDir": "./js",  
