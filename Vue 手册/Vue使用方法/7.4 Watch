@@ -1,0 +1,11 @@
+-----------------------Watch-----------------------
+
+// 该回调将会在侦听开始之后被立即调用 immediate
+    d: {
+      handler: function (val, oldVal) { /* ... */ },
+      immediate: true
+    },
+
+handle就是你watch中需要具体执行的方法
+deep：就是你需要监听的数据的深度，一般用来监听对象中某个属性的变化
+immediate：在选项参数中指定 immediate: true 将立即以表达式的当前值触发回调：

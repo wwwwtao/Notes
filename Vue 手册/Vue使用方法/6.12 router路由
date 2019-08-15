@@ -1,0 +1,78 @@
+
+
+JSON.stringify()的作用是将 JavaScript 值转换为 JSON 字符串，而JSON.parse()可以将JSON字符串转为一个对象
+1.判断数组是否包含某对象，或者判断对象是否相等。
+2.让localStorage/sessionStorage可以存储对象。 存储时利用json.stringify()将对象转为字符串，而在取缓存时，只需配合json.parse()转回对象即可
+3.实现对象深拷贝
+
+1.$router为VueRouter实例，想要导航到不同URL，则使用$router.push方法
+2.$route为当前router跳转对象，里面可以获取name、path、query、params等
+
+query  传递的参数在问号后面 键值对的形式
+params 传递的参数在路径后面 直接显示值  (如果路由中的path后面参数不写,那么就不会在地址栏上显示  而且刷新页面参数会消失,写上参数刷新页面 参数不会消失)
+
+
+另外，二者还有点区别，
+注意:params传参，只能用name来引入路由!!!   (如果这里写成了path，接收参数页面会是undefined！！！)
+
+ 一、this.$route.query的使用
+  1、router/index.js
+
+    {
+    path:'/mtindex',
+    component: mtindex,
+    //添加路由
+    children:[
+     {
+     	path:':shopid',
+     	component:guessdetail
+     }
+    ]    	
+    },
+
+2、传参数
+this.$router.push({
+      path: '/mtindex/detail', query:{shopid: item.id}
+        });
+
+3、获取参数
+
+this.$route.query.shopid
+
+4、url的表现形式(url中带有参数)
+
+http://localhost:8080/#/mtindex/detail?shopid=1
+
+二、this.$route.params
+1、router/index.js
+
+{
+    path:'/mtindex',
+    component: mtindex,
+    //添加路由
+    children:[
+     {
+     	path:"/detail",
+     	name:'detail',
+     	component:guessdetail
+     }
+    ]    	
+
+    },
+
+2、传参数（ params相对应的是name  query相对应的是path）
+this.$router.push({
+      name: 'detail', params:{shopid: item.id}
+        });
+
+3、获取参数
+this.$route.params.shopid
+
+4、url的表现形式(url中没带参数)
+
+query  传递的参数在问号后面 键值对的形式
+params 传递的参数在路径后面 直接显示值  (如果路由中的path后面参数不写,那么就不会在地址栏上显示  而且刷新页面参数会消失,写上参数刷新页面 参数不会消失)
+
+另外，二者还有点区别，
+注意:params传参，只能用name来引入路由!!!   (如果这里写成了path，接收参数页面会是undefined！！！)
+

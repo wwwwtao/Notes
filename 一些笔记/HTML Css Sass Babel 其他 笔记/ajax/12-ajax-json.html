@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>12-ajax-json</title>
+    <script src="myAjax2.js"></script>
+    <script>
+        window.onload = function (ev) {
+
+            var oBtn = document.querySelector("button");
+            oBtn.onclick = function (ev1) {
+                ajax({
+                    type:"get",
+                    url:"12-ajax-json.php",
+                    success: function (xhr) {
+                        // console.log(xhr.responseText);
+                        var str = xhr.responseText;
+                        /*
+                        在低版本的IE中, 不可以使用原生的JSON.parse方法, 但是可以使用json2.js这个框架来兼容
+                        */
+                        var obj = JSON.parse(str);
+                        // console.log(obj);
+                        console.log(obj.name);
+                        console.log(obj.age);
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.status);
+                    }
+                })
+            }
+        }
+    </script>
+</head>
+<body>
+<button>发送请求</button>
+</body>
+</html>

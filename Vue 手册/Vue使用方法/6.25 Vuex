@@ -1,0 +1,53 @@
+
+--------------------------------------VueX------------------------------------------                                
+https://class.imooc.com/course/qadetail/113694
+ 
+这是一个将数据存在state,通过dispatch来修改state中数据的过程：
+this.$store.dispatch('inc',11111)派遣
+
+参数问题:
+这是在vue中规定的，第一个参数是函数(就是action中的inc)，第二个是obj  
+
+mutation中的这个会接受 state 作为第一个参数。就是我们之前定义的数据。而传递的obj是对应的第二个参数
+actions中的这个inc接收到的第一个参数是一个context对象(也就是上下文)，commit(委任的意思)是该对象的一个属性，
+{ commit }就是解构这个对象，得到的这个属性哦。obj就是我们传递过来的100000.
+
+http://img.mukewang.com/climg/5cce5ee70001244804710587.jpg
+
+
+执行过程就是:
+(1)state存了项目中公用的数据
+
+(2)mutations,里面装着一些改变数据方法的集合,例如count++等
+
+(3)actions来调用mutations中increment的方法，从而能双向的修改increment中的count、num值,
+   意思就是说mutations中increment的count、num修改了，state中的count、num也会修改
+
+(4)在页面中使用this.$store.dispatch('inc',100000);
+    ①调用 actions 的 inc 函数中的 commit
+    ② commit 从而调用了 mutations 中的 increment 
+
+this.$store.dispatch('inc',11111)派遣
+commit()委任
+
+
+
+export default new Vuex.Store({
+
+    state:{      //(1)state存了项目中公用的数据
+		count:0,
+		num:1
+	},
+
+	mutations:{     //(2)mutations,里面装着一些改变数据方法的集合,例如count++等
+		increment(state,num){
+			state.count++,
+			state.num=num
+		}
+	},
+
+	actions:{    //(3)actions来调用mutations中increment的方法
+		inc({commit},obj){
+			commit('increment',obj)
+		}
+	}

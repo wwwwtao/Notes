@@ -1,0 +1,203 @@
+渲染函数    
+
+Vue.component('anchored-heading', {
+  render: function (createElement) {
+    return createElement(
+      'h' + this.level,   // 标签名称
+      this.$slots.default // 子节点数组
+    )
+  },
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  }
+})
+
+
+这是一个组件 名为anchored-heading
+
+里面有一个标签名为<h+this.level>   可能是h1-h6之间
+this.$slots.default // 标签中的内容 也就是子节点 可以是数组
+
+
+var getChildrenTextContent = function (children) {
+  return children.map(function (node) {
+    return node.children
+      ? getChildrenTextContent(node.children)
+      : node.text
+  }).join('')
+}
+
+Vue.component('anchored-heading', {
+  render: function (createElement) {
+
+    // 创建 kebab-case 风格的 ID
+    var headingId = getChildrenTextContent(this.$slots.default)
+      .toLowerCase()
+      .replace(/\W+/g, '-')
+      .replace(/(^-|-$)/g, '')
+
+    return createElement(
+      'h' + this.level,
+      [
+        createElement('a', {
+          attrs: {
+            name: headingId,
+            href: '#' + headingId
+          }
+        }, this.$slots.default)
+      ]
+    )
+  },
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  }
+})
+
+
+v-model
+渲染函数中没有与 v-model 的直接对应——你必须自己实现相应的逻辑：
+
+props: ['value'],
+render: function (createElement) {
+  var self = this
+  return createElement('input', {
+    domProps: {
+      value: self.value
+    },
+    on: {
+      input: function (event) {
+        self.$emit('input', event.target.value)
+      }
+    }
+  })
+}
+这就是深入底层的代价，但与 v-model 相比，这可以让你更好地控制交互细节。
+
+
+{
+  // 与 `v-bind:class` 的 API 相同，
+  // 接受一个字符串、对象或字符串和对象组成的数组
+  'class': {
+    foo: true,
+    bar: false
+  },
+  // 与 `v-bind:style` 的 API 相同，
+  // 接受一个字符串、对象，或对象组成的数组
+  style: {
+    color: 'red',
+    fontSize: '14px'
+  },
+  // 普通的 HTML 特性
+  attrs: {
+    id: 'foo'
+  },
+  // 组件 prop
+  props: {
+    myProp: 'bar'
+  },
+  // DOM 属性
+  domProps: {
+    innerHTML: 'baz'
+  },
+  // 事件监听器在 `on` 属性内，
+  // 但不再支持如 `v-on:keyup.enter` 这样的修饰器。
+  // 需要在处理函数中手动检查 keyCode。
+  on: {
+    click: this.clickHandler
+  },
+  // 仅用于组件，用于监听原生事件，而不是组件内部使用
+  // `vm.$emit` 触发的事件。
+  nativeOn: {
+    click: this.nativeClickHandler
+  },
+  // 自定义指令。注意，你无法对 `binding` 中的 `oldValue`
+  // 赋值，因为 Vue 已经自动为你进行了同步。
+  directives: [
+    {
+      name: 'my-custom-directive',
+      value: '2',
+      expression: '1 + 1',
+      arg: 'foo',
+      modifiers: {
+        bar: true
+      }
+    }
+  ],
+  // 作用域插槽的格式为
+  // { name: props => VNode | Array<VNode> }
+  scopedSlots: {
+    default: props => createElement('span', props.text)
+  },
+  // 如果组件是其它组件的子组件，需为插槽指定名称
+  slot: 'name-of-slot',
+  // 其它特殊顶层属性
+  key: 'myKey',
+  ref: 'myRef',
+  // 如果你在渲染函数中给多个元素都应用了相同的 ref 名，
+  // 那么 `$refs.myRef` 会变成一个数组。
+  refInFor: true
+}
+
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~ JSX插件  用更简单的语法 写render 
+import AnchoredHeading from './AnchoredHeading.vue'
+
+new Vue({
+  el: '#demo',
+  render: function (h) {
+    return (
+      <AnchoredHeading level={1}>
+        <span>Hello</span> world!
+      </AnchoredHeading>
+    )
+  }
+})
+
+
+
+下面是一个 smart-list 组件的例子，它能根据传入 prop 的值来代为渲染更具体的组件：
+传不同的prop 渲染出不同的组件
+
+
+var EmptyList = { /* ... */ }
+var TableList = { /* ... */ }
+var OrderedList = { /* ... */ }
+var UnorderedList = { /* ... */ }
+
+Vue.component('smart-list', {
+  functional: true,
+  props: {
+    items: {
+      type: Array,
+      required: true
+    },
+    isOrdered: Boolean
+  },
+  render: function (createElement, context) {
+    function appropriateListComponent () {
+      var items = context.props.items
+
+      if (items.length === 0)           return EmptyList
+      if (typeof items[0] === 'object') return TableList
+      if (context.props.isOrdered)      return OrderedList
+
+      return UnorderedList
+    }
+
+    return createElement(
+      appropriateListComponent(),
+      context.data,
+      context.children
+    )
+  }
+})
