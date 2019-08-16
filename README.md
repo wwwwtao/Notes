@@ -3,22 +3,57 @@
 <strong>目录结构：</strong>
 
 一些笔记<br>
+Vue 手册<br>
 学习和工作中遇到的问题记录<br>
 TypeScript 电子书和笔记<br>
 慕课学习三阶段的笔记<br>
 英语<br>
-Vue 手册<br>
 
 #<strong>一些笔记</strong>
 
-<strong>1.Javascript深入浅出</strong>
+<strong>⒈.Javascript深入浅出</strong>
+
+包含:
+
+JS对象类型   对象的API使用方法和心得 如<i>Date类型</i>  <i>JS类型检测</i>
+
+闭包，作用域
+
+函数、this
+
+严格模式
+
+正则表达式
+
+OOP
 
 
-JS对象类型--对象的API使用方法和心得 如<i>Date类型</i>
+<strong>⒉.ES6基础</strong>
 
-2.ES6基础
+包含:
 
-包含
+ES6笔记(基础 解构赋值 扩展运算符)
 
+ES6 class
+
+ES6 Promise
+
+ES6 扩展
+
+
+<strong>⒊.HTML Css Sass Babel 其他 笔记</strong>
+
+包含:
+
+杂记
+
+css3   Sass   Babel
+
+
+#<strong>Vue 手册</strong>
+
+<strong>⒈.Vue使用方法与小技巧</strong>
+
+<strong>⒉.Vue源码分析（待补充）</strong>
 
 
