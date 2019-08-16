@@ -6,7 +6,7 @@
 Vue 手册<br>
 学习和工作中遇到的问题记录<br>
 TypeScript 电子书和笔记<br>
-慕课学习三阶段的笔记<br>
+stage three<br>
 英语<br>
 
 #<strong>一些笔记</strong>
