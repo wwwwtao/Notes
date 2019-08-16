@@ -14,7 +14,7 @@ Vue 手册<br>
 <strong>1.Javascript深入浅出</strong>
 
 
-JS对象类型--对象的API使用方法和心得 如<u>Date类型</u>
+JS对象类型--对象的API使用方法和心得 如<i>Date类型</i>
 
 2.ES6基础
 
