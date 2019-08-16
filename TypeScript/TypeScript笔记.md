@@ -23,6 +23,10 @@ class clo implements Clo {
 }
 ```
 
+网络错误 failed
+超时 canceled(已取消)
+404 找不到页面
+
 #1. 类型不同
 
 类型不同Accept属于请求头， Content-Type属于实体头。
