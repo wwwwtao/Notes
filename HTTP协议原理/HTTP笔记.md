@@ -4,4 +4,4 @@
 
 ⒈认识URL
 
-! [avator](./images/认识URL.png)
+! [URL结构](./images/认识URL.png)
