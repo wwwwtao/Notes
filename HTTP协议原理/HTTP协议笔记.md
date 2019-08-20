@@ -118,3 +118,22 @@ HTTP的状态码有以下几种，其中重定向状态码又分为永久性重�
 
 Cookie的具体工作原理为：当用户访问某个带Cookie的网站时，该网站的服务器该用户产生一个标识符，并将该标识符作为索引在后台的数据库中生成一个项目。然后在响应报文中添加一个“Set-Cookie：标识符”的键值对。当浏览器收到响应之后，会将“服务器的主机名和标识符”添加在它管理的Cookie文件中。当用户继续浏览该网站时，浏览器会将在请求报文中添加“Cookie:标识符”的键值对，发送给服务器，这样服务器便可以根据标识符知道用户之前的活动状态了。
 
+#创建一个最简单的web服务（node.js版）
+
+```javascript
+//第一行请求（require）Node.js 自带的 http 模块，并且把它赋值给 http 变量。
+
+// 接下来我们调用 http 模块提供的函数： createServer 。这个函数会返回 一个对象，这个对象有一个叫做 listen 的方法，这个方法有一个数值参数， 指定这个 HTTP 服务器监听的端口号。
+
+const http = require('http')
+
+http.createServer(function(request,response){
+  console.log('request come',request.url)
+
+  // 发送响应数据 "Hello World"
+  response.end('Hello World')
+}).listen(8888)
+
+console.log('server listening on 8888')
+```
+
