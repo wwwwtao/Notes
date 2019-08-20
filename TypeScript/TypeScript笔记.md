@@ -23,23 +23,6 @@ class clo implements Clo {
 }
 ```
 
-网络错误 failed
-超时 canceled(已取消)
-404 找不到页面
-
-#Axios 接受的参数
-
-```typescript
-export interface AxiosRequestConfig {
-  url?: string   /* Axios.get Axios.post url必传 */
-  method?: Method /* | 'get'| 'GET'| 'POST'| 'Delete' | 'HEAD' | 'OPTIONS' | 'PUT' | 'PATCH' 大小写都可以  */
-  data?: any  /*  data是添加到请求体（body）中   post  put  patch 请求专用*/
-  params?: any /* params是添加到url的请求字符串 */
-  headers?: any
-  responseType?: XMLHttpRequestResponseType /* type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text" */
-  timeout?: number
-}
-```
 
 #1. 类型不同
 
