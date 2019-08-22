@@ -46,7 +46,6 @@
 
 1. 认识URL
 
-! [URL结构图](https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/认识URL.png)
 <img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/认识URL.png">
 
 2. HTTP协议格式
@@ -71,7 +70,7 @@
 
 主要格式如下图：（请求报文）
 
-! [HTTP协议格式图](https://github.com/wwwwtao/Notes/blob/master/HTTP协议原理/images/HTTP协议格式.png)
+<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/HTTP协议格式.png">
 
 （2）响应报文 response
 
@@ -87,19 +86,19 @@
 
 具体响应报文如下图（其中一部分，响应正文没有截完）：
 
-! [响应报文图](https://github.com/wwwwtao/Notes/blob/master/HTTP协议原理/images/响应报文.png)
+<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/响应报文.png">
 
 3. HTTP的方法
 
 具体方法见下表，常用方法有GET与POST方法：
 
-! [HTTP的方法图](https://github.com/wwwwtao/Notes/blob/master/HTTP协议原理/images/HTTP的方法.png)
+<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/HTTP的方法.png">
 
 4. HTTP的状态码
 
 HTTP的状态码有以下几种，其中重定向状态码又分为永久性重定向、临时性重定向两种。
 
-! [HTTP的状态码图](https://github.com/wwwwtao/Notes/blob/master/HTTP协议原理/images/HTTP的状态码.png)
+<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/HTTP的状态码.png">
 
 5. HTTP常见Header（报头）
 
