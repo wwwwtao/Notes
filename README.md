@@ -10,7 +10,7 @@ HTTP协议原理<br>
 stage three<br>
 英语<br>
 
-#<strong>一些笔记</strong>
+# 一些笔记
 
 <strong>⒈.Javascript深入浅出</strong>
 
@@ -51,7 +51,7 @@ ES6 扩展
 css3   Sass   Babel
 
 
-#<strong>Vue 手册</strong>
+# Vue 手册
 
 <strong>⒈.Vue使用方法与小技巧</strong>
 
