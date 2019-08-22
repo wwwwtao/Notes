@@ -1,6 +1,6 @@
 # 我的学习笔记
 
-<strong>目录结构：</strong>
+## 目录结构：
 
 一些笔记<br>
 Vue 手册<br>
@@ -10,7 +10,7 @@ HTTP协议原理<br>
 stage three<br>
 英语<br>
 
-# 一些笔记
+## 一些笔记
 
 <strong>⒈.Javascript深入浅出</strong>
 
@@ -51,7 +51,7 @@ ES6 扩展
 css3   Sass   Babel
 
 
-# Vue 手册
+## Vue 手册
 
 <strong>⒈.Vue使用方法与小技巧</strong>
 
