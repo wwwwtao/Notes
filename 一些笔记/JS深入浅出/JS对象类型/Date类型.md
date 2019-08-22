@@ -26,7 +26,8 @@ var newDate = new Date(oldDate); //复制一个时间对象
 毫秒MilliSeconds
 
 # 常用的Date对象方法
-<!-- Date()  返回当日的日期和时间。
+```javascript
+/*  Date()  返回当日的日期和时间。
 getDate()   从 Date 对象返回一个月中的某一天 (1 ~ 31)。
 getDay()    从 Date 对象返回一周中的某一天 (0 ~ 6)。
 getMonth()  从 Date 对象返回月份 (0 ~ 11)。
@@ -73,7 +74,8 @@ toLocaleString()    根据本地时间格式，把 Date 对象转换为字符串
 toLocaleTimeString()    根据本地时间格式，把 Date 对象的时间部分转换为字符串。
 toLocaleDateString()    根据本地时间格式，把 Date 对象的日期部分转换为字符串。
 UTC()   根据世界时返回 1970 年 1 月 1 日 到指定日期的毫秒数。
-valueOf()   返回 Date 对象的原始值。 -->
+valueOf()   返回 Date 对象的原始值。  */
+```
 
 # 转换时间 年月日时分
 ```javascript
