@@ -141,9 +141,28 @@ console.log('server listening on 8888')
 
 ### 什么是跨域：
 协议、端口号、域名 都相同才是同一个域。
+
 需要注意的是：协议不同（eg:https和http）或者端口号不同造成的跨域，前端是无法解决的。
 
 在命令行 curl 发送请求是不会有限制的。
 
-跨域是浏览器做出的同源限制
+跨域是 浏览器 CORS 做出的同源限制
+
+### 跨域请求的解决
+
+1. 请求服务器的 响应头 设置 'Access-Control-Allow-Origin'
+```javascript
+response.writeHead(200,{
+    /* 'Access-Control-Allow-Origin': '*'  //这样是不安全的 所有人都可以访问我们的内容 */
+    'Access-Control-Allow-Origin': 'http://127.0.0.1:8888'
+  })
+
+  /* 如果想添加多个域 可以做判断（在服务端） 判断是允许的域就写入到 Access-Control-Allow-Origin 中 */
+```
+
+2. JSONP  浏览器允许 link img script 这类在标签上写 src路径加载内容 是跨域的
+```javascript
+<script src="http://127.0.0.1:8887/"></script>
+```
+
 
