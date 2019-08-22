@@ -46,7 +46,7 @@
 
 1. 认识URL
 
-! [URL结构图](https://github.com/wwwwtao/Notes/blob/master/HTTP协议原理/images/认识URL.png)
+! [URL结构图](https://github.com/wwwwtao/Notes/blob/master/HTTP%E5%8D%8F%E8%AE%AE%E5%8E%9F%E7%90%86/images/%E8%AE%A4%E8%AF%86URL.png)
 
 2. HTTP协议格式
 
