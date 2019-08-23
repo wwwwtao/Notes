@@ -2,12 +2,12 @@
 
 ## 目录结构：
 
-一些笔记<br>
+[HTTP协议原理](./HTTP协议原理/HTTP协议笔记.md)</a><br>
+JS深入浅出、ES6、其他笔记<br>
 Vue 手册<br>
+TypeScript (TS电子书 Axios笔记)<br>
 学习和工作中遇到的问题记录<br>
-TypeScript (电子书和笔记 Axios笔记)<br>
-.[HTTP协议原理](./HTTP协议原理/HTTP协议笔记.md)</a><br>
-stage three<br>
+stage three（audio、video、高德地图、移动端的学习笔记）<br>
 英语<br>
 
 ## 一些笔记
