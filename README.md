@@ -10,9 +10,9 @@ TypeScript (TS电子书 Axios笔记)<br>
 stage three（audio、video、高德地图、移动端的学习笔记）<br>
 英语<br>
 
-## 一些笔记
+## JS深入浅出、ES6、其他笔记
 
-<strong>⒈.Javascript深入浅出</strong>
+<strong>⒈.[Javascript深入浅出](./JS深入浅出、ES6、其他笔记/JS深入浅出)</strong>
 
 包含:
 
@@ -29,7 +29,7 @@ JS对象类型   对象的API使用方法和心得 如<i>Date类型</i>  <i>JS�
 OOP
 
 
-<strong>⒉.ES6基础</strong>
+<strong>⒉.[ES6基础](./JS深入浅出、ES6、其他笔记/ES6基础)</strong>
 
 包含:
 
@@ -42,7 +42,7 @@ ES6 Promise
 ES6 扩展
 
 
-<strong>⒊.HTML Css Sass Babel 其他 笔记</strong>
+<strong>⒊.HTML、Css、Sass、Babel、其他笔记</strong>
 
 包含:
 
