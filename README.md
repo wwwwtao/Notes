@@ -6,7 +6,7 @@
 Vue 手册<br>
 学习和工作中遇到的问题记录<br>
 TypeScript (电子书和笔记 Axios笔记)<br>
-<a src="https://github.com/wwwwtao/Notes/blob/master/HTTP%E5%8D%8F%E8%AE%AE%E5%8E%9F%E7%90%86/HTTP%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B0.md">HTTP协议原理</a><br>
+.[HTTP协议原理](./HTTP协议原理/HTTP协议笔记.md)</a><br>
 stage three<br>
 英语<br>
 
