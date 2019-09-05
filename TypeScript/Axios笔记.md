@@ -1,6 +1,4 @@
-
-# 此笔记更多的是记录实现Axios过程中 发现的Axios 功能 使用方法和技巧  而不是Axios实现细节 因为实现细节在电子书上更详细
-
+# 此笔记更多的是记录实现 Axios 过程中 发现的 Axios 功能 使用方法和技巧  而不是 Axios 实现细节 因为实现细节在电子书上更详细
 
 ## Axios 能够接受的参数
 
@@ -42,7 +40,7 @@ axios('/extend/post', {
 })
 ```
 
-2. Axios拥有 Axios 类的所有原型属性和实例属性
+2. Axios 拥有 Axios 类的所有原型属性和实例属性
 
 当直接调用 axios 方法就相当于执行了 Axios 类的 request 方法发送请求，当然我们也可以调用 axios.get、axios.post 等方法
 
@@ -92,15 +90,16 @@ axios.defaults.timeout = 2000
 
 ## transformRequest 和 transformResponse 两个默认字段，它们的值是一个数组或者是一个函数
 
-其中 transformRequest 允许你在将请求数据发送到服务器之前对其进行修改，这只适用于请求方法 put、post 和 patch,如果值是数组，则数组中的最后一个函数必须返回一个字符串或 FormData、URLSearchParams、Blob 等类型作为 xhr.send 方法的参数，而且在 transform 过程中可以修改 headers 对象。
+其中 transformRequest 允许你在将请求数据发送到服务器之前对其进行修改，这只适用于请求方法 put、post 和 patch, 如果值是数组，则数组中的最后一个函数必须返回一个字符串或 FormData、URLSearchParams、Blob 等类型作为 xhr.send 方法的参数，而且在 transform 过程中可以修改 headers 对象。
 
 而 transformResponse 允许你在把响应数据传递给 then 或者 catch 之前对它们进行修改。
 
 当值为数组的时候，数组的每一个函数都是一个转换函数，数组中的函数就像管道一样依次执行，前者的输出作为后者的输入。
 
 使用方法如下：
+
 ```typescript
-  transformRequest: [(function(data) { 
+  transformRequest: [(function(data) {
     return qs.stringify(data)   //要有返回值
   }), ...(axios.defaults.transformRequest as AxiosTransformer[])],
   transformResponse: [...(axios.defaults.transformResponse as AxiosTransformer[]), function(data) {
@@ -109,4 +108,42 @@ axios.defaults.timeout = 2000
     }
     return data
   }],
+```
+
+## axios.create
+
+允许我们传入新的配置和默认配置合并，并做为新的默认配置。
+
+## 取消功能的实现
+
+```typescript
+// 方式一
+const CancelToken = axios.CancelToken
+const source = CancelToken.source()
+
+axios.get('/cancel/get', {
+  cancelToken: source.token
+}).catch(function(e) {
+  if (axios.isCancel(e)) {
+    console.log('Request canceled', e.message)
+  }
+})
+
+source.cancel('Operation canceled by the user.')
+
+//方式二
+let cancel: Canceler
+
+axios.get('/cancel/get', {
+  cancelToken: new CancelToken(c => {
+    cancel = c
+  })
+}).catch(function(e) {
+  if (axios.isCancel(e)) {
+    console.log('Request canceled')
+  }
+})
+
+cancel()
+
 ```
