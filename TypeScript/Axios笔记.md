@@ -147,3 +147,28 @@ axios.get('/cancel/get', {
 cancel()
 
 ```
+
+## withCredentials（跨域请求携带 Cookie)
+
+在同域的情况下，我们发送请求会默认携带当前域下的 cookie，但是在跨域的情况下，默认是不会携带请求域下的 cookie 的，比如 http://domain-a.com 站点发送一个 http://api.domain-b.com/get 的请求，默认是不会携带 api.domain-b.com 域下的 cookie，如果我们想携带（很多情况下是需要的），只需要设置请求的 xhr 对象的 withCredentials 为 true 即可。
+
+```typescript
+axios.post('http://127.0.0.1:8088/more/server2', { }, {
+  withCredentials: true
+}).then(res => {
+  console.log(res)
+})
+```
+
+## XSRF 防御
+
+我们允许用户配置 xsrfCookieName 和 xsrfHeaderName，其中 xsrfCookieName 表示存储 token 的 cookie 名称，xsrfHeaderName 表示请求 headers 中 token 对应的 header 名称
+
+```typescript
+axios.get('/more/get',{
+  xsrfCookieName: 'XSRF-TOKEN', // default
+  xsrfHeaderName: 'X-XSRF-TOKEN' // default
+}).then(res => {
+  console.log(res)
+})
+```
