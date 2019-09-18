@@ -164,6 +164,10 @@ axios.post('http://127.0.0.1:8088/more/server2', { }, {
 
 我们允许用户配置 xsrfCookieName 和 xsrfHeaderName，其中 xsrfCookieName 表示存储 token 的 cookie 名称，xsrfHeaderName 表示请求 headers 中 token 对应的 header 名称
 
+在访问页面的时候，服务端通过 set-cookie 往客户端种了 key 为 XSRF-TOKEN，值为 1234abc 的 cookie，作为 xsrf 的 token 值。
+
+然后我们在前端发送请求的时候，就能从 cookie 中读出 key 为 XSRF-TOKEN 的值，然后把它添加到 key 为 X-XSRF-TOKEN 的请求 headers 中。
+
 ```typescript
 axios.get('/more/get',{
   xsrfCookieName: 'XSRF-TOKEN', // default
@@ -172,3 +176,7 @@ axios.get('/more/get',{
   console.log(res)
 })
 ```
+
+## 上传和下载的进度监控
+我们希望给 axios 的请求配置提供 onDownloadProgress 和 onUploadProgress 2 个函数属性，用户可以通过这俩函数实现对下载进度和上传进度的监控。
+xhr 对象提供了一个 progress 事件，我们可以监听此事件对数据的下载进度做监控；另外，xhr.uplaod 对象也提供了 progress 事件，我们可以基于此对上传进度做监控
