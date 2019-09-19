@@ -178,5 +178,74 @@ axios.get('/more/get',{
 ```
 
 ## 上传和下载的进度监控
+
 我们希望给 axios 的请求配置提供 onDownloadProgress 和 onUploadProgress 2 个函数属性，用户可以通过这俩函数实现对下载进度和上传进度的监控。
 xhr 对象提供了一个 progress 事件，我们可以监听此事件对数据的下载进度做监控；另外，xhr.uplaod 对象也提供了 progress 事件，我们可以基于此对上传进度做监控
+
+## HTTP 授权
+
+HTTP 协议中的 Authorization 请求 header 会包含服务器用于验证用户代理身份的凭证，通常会在服务器返回 401 Unauthorized 状态码以及 WWW-Authenticate 消息头之后在后续请求中发送此消息头。
+
+axios 库也允许你在请求配置中配置 auth 属性，auth 是一个对象结构，包含 username 和 password 2 个属性。一旦用户在请求的时候配置这俩属性，我们就会自动往 HTTP 的 请求 header 中添加 Authorization 属性，它的值为 Basic 加密串。 这里的加密串是 username:password base64 加密后 (btoa()) 的结果。
+
+## 自定义合法状态码
+
+通过在请求配置中配置一个 validateStatus 函数，它可以根据参数 status 来自定义合法状态码的规则。
+
+```typescript
+axios.get('/more/304', {
+  validateStatus(status) {
+    return status >= 200 && status < 400
+  }
+}).then(res => {
+  console.log(res)
+}).catch((e: AxiosError) => {
+  console.log(e.message)
+})
+```
+
+## 自定义参数序列化
+
+我们对请求的 url 参数做了处理，我们会解析传入的 params 对象，根据一定的规则把它解析成字符串，然后添加在 url 后面。在解析的过程中，我们会对字符串 encode，但是对于一些特殊字符比如 @、+ 等却不转义，这是 axios 库的默认解析规则。
+
+当然，我们也希望自己定义解析规则，于是我们希望 ts-axios 能在请求配置中允许我们配置一个 <b>paramsSerializer</b> 函数来自定义参数的解析规则，该函数接受 params 参数，返回值作为解析后的结果
+
+```typescript
+axios.get('/more/get', {
+  params: {
+    a: 1,
+    b: 2,
+    c: ['a', 'b', 'c']
+  },
+  paramsSerializer(params) {
+    return qs.stringify(params, { arrayFormat: 'brackets' })
+  }
+}).then(res => {
+  console.log(res)
+})
+```
+
+## baseURL（默认的基础 URL api.host）
+
+有些时候，我们会请求某个域名下的多个接口，我们不希望每次发送请求都填写完整的 url，希望可以配置一个 baseURL，之后都可以传相对路径。如下：
+
+```typescript
+const instance = axios.create({
+  baseURL: 'https://some-domain.com/api'
+})
+
+instance.get('/get')
+
+instance.post('/post')
+```
+
+我们一旦配置了 baseURL，之后请求传入的 url 都会和我们的 baseURL 拼接成完整的绝对地址，除非请求传入的 url 已经是绝对地址
+
+## 静态方法扩展
+
+官方 axios 库实现了 axios.all、axios.spread 等方法
+
+官方 axios 库也通过 axios.Axios 对外暴露了 Axios 类
+
+另外对于 axios 实例，官网还提供了 getUri 方法在不发送请求的前提下根据传入的配置返回一个 url
+
