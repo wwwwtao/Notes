@@ -115,7 +115,7 @@ Host: passport.cnblogs.com
 
 <!-- Connection 决定当前的事务完成后，是否会关闭网络连接。如果该值是“keep-alive”，网络连接就是持久的，不会关闭，使得对同一个服务器的请求可以继续在该连接上完成。 -->
 
-Connection: keep-alive        --
+Connection: keep-alive
 
 <!-- 发送给 HTTP 服务器的长度 -->
 
@@ -156,21 +156,33 @@ Content-Type: application/json; charset=UTF-8
 补充：常见的媒体格式 Content-Type 类型如下：
 
    text/html ： HTML 格式
+
    text/plain ：纯文本格式
+
    text/xml ：  XML 格式
+
    image/gif ：gif 图片格式
+
    image/jpeg ：jpg 图片格式
+
    image/png：png 图片格式
 
    以 application 开头的媒体格式类型：
 
    application/xhtml+xml ：XHTML 格式
+
    application/xml     ： XML 数据格式
+
    application/atom+xml  ：Atom XML 聚合格式
+
    application/json    ： JSON 数据格式
+
    application/pdf       ：pdf 格式
+
    application/msword  ： Word 文档格式
+
    application/octet-stream ： 二进制流数据（如常见的文件下载）
+
    application/x-www-form-urlencoded ： <form encType=''>中默认的 encType，form 表单数据被编码为 key/value 格式发送到服务器（表单默认的提交数据的格式）
 
    另外一种常见的媒体格式是上传文件之时使用的：
@@ -198,8 +210,11 @@ Last-Modified:Wed, 21 Dec 2011 09:09:10 GMT
 Content-Type: application/json; charset=utf-8
 
 更多类型，例如：
+
 Content-Type:text/html; charset=utf-8
+
 Content-Type:text/html;charset=GB2312
+
 Content-Type: image/jpeg
 
 <!-- http 服务器的响应实体正文的长度 -->
