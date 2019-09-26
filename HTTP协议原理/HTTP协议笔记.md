@@ -45,11 +45,11 @@
 
  只要能够保证，一端发送时构造的数据，另一端能够正确的解析，就是 ok 的，这种约定就是应用层协议
 
-1. 认识 URL
+### 认识 URL
 
 <img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/认识URL.png">
 
-2. HTTP 协议格式
+### HTTP 协议格式
 
 （1）HTTP 请求
 
@@ -89,35 +89,156 @@
 
 <img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/响应报文.png">
 
-3. HTTP 的方法
+### HTTP 的方法
 
 具体方法见下表，常用方法有 GET 与 POST 方法：
 
 <img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/HTTP的方法.png">
 
-4. HTTP 的状态码
+### HTTP 的状态码
 
 HTTP 的状态码有以下几种，其中重定向状态码又分为永久性重定向、临时性重定向两种。
 
 <img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/HTTP的状态码.png">
 
-5. HTTP 常见 Header（报头）
+### HTTP 请求头 (request headers) 和响应头 (response headers) 解析
 
-（1）Content-Type：数据类型（text/html 等）
+#### 请求头（request headers）
 
-（2）Content-Length：请求正文的长度（字节为单位）
+<!-- -- 请求方式 文件名 http 版本号 -->
 
-（3）Host：客户端告知服务器，所请求的资源是在哪台主机的哪个端口上
+POST /user/signin HTTP/1.1
 
-（4）User-Agent：声明用户的操作系统和浏览器版本信息
+<!-- 请求地址  -->
 
-（5）referer：表明当前页面是从哪个页面跳转过来的
+Host: passport.cnblogs.com
 
-（6）location：跳转重定向，告诉客户端接下来要去哪访问，要搭配状态码 3xx 使用
+<!-- Connection 决定当前的事务完成后，是否会关闭网络连接。如果该值是“keep-alive”，网络连接就是持久的，不会关闭，使得对同一个服务器的请求可以继续在该连接上完成。 -->
 
-（7）Cookie：是一个本地文件，用于在客户端存储少量信息，通常用于实现会话的功能。比如，在登录某个账号以及密码时，计算机允许在信息输入后，保存到本地上，以实现下次不用输入，这些信息会在，这样产生的文件就叫做 Cookie。但是 Cookie 有安全隐患，因为保存的信息当中可能会有密码等。
+Connection: keep-alive        --
 
-Cookie 的具体工作原理为：当用户访问某个带 Cookie 的网站时，该网站的服务器该用户产生一个标识符，并将该标识符作为索引在后台的数据库中生成一个项目。然后在响应报文中添加一个“Set-Cookie：标识符”的键值对。当浏览器收到响应之后，会将“服务器的主机名和标识符”添加在它管理的 Cookie 文件中。当用户继续浏览该网站时，浏览器会将在请求报文中添加“Cookie: 标识符”的键值对，发送给服务器，这样服务器便可以根据标识符知道用户之前的活动状态了。
+<!-- 发送给 HTTP 服务器的长度 -->
+
+Content-Length: 557
+
+<!-- 起源是来自哪里 -->
+
+Origin: https://passport.cnblogs.com
+
+<!-- 表明是 ajax 异步请求 -->
+
+X-Requested-With: XMLHttpRequest
+
+<!-- 提供上下文服务器，告诉服务器我是从哪里来的，一般用于网站流量统计。 -->
+
+Referer: https://passport.cnblogs.com/user/signin?ReturnUrl=http://www.cnblogs.com/fighter007/p/8422868.html
+
+<!-- 浏览器申明自己接收的编码方式：通常指定压缩、是否支持压缩、支持什么方式压缩（gzip/default） -->
+
+Accept-Encoding: gzip, deflate, br
+
+<!-- 浏览器申明自己接收的语言 -->
+
+Accept-Language: zh-CN,zh;q=0.9
+
+<!-- 浏览器接收的媒体类型 application/json, text/javascript  */* 代表浏览器可以处理所有类型 -->
+
+Accept: application/json, text/javascript, */*;
+
+<!-- 告诉 HTTP 服务器客户端浏览器使用的操作系统和浏览器的版本和名称 -->
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
+
+<!-- 浏览器接收的内容类型、字符集 -->
+
+Content-Type: application/json; charset=UTF-8
+
+补充：常见的媒体格式 Content-Type 类型如下：
+
+   text/html ： HTML 格式
+   text/plain ：纯文本格式
+   text/xml ：  XML 格式
+   image/gif ：gif 图片格式
+   image/jpeg ：jpg 图片格式
+   image/png：png 图片格式
+
+   以 application 开头的媒体格式类型：
+
+   application/xhtml+xml ：XHTML 格式
+   application/xml     ： XML 数据格式
+   application/atom+xml  ：Atom XML 聚合格式
+   application/json    ： JSON 数据格式
+   application/pdf       ：pdf 格式
+   application/msword  ： Word 文档格式
+   application/octet-stream ： 二进制流数据（如常见的文件下载）
+   application/x-www-form-urlencoded ： <form encType=''>中默认的 encType，form 表单数据被编码为 key/value 格式发送到服务器（表单默认的提交数据的格式）
+
+   另外一种常见的媒体格式是上传文件之时使用的：
+
+  multipart/form-data ： 需要在表单中进行文件上传时，就需要使用该格式
+
+  cookies: 是服务器发送到浏览器并保存在本地的一小块数据，存储在 header 中，它会在浏览器下次向同一服务器再发起请求时被携带并发送到服务器上，通常，它用于告知服务端两个请求是否来自同一浏览器，如保持用户的登录状态。
+
+#### 响应头（response headers）解析
+
+<!--  响应的状态码 200 表示正常应答 -->
+
+HTTP/1.1 200 OK
+
+<!-- 生成消息的具体时间和日期 -->
+
+Date: Mon, 12 Feb 2018 11:22:13 GMT
+
+<!-- 申明资源的最后修改日期和时间 -->
+
+Last-Modified:Wed, 21 Dec 2011 09:09:10 GMT
+
+<!-- http 服务器告诉浏览器自己响应的对象类型和字符集（并且告诉客户端实际返回的内容的内容类型） -->
+
+Content-Type: application/json; charset=utf-8
+
+更多类型，例如：
+Content-Type:text/html; charset=utf-8
+Content-Type:text/html;charset=GB2312
+Content-Type: image/jpeg
+
+<!-- http 服务器的响应实体正文的长度 -->
+
+Content-Length: 54
+
+<!-- http 服务器告诉浏览器自己响应的语言 -->
+
+Content-Language：da
+
+<!-- http 服务器表名自己使用了什么压缩方法 -->
+
+Content-Encoding：gzip
+
+<!-- Connection 决定当前的事务完成后，是否会关闭网络连接。如果该值是“keep-alive”，网络连接就是持久的，不会关闭，使得对同一个服务器的请求可以继续在该连接上完成 -->
+
+Connection: keep-alive
+
+<!-- "private" 表示该响应是专用于某单个用户的，中间人不能缓存此响应，该响应只能应用于浏览器私有缓存中。 -->
+
+Cache-Control: private
+
+<!-- asp.net 版本号 -->
+
+X-AspNetMvc-Version: 5.2
+
+<!-- asp.net 技术的版本号 -->
+
+X-AspNet-Version: 4.0.30319
+
+<!-- 表示网站是由什么技术开发 -->
+
+X-Powered-By: ASP.NET
+
+<!-- Set-Cookie 是非常重要的 header, 用于把 cookie 发送到客户端浏览器， 每一个写入 cookie 都会生成一个 Set-Cookie. -->
+
+Set-Cookie
+
+Cookie 的具体工作原理为：当用户访问某个带 Cookie 的网站时，该网站的服务器该用户产生一个标识符，并将该标识符作为索引在后台的数据库中生成一个项目。然后在响应报文中添加一个“Set-Cookie：标识符”的键值对。当浏览器收到响应之后，会将“服务器的主机名和标识符”添加在它管理的 Cookie 文件中。当用户继续浏览该网站时，浏览器会将在请求报文中添加“Cookie: 标识符”的键值对，发送给服务器，这样服务器便可以根据标识符知道用户之前的活动状态了。 通常，它用于告知服务端两个请求是否来自同一浏览器，如保持用户的登录状态
 
 ## 创建一个最简单的 web 服务（node.js 版）
 
@@ -169,19 +290,24 @@ response.writeHead(200,{
 <script src="http://127.0.0.1:8887/"></script>
 ```
 
-### CORS 预请求验证
+### CORS 预请求验证限制
 
 允许的方法（跨域的时候不需要设置允许就可以进行预请求的）：GET HEAD POST （只有这三个默认）
 
 允许 Content-Type（这三种不需要预请求验证就可以发送） : text/plain multipart/form-data application/x-www-form-urlencoded
 
-其他限制： 请求头限制  XMLHttpRequestUpload 对象均没有注册任何事件监听器  请求中没有使用 ReadableStream 对象
+其他限制：
+1. 请求头限制 (https://fetch.spec.whatwg.org 里面有介绍允许的头部）
+
+2. XMLHttpRequestUpload 对象均没有注册任何事件监听器
+
+3. 请求中没有使用 ReadableStream 对象
 
 ```javascript
 response.writeHead(200,{
-    'Access-Control-Allow-Origin': '*', //允许所有跨域请求
-    'Access-Control-Allow-Headers': 'X-Test-Cors', //允许跨域请求可以设置的请求头
-    'Access-Control-Allow-Methods': 'POST,PUT,Delete', //允许这些请求进行跨域（默认只有GET POST HEAD）
+    'Access-Control-Allow-Origin': '*', //允许所有跨域请求 (允许跨域的服务器)
+    'Access-Control-Allow-Headers': 'X-Test-Cors', //允许跨域请求可以设置的请求头 (打破请求头限制)
+    'Access-Control-Allow-Methods': 'POST,PUT,Delete', //允许这些请求进行跨域（默认只有GET POST HEAD 打破默认请求方法限制）
     'Access-Control-Max-Age': '1000',//1000秒内再次请求 不需要也不会进行预请求验证
   })
 ```
@@ -215,3 +341,49 @@ proxy-revalidate （缓存服务器过期了 必须去原服务器重新请求�
 no-store （本地 和 代理都不能存储缓存）
 
 no-transform （不允许代理服务器对返回内容进行压缩之类的）
+
+## 缓存验证头 Last-Modified 和 Etag 的使用
+
+### Last-Modified（上次修改时间）
+
+对比上次修改时间来验证资源是否需要更新
+
+配合 If-Modified-Since 或者 If-Unmodified-Since 使用
+
+### Etag（数据签名）
+
+常见于对资源的内容进行哈希计算，对比资源的签名判断是否使用缓存
+
+配合 If-Match 或者 If-None-Match 使用
+
+### 使用方法 (Chrome 勾选 Disable cache 就不会发送带缓存的头了）)
+
+1. 服务端响应头（response headers） 设置 缓存验证头
+
+2. 浏览器在第二次发送请求 会在请求头（request headers）中，把对应的验证缓存的头带上（If-Modified-Since,If-None-Match）
+
+3. 在服务端做判断验证是否可以使用缓存
+
+```javascript
+if (request.url === '/script.js') {
+    // const html = fs.readFileSync('test.html', 'utf-8')
+    const etag = request.headers['if-none-match']
+    if (etag === '777') {
+      response.writeHead(304, {
+        'Content-type': 'text/javascript',
+        'Cache-Control': 'max-age=20000000,no-cache',
+        'Last-Modified': '123',
+        'Etag': '777'
+      })
+      response.end('') //无效的 Chrome会返回你命中的缓存的值
+    } else {
+      response.writeHead(200, {
+        'Content-type': 'text/javascript',
+        'Cache-Control': 'max-age=20000000,no-cache',
+        'Last-Modified': '123',
+        'Etag': '777'
+      })
+      response.end('console.log("script loaded twice")')
+    }
+  }
+```
