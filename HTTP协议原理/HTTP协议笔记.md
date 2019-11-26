@@ -402,3 +402,23 @@ if (request.url === '/script.js') {
     }
   }
 ```
+
+## cookie 和 session
+
+### Cookie
+
+1. 通过 Set-Cookie 设置
+
+2. 下次请求自动带上
+
+3. 键值对，可以设置多个
+
+### Cookie 属性
+
+max-age 和 expires 设置过期时间
+
+Secure 设置只有 https 的时候才带上 cookie
+
+HttpOnly 无法通过 document.cookie 访问（无法用 JS 访问 cookie 内容）
+
+Domain 让二级域名之间共享 cookie 可以设置一个主域名 在此域名之上的二级域名都共享 cookie
