@@ -421,4 +421,4 @@ Secure 设置只有 https 的时候才带上 cookie
 
 HttpOnly 无法通过 document.cookie 访问（无法用 JS 访问 cookie 内容）
 
-Domain 让二级域名之间共享 cookie 可以设置一个主域名 在此域名之上的二级域名都共享 cookie
+Domain 让二级域名之间共享 cookie 可以设置一个主域名 在此域名之上的二级域名都共享 cookie 
