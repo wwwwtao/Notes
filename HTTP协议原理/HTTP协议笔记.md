@@ -14,7 +14,7 @@
 
  所有数据以二进制传输
 
- 同一个连接发送多个请求不再需要按顺序来（现在是并发发送请求 但是服务器响应请求要一个一个来）
+ 同一个连接发送多个请求不再需要按顺序来（现在是并发发送 HTTP 请求 但是服务器响应请求要一个一个来）
 
  头信息压缩以及推送等提高效率的功能（请求 html 同时 推送 js，css 到客户端  并行下载 html，css，js）
 
@@ -421,4 +421,34 @@ Secure 设置只有 https 的时候才带上 cookie
 
 HttpOnly 无法通过 document.cookie 访问（无法用 JS 访问 cookie 内容）
 
-Domain 让二级域名之间共享 cookie 可以设置一个主域名 在此域名之上的二级域名都共享 cookie 
+Domain 让二级域名之间共享 cookie 可以设置一个主域名 在此域名之上的二级域名都共享 cookie
+
+## Connection- 长链接 (Keep-Alive 与 close 是否保持 TCP 链接）
+
+1. HTTP 请求是在 TCP 链接上发送的
+
+2. 一个 TCP 链接可以发送多个 HTTP 请求
+
+3. HTTP1.1 不能并发 HTTP 请求 HTTP2 可以并发（所以只开一个 TCP 链接就够了）！！！
+
+4. 目前谷歌浏览器支持 6 个 TCP 链接并发
+
+## 数据协商
+
+### Accept
+
+ Accept（声明 - 我想要的数据类型）
+
+ Accept-Encoding（声明 - 我想要的编码方式 主要指数据压缩方式）
+
+ Accept-Language（声明 - 我想要的语言）
+
+ User-Agent（浏览器相关信息 - 移动端 or PC 端）
+
+### Content
+
+ Content-Type （声明 - 我实际返回的数据类型）
+
+ Content-Encoding（声明 - 我返回的编码方式 主要指数据压缩方式）
+
+ Content-Language（声明 - 我返回的语言）
