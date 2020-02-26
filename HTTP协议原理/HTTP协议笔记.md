@@ -292,6 +292,13 @@ console.log('server listening on 8888')
 
 ```javascript
 response.writeHead(200,{
+
+  /*  设置响应头
+      res.writeHead(200, { 'Content-type': 'text/html;charset=utf-8' })
+      参数1：必选，三位数的http状态码
+      参数2：可选，可有可无
+      参数3：可选，告诉浏览器我发给你的数据是什么类型的
+   */
     /* 'Access-Control-Allow-Origin': '*'  //这样是不安全的 所有人都可以访问我们的内容 */
     'Access-Control-Allow-Origin': 'http://127.0.0.1:8888'
   })
@@ -452,3 +459,11 @@ Domain 让二级域名之间共享 cookie 可以设置一个主域名 在此域�
  Content-Encoding（声明 - 我返回的编码方式 主要指数据压缩方式）
 
  Content-Language（声明 - 我返回的语言）
+
+## Redirect（重定向）返回状态码 302/301 才行
+
+1. 在 writeHead（响应头）里面设置'Location':'/ 新路径'
+
+2. 302 是临时重定向 301 是永久重定向 301 服务器会告诉浏览器以后这个地址你直接请求新路径（缓存了用户不清不能反悔），而 302 是每次经过服务器都会跳转到 Location 中的新路径
+
+## Nginx 代理以及面向未来的 HTTP

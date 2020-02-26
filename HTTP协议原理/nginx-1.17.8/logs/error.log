@@ -1,0 +1,6 @@
+2020/02/26 14:46:39 [emerg] 8748#8544: CreateFile() "C:\Users\acer\Desktop\工具\nginx-1.17.8/conf/nginx.conf" failed (1113: No mapping for the Unicode character exists in the target multi-byte code page)
+2020/02/26 14:47:27 [emerg] 1892#8124: CreateFile() "C:\Users\acer\Desktop\工具\nginx-1.17.8/conf/nginx.conf" failed (1113: No mapping for the Unicode character exists in the target multi-byte code page)
+2020/02/26 14:48:37 [error] 2400#15180: *1 CreateFile() "C:\Users\acer\Desktop\d\nginx-1.17.8/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/"
+2020/02/26 14:52:06 [notice] 10864#3680: signal process started
+2020/02/26 15:06:34 [emerg] 8388#5148: CreateFile() "C:\Users\acer\Desktop\学习\Notes\HTTP协议原理\nginx-1.17.8/conf/nginx.conf" failed (1113: No mapping for the Unicode character exists in the target multi-byte code page)
+2020/02/26 15:07:11 [emerg] 8572#8716: CreateFile() "C:\Users\acer\Desktop\学习\Notes\HTTP协议原理\nginx-1.17.8/conf/nginx.conf" failed (1113: No mapping for the Unicode character exists in the target multi-byte code page)
