@@ -14,4 +14,4 @@
 5. mapActions
 6. mapMutations
 
-<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/Vue%20手册/Vue面试课程/Vue使用/img/Vuex流程图.png">
+<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/Vue%20手册/Vue使用与原理/Vue使用/img/Vuex流程图.png">
