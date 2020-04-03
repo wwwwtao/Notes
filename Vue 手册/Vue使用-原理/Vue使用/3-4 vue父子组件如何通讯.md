@@ -9,4 +9,5 @@
 5. inheritAttrs  inheritAttrs 属性控制子组件 html 属性上是否显示父组件的提供的属性。
 
 6. $attrs 可以获取到没有使用的注册属性，如果需要，我们在这也可以往下继续传递。
- 
+
+7. .sync
