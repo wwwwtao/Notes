@@ -1,6 +1,6 @@
 ### 核心 API - Object.defineProperty (Vue3.0 用 Proxy-- 有兼容性问题且无法用 polyfill)
 
-通过 Object.defineProperty() 来劫持各个属性的 setter,getter，在数据变动时发布消息给订阅者，触发相应的监听回调
+通过 Object.defineProperty() 来劫持各个属性的 setter,getter，在数据变动时发布消息给订阅者 (Wather)，触发相应的监听回调
 
 ### Object.defineProperty 的缺点 为什么用 Proxy
 
