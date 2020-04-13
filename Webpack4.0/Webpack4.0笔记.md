@@ -51,7 +51,8 @@ module.exports = {
 //配置一个loader
 //安装loader npm install file-loader -D
 module.exports = {
-    // entry: './index.js',  //打包入口文件 可配置多个
+    mode:'development',   //开发环境打包 打包的代码不会被压缩
+    entry: './index.js',  //打包入口文件 可配置多个
     module: {
         rules: [{
             test: /\.jpg$/, //打包的文件后缀
@@ -60,10 +61,10 @@ module.exports = {
             }
         }]
     },
-    // output: {
-        // filename: 'bundle.js',
-        // path: path.resolve(__dirname, 'dist')  //打包输出文件地址
-    // }
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist')  //打包输出文件地址
+    }
 }
 ```
 
@@ -251,6 +252,7 @@ cheap-module-source-map  没有列映射 (column mapping) 的 source map，将 l
 #### 基本使用
 
 https://www.webpackjs.com/configuration/dev-server/
+
 1. npm install webpack-dev-server -D
 2. npm scripts 里面写入 start 命令为 webpack-dev-server
 
@@ -272,4 +274,151 @@ var webpackConfig = {
     //   port: 8080
   }
 };
+```
+
+### Hot Module Replacement 热模块更新
+
+#### 基本使用
+
+```js
+const webpack = require('webpack');
+
+  module.exports = {
+    //省略。。。
+   devServer:{  //修改和保存任意源文件，web 服务器就会自动重新加载编译后的代码
+      hot:true, //开启HMR热更新
+      hotOnly: true //即使热更新失效也不让浏览器刷新
+  },
+   plugins: [
+      new CleanWebpackPlugin(['dist']),
+      new HtmlWebpackPlugin({
+        title: 'Hot Module Replacement'
+      }),
+      new webpack.NamedModulesPlugin(), //更容易查看要修补(patch)的依赖
+      new webpack.HotModuleReplacementPlugin()
+    ],
+    //省略。。。
+```
+
+#### module.hot.accept
+
+```js
+//js文件HMR 需要自己写HMR函数 比如热更新的时候重新渲染组件
+//css-loader vue-loader集成了这个功能  所以不需要自己写HMR这部分代码
+  if (module.hot) {
+    module.hot.accept('./print.js', function() {
+      console.log('Accepting the updated printMe module!');
+      document.body.removeChild(element); //清除element 组件
+      element = component(); // 重新渲染页面后，component 更新 click 事件处理
+      document.body.appendChild(element); //添加新的element组件
+    })
+  }
+```
+
+### 使用 Babel 处理 ES6 语法
+
+#### 基本使用
+
+https://www.babeljs.cn/setup#installation
+
+1. npm install --save-dev babel-loader @babel/core （连接 webpack 和 js 文件）
+
+2. npm install @babel/preset-env --save-dev （转换 es6 的代码 const 之类的）
+
+3. npm install --save @babel/polyfill （转换一些 es6 的方法 Promise 之类的）
+
+4. 在入口文件引入 import "@babel/polyfill"; （会让包变得很大 需要配置按需引入 polyfill 看第 5 条 )
+
+5. 配置 useBuiltIns 设置 polyfill 只转换用到的方法 代码如下 （配置按需引入 polyfill)
+
+6. Babel 的 options 太繁长，可以不写 去创建一个。babelr 文件写入配置选项
+
+```js
+module.exports = {
+    //省略。。。
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /node_modules/,  //不转换此文件夹中的
+            loader: "babel-loader",   //连接 webpack 和 js 文件
+            options:{
+                "presets": [["@babel/preset-env",{ //转换 es6 的代码 const 之类的
+                    useBuiltIns: 'usage',  //设置polyfill只转换用到的方法
+                    tagets:{               //tagets根据浏览器打包代码 支持的就不用打包 进一步压缩打包体积
+                        chorme: '67'
+                    }
+                }]]
+                }
+            }]
+        }
+    }
+    //省略。。。
+```
+
+#### polyfill 其他注意事项 （写库 第三方组件时 polyfill 的配置）transform-runtime
+
+https://www.babeljs.cn/docs/babel-plugin-transform-runtime
+
+1. polyfill 可能会产生全局变量，污染全局的代码，如果写 ui 组件库之类的第三方模块就要用其他的方法打包
+
+2. npm install --save-dev @babel/plugin-transform-runtime
+
+3. npm install --save @babel/runtime
+
+```js
+module.exports = {
+    //省略。。。
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /node_modules/,  //不转换此文件夹中的
+            loader: "babel-loader",   //连接 webpack 和 js 文件
+            options:{
+                    "plugins": [["@babel/plugin-transform-runtime",  //不会全局污染 闭包或间接的引入
+                        {
+                            "absoluteRuntime": false,
+                            "corejs": 2,  //改变corejs参数需要安装不同的npm包 看下面注释
+                            "helpers": true,
+                            "regenerator": true,
+                            "useESModules": false,
+                            "version": "7.0.0-beta.0"
+                        }
+                    ]]
+                }
+            }]
+        }
+    }
+    //省略。。。
+
+    //改变参数需要安装不同的npm包
+    corejs option	Install command
+
+    false	npm install --save @babel/runtime
+
+    2	    npm install --save @babel/runtime-corejs2
+
+    3	    npm install --save @babel/runtime-corejs3
+```
+
+### Webpack 实现对 React 框架代码的打包
+
+#### 基本使用
+
+https://www.babeljs.cn/docs/babel-preset-react
+
+1. npm install --save-dev @babel/preset-react
+
+2. 配置代码到。babelr 文件
+
+```js
+//.babelr 文件
+    //presets执行顺序也是从下往上 从右往左的倒序 (和loader一样)
+    {
+    "presets": [["@babel/preset-env",{ //转换 es6 的代码 const 之类的
+        useBuiltIns: 'usage',  //设置polyfill只转换用到的方法
+    }
+],
+    "@babel/preset-react"      //转换React代码
+]
+}
 ```
