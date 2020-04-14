@@ -343,7 +343,7 @@ module.exports = {
             loader: "babel-loader",   //连接 webpack 和 js 文件
             options:{
                 "presets": [["@babel/preset-env",{ //转换 es6 的代码 const 之类的
-                    useBuiltIns: 'usage',  //设置polyfill只转换用到的方法
+                    useBuiltIns: 'usage',  //设置polyfill按需转换
                     tagets:{               //tagets根据浏览器打包代码 支持的就不用打包 进一步压缩打包体积
                         chorme: '67'
                     }

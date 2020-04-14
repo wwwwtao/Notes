@@ -6,6 +6,7 @@
 JS深入浅出、ES6、其他笔记<br>
 React 手册<br>
 Vue 手册<br>
+[Webpack4.0](./Webpack4.0/Webpack4.0笔记.md)<br>
 TypeScript (TS电子书 Axios笔记)<br>
 学习和工作中遇到的问题记录<br>
 stage three（audio、video、高德地图、移动端的学习笔记）<br>
