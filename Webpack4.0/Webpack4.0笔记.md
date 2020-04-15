@@ -585,13 +585,19 @@ CommonsChunkPlugin 插件还可以通过使用显式的 vendor chunks 功能，�
 ##### 拆包策略：
 
 基础类库 chunk-libs
+
 UI 组件库 chunk-elementUI
+
 自定义共用组件 / 函数 chunk-commons
+
 低频组件 chunk-eachrts/chunk-xlsx 等
+
 业务代码 lazy-loading xxxx.js
 
 ##### 持久化缓存：
 
 使用 runtimeChunk 提取 manifest，使用 script-ext-html-webpack-plugin 等插件内联到 index.html 减少请求
+
 使用 HashedModuleIdsPlugin 固定 moduleId
+
 使用 NamedChunkPlugin 结合自定义 nameResolver 来固定 chunkId
