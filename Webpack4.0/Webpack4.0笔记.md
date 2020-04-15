@@ -191,6 +191,14 @@ var webpackConfig = {
 };
 ```
 
+```js
+//某些框架的 webpack.config.js在 build文件夹里，CleanWebpackPlugin会认为 build文件夹 是项目根目录，而他只能清除根目录下的文件夹)
+//root参数可以 可设置CleanWebpackPlugin认为的根目录  达到清除根目录下dist的效果（输出的文件也要../dist）
+new CleanWebpackPlugin(['dist'],{
+    root: path: path.resolve(__dirname, '../'),
+})]
+```
+
 ### Entry 与 Output 的基础配置
 
 #### 多个入口文件 和 publicPath（JS 上传到 CDN 使用）
@@ -422,3 +430,168 @@ https://www.babeljs.cn/docs/babel-preset-react
 ]
 }
 ```
+
+## Webpack 的高级概念
+
+### Tree Shaking （移除 JavaScript 上下文中的未引用代码 (export 了却并未 import 的代码）)
+
+#### 基本使用
+
+你可以将应用程序想象成一棵树。绿色表示实际用到的源码和 library，是树上活的树叶。灰色表示无用的代码，是秋天树上枯萎的树叶。为了除去死去的树叶，你必须摇动这棵树，使它们落下。
+
+实际上 Tree Shaking 发现引入了一个模块就会去看这个模块导出了什么，引入了什么。没引用的就会被删除
+
+https://www.webpackjs.com/guides/tree-shaking/
+
+为了学会使用 tree shaking，你必须……
+
+1. 使用 ES2015 模块语法（即 import 和 export）。  只支持 ES 语法 CommonJS 引入是不支持的
+
+2. 在项目 package.json 文件中，添加一个 "sideEffects" 入口。（请看注意事项 -- 副作用举例）
+
+3. 引入一个能够删除未引用代码 (dead code) 的压缩工具 (minifier)（例如 UglifyJSPlugin,BabelMinifyWebpackPlugin,ClosureCompilerPlugin）
+
+```js
+// package.json文件下的配置
+{
+  "name": "your-project",
+  "sideEffects": false //没有副作用的时候简单地将该属性标记为 false，来告知 webpack，它可以安全地删除未用到的 export 导出
+}
+//注意事项--副作用举例
+//任何导入的文件都会受到 tree shaking 的影响。这意味着，如果在项目中使用类似 css-loader(polyfill) 并导入 CSS 文件，则需要将其添加到 side effect 列表中，以免在生产模式中无意中将它删除：
+//polyfill 会给全局对象绑定 promise 之类的方法 但不会 export  所以一般要设置"sideEffects": ["@babel/polly-fill"."*.css"]
+```
+
+```js
+// development开发环境下 webpack.config.js 配置文件
+
+// production生产环境下他已经默认写好了 也会默认压缩输出
+module.exports = {
+    //省略。。。
+        optimization: {  //优化
+            usedExports: true
+        }
+    }
+    //省略。。。
+```
+
+### Develoment 和 Production 模式的区分打包 （遵循逻辑分离，我们通常建议为每个环境编写彼此独立的 webpack 配置。)
+
+1. 把 webpack.config.js 分为 webpack.common.js 和 webpack.dev.js 和 webpack.prod.js
+
+2. 遵循不重复原则 (Don't repeat yourself - DRY)，保留一个“通用”配置。 为了将这些配置合并在一起，我们将使用一个名为 webpack-merge（配置合并）的工具。
+
+3. npm scripts 里面把 strat 指令加上指定 webpack 配置文件语句 (--config webpack.dev.js)   npm run build 同理
+
+#### webpack-merge（配置合并）的使用
+
+npm install --save-dev webpack-merge
+
+```js
+// + |- webpack.common.js -- “通用”配置
+// + |- webpack.dev.js --开发环境配置 (实时重新加载(live reloading)和热模块替换(hot module replacement)能力的 source map 和 localhost server)
+// + |- webpack.prod.js --生产环境配置 (关注更小的 bundle，更轻量的 source map，以及更优化的资源)
+
+
+//开发环境配置merge示例
+ const merge = require('webpack-merge');
+ const common = require('./webpack.common.js');
+
+ module.exports = merge(common, {
+   devtool: 'cheap-module-eval-source-map',
+   devServer: {
+     contentBase: './dist'
+   }
+ });
+
+```
+
+#### DefinePlugin （指定环境）
+
+https://www.webpackjs.com/guides/production/#%E6%8C%87%E5%AE%9A%E7%8E%AF%E5%A2%83
+
+```js
+//生产环境配置merge＋指定环境示例
+  const webpack = require('webpack');
+  const merge = require('webpack-merge');
+  const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+  const common = require('./webpack.common.js');
+
+  module.exports = merge(common, {
+    devtool: 'source-map',
+    plugins: [
+      new UglifyJSPlugin({
+        sourceMap: true
+     }),
+     new webpack.DefinePlugin({  //指定process.env.NODE_ENV为production ,因为许多 library（库，例如react） 将通过与 process.env.NODE_ENV 环境变量关联，以决定 library 中应该引用哪些内容
+       'process.env.NODE_ENV': JSON.stringify('production')
+     })
+    ]
+  });
+```
+
+### Webpack 和 Code Splitting（代码拆分）
+
+有三种常用的代码分离方法：
+
+1. 入口起点：使用 entry 配置手动地分离代码。
+
+2. 防止重复：使用 CommonsChunkPlugin 去重和分离 chunk。
+
+3. 动态导入：通过模块的内联函数调用来分离代码。
+
+#### 防止重复 (prevent duplication) CommonsChunkPlugin 已被替代
+
+webpack 作代码分割，异步代码不用管，同步代码只要配置 optimization 即可
+
+```js
+//异步代码  webpack会自动的作代码分割  babel-plugin-dynamic-import-webpack（这个babel插件可以让webpack使用预案写法import('异步组件')）
+//同步代码  以下配置写到公共的webpack.common.js配置文件里  webpack会自动的作代码分割
+module.exports = {
+    //省略。。。
+        optimization: {
+            splitChunks: {
+                chunks: 'all'  //webpack会自动的作代码分割
+            }
+        }
+    }
+    //省略。。。
+```
+
+ExtractTextPlugin: 用于将 CSS 从主应用程序中分离。
+
+bundle-loader: 用于分离代码和延迟加载生成的 bundle。
+
+promise-loader: 类似于 bundle-loader ，但是使用的是 promises。
+
+CommonsChunkPlugin 插件还可以通过使用显式的 vendor chunks 功能，从应用程序代码中分离 vendor 模块。
+
+#### 总结~小技巧：
+
+手摸手 webpack 优化技巧：https://juejin.im/post/5b5d6d6f6fb9a04fea58aabc
+
+它内置的代码分割策略是这样的：
+
+新的 chunk 是否被共享或者是来自 node_modules 的模块
+
+新的 chunk 体积在压缩之前是否大于 30kb
+
+按需加载 chunk 的并发请求数量小于等于 5 个（太多了就不分了 不然 http 请求次数太多）
+
+页面初始加载时的并发请求数量小于等于 3 个（太多了就不分了 不然 http 请求次数太多）
+
+它内置的代码分割策略很好很不错，但有些场景下这些规则可能就显得不怎么合理了。比如我有一个管理后台，它大部分的页面都是表单和 Table，我使用了一个第三方 table 组件（比如 element table），几乎后台每个页面都需要它，但它的体积也就 15kb，不具备单独拆包的标准，它就这样被打包到每个页面的 bundle 中了，这就很浪费资源了。这种情况下建议把大部分页面能共用的组件单独抽出来，合并成一个 component-vendor.js 的包（后面会介绍）
+
+##### 拆包策略：
+
+基础类库 chunk-libs
+UI 组件库 chunk-elementUI
+自定义共用组件 / 函数 chunk-commons
+低频组件 chunk-eachrts/chunk-xlsx 等
+业务代码 lazy-loading xxxx.js
+
+##### 持久化缓存：
+
+使用 runtimeChunk 提取 manifest，使用 script-ext-html-webpack-plugin 等插件内联到 index.html 减少请求
+使用 HashedModuleIdsPlugin 固定 moduleId
+使用 NamedChunkPlugin 结合自定义 nameResolver 来固定 chunkId
