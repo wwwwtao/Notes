@@ -70,6 +70,12 @@ module.exports = {
 
 ### 使用 Loader 打包静态资源（图片篇）
 
+image-compressor---https://www.jianshu.com/p/3ce3e3865ae2
+
+一个简单的 JavaScript 图像压缩器。使用浏览器的原生 canvas.toBlob API 做的压缩工作。一般使用此压缩是在客户端图像文件上传之前。
+
+npm install image-compressor.js // 注意是 image-compressor.js 不是 image-compressor 那是另一个包
+
 ```js
 //file-loader 或者  url-loader
 module.exports = {
@@ -435,13 +441,13 @@ https://www.babeljs.cn/docs/babel-preset-react
 
 ### Tree Shaking （移除 JavaScript 上下文中的未引用代码 (export 了却并未 import 的代码）)
 
-#### 基本使用
-
 你可以将应用程序想象成一棵树。绿色表示实际用到的源码和 library，是树上活的树叶。灰色表示无用的代码，是秋天树上枯萎的树叶。为了除去死去的树叶，你必须摇动这棵树，使它们落下。
 
 实际上 Tree Shaking 发现引入了一个模块就会去看这个模块导出了什么，引入了什么。没引用的就会被删除
 
 https://www.webpackjs.com/guides/tree-shaking/
+
+#### 基本使用
 
 为了学会使用 tree shaking，你必须……
 
