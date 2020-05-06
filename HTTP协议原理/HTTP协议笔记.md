@@ -41,6 +41,10 @@
 
   发送端的 seq 字段需要接收到服务器段的 ack 才会变化，这个时候 服务器 ack = 客户端 seq
 
+## 浏览器输入 URL 后 HTTP 请求返回的完整过程
+
+<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/浏览器输入 URL 后 HTTP 请求返回的完整过程.png">
+
 ## 应用层协议 (HTTP 协议）    ==>传输层（TCP）==>网络层 ==>数据链路层 ==>物理层：
 
  只要能够保证，一端发送时构造的数据，另一端能够正确的解析，就是 ok 的，这种约定就是应用层协议
@@ -466,4 +470,119 @@ Domain 让二级域名之间共享 cookie 可以设置一个主域名 在此域�
 
 2. 302 是临时重定向 301 是永久重定向 301 服务器会告诉浏览器以后这个地址你直接请求新路径（缓存了用户不清不能反悔），而 302 是每次经过服务器都会跳转到 Location 中的新路径
 
-## Nginx 代理以及面向未来的 HTTP
+## Nginx 代理，缓存以及面向未来的 HTTP
+
+### Nginx 安装和基础代理配置
+
+```js
+// 1. Nginx 文件夹 -->conf-->nginx.conf  （nginx 配置文件）
+// 2. include servers/*.conf  这行代码表示配置 servers 文件夹下的 conf 配置（新的站点的单独配置文件）include 导入配置指令
+// 3. .conf配置文件具体作用
+   server {
+    listen     8888; //监听的端口
+    server_name  test.com; //浏览器里面访问的host_name 根据我们访问的host_name判断服务启动在哪里 返回什么 代理到哪里
+
+    // location是项目的定位， root定位到项目所在文件夹，index定位到首页HTML。
+    location / {
+        proxy_pass http://127.0.0.1:8888;  // 代理到哪个地方
+        proxy_set_header Host $host;       // 设置请求头Host为$host(nginx的变量 指原host--test.com) 用来区分不同的server_name
+}
+```
+
+### Nginx 代理配置和代理缓存的用处
+
+```js
+// 1. 配置Nginx的缓存 .conf
+proxy_cache_path cache levels=1:2 keys_zone=my_cache:10m    //(cache文件夹 levels是否要生成二级目录 keys_zone指关键区域的名字和内存大小)
+   server {
+     //...省略
+
+    location / {
+      proxy_cache my_chche; //配置的代理缓存的名字
+      //...省略
+}
+// 2. 代理缓存相关请求头
+res.writeHead(200,{
+  'Cache-Control': 'max-age=2, s-maxage=20, private,no-store'
+  // max-age是浏览器缓存过期时间
+  // s-maxage是代理缓存过期时间
+  // private 不允许代理缓存
+  // no-store 不允许缓存
+
+  'Cache-Control': 's-maxage=200',
+  'Vary': 'X-Test-Cache'
+  //Vary 指发送一个请求的时候，只有Vary指定的Http头的值是相同的情况下 才会使用缓存
+  //还有。。。让缓存使用内存之类等等的配置
+})
+```
+
+### HTTPS 解析 [vipsrc.com]
+
+<img width="100%" src="https://raw.githubusercontent.com/wwwwtao/Notes/master/HTTP协议原理/images/HTTPS流程.png">
+
+### 使用 Nginx 部署 HTTPS 服务
+
+```js
+// 1. 在nginx/certs(证书)文件夹下输入证书生成命令（git Bash）
+openssl req -x509 -newkey rsa:2048 -nodes -sha256 -keyout localhost-privkey.pem -out localhost-cert.pem
+
+// 2. 配置一个HTTPS的nginx代理服务器 HTTPS server
+    server {
+        listen       443 ssl;
+        server_name  localhost;
+
+        ssl_certificate      cert.pem;
+        ssl_certificate_key  cert.key;
+
+        ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
+
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers  on;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+    }
+
+// 3. 访问HTTP跳转到HTTPS
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  test.com
+        return 302 https:/ /$server_name$request_uri;
+    }
+```
+
+### HTTP2 的优势和 Nginx 配置 HTTP2 的简单使用
+
+1. 信道复用
+
+2. 分帧传输
+
+3. Server push
+
+```js
+
+// 2. 配置一个HTTPS的nginx代理服务器 HTTPS server  HTTP2
+    server {
+        listen       443 ssl http2;//
+        server_name  localhost;
+        http2_push_preload on; //
+
+        ssl_certificate      cert.pem;
+        ssl_certificate_key  cert.key;
+
+        ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
+
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers  on;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+    }
+```

@@ -50,16 +50,38 @@ axios('/extend/post', {
 
 ```typescript
 // 添加一个请求拦截器
-axios.interceptors.request.use(function (config) {
-  // 在发送请求之前可以做一些事情
-  return config;
+axios.interceptors.request.use(function (req) {
+  // 在发送请求之前可以做一些事情 必须要返回req
+  // 加入token
+  req.headers.Authorization = sessionStorage.getItem('token')
+
+  //判断非权限范围内的请求
+  //1. 判断当前请求的行为（restful请求风格） 如果不是就只能用url中的字符串 反正要有规矩
+  // get请求 view
+  // post请求 add
+  // put请求 edit
+  // delete请求 delete
+  const action = actionMapping[req.method]
+  const currentRight = router.currentRoute.meta
+  if(currentRight && currentRight.indexOf(action)===-1){
+    //没有权限
+    return Promise.reject('没有权限');
+  }
+  return req;
 }, function (error) {
   // 处理请求错误
   return Promise.reject(error);
 });
+
 // 添加一个响应拦截器
 axios.interceptors.response.use(function (response) {
   // 处理响应数据
+  // 响应控制 比如token失效返回登录页面401 没有操作权限403
+  if(res.data.meta.status === 401){
+    router.push('/login')
+    sessionStorage.clear()
+    window.location.reload() //刷新页面 情况vuex的数据
+  }
   return response;
 }, function (error) {
   // 处理响应错误
@@ -248,4 +270,3 @@ instance.post('/post')
 官方 axios 库也通过 axios.Axios 对外暴露了 Axios 类
 
 另外对于 axios 实例，官网还提供了 getUri 方法在不发送请求的前提下根据传入的配置返回一个 url
-
