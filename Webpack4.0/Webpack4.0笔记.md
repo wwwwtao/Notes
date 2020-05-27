@@ -607,3 +607,36 @@ UI 组件库 chunk-elementUI
 使用 HashedModuleIdsPlugin 固定 moduleId
 
 使用 NamedChunkPlugin 结合自定义 nameResolver 来固定 chunkId
+
+### SplitChunksPlugin 配置参数详解
+
+```js
+module.exports = {
+    //省略。。。
+    //SplitChunksPlugin 默认配置详解
+        optimization: {
+            splitChunks: {
+                chunks: "async",            // 作代码分割的时候 只对异步代码生效
+                minSize: 30000,             // 新的 chunk 体积在压缩之前是否大于 30kb
+                minChunks: 1,               // 被用了至少多少次才分割
+                maxAsyncRequests: 5,        // 按需加载 chunk 的并发请求数量小于等于 5 个（太多了就不分了 不然 http 请求次数太多）
+                maxInitialRequests: 3,      // 页面初始加载时的并发请求数量小于等于 3 个（太多了就不分了 不然 http 请求次数太多）
+                automaticNameDelimiter: '~',// 自动名称分隔符
+                name: true,                 // 让 cacheGroups 起的名有效
+                cacheGroups: {              // cacheGroups-缓存分组 打包同步代码符合上述条件后会走这里(也就是必须符合这里规则的同步代码才打包出来)
+                    vendors: {              // vendors-供应商 供应商配置组
+                        test: /[\\/]node_modules[\\/]/,     // 是从node_modules引入的 就单独打包出来  新的 chunk 是否被共享或者是来自 node_modules 的模块
+                        priority: -10，                     // priority-优先权
+                        filename: 'vendors.js'              // 指定打包出来的文件名(默认名字是vendors~main.js )
+                    },
+                    default: {              // 默认配置组 不属于上面的同步代码(不属于node_modules)走这里打包(默认名字是default~main.js )
+                        minChunks: 2,                       // 最小共用次数
+                        priority: -20,                      // 小于 vendors 会被打包进 vendors 或者 app
+                        reuseExistingChunk: true            // reuseExistingChunk-重用现有块  会复用之前已经打包过的模块 不会重新打包进default~main.js
+                    }
+                }
+            }
+        }
+    }
+    //省略。。。
+```
