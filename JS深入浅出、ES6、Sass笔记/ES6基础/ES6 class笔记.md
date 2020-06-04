@@ -1,4 +1,5 @@
 ************************************ class ********************************
+
 ```javascript
 class Person{                   //定义了一个名字为Person的类
     //属性写在这
@@ -13,19 +14,19 @@ class Person{                   //定义了一个名字为Person的类
 }
 ```
 
-constructor方法如果没有显式定义，会隐式生成一个constructor方法。所以即使你没有添加构造函数，构造函数也是存在的。
-constructor方法默认返回实例对象this，但是也可以指定constructor方法返回一个全新的对象，让返回的实例对象不是该类的实例。
-constructor中定义的属性可以称为实例属性（即定义在this对象上），constructor外声明的属性都是定义在原型上的，可以称为原型属性（即定义在class上)。
-类的所有实例共享一个原型对象 ，所以proto属性是相等的  由此，也可以通过proto来为类增加方法。使用实例的proto属性改写原型，会改变Class的原始定义，影响到所有实例，所以不推荐使用！
-
+constructor 方法如果没有显式定义，会隐式生成一个 constructor 方法。所以即使你没有添加构造函数，构造函数也是存在的。
+constructor 方法默认返回实例对象 this，但是也可以指定 constructor 方法返回一个全新的对象，让返回的实例对象不是该类的实例。
+constructor 中定义的属性可以称为实例属性（即定义在 this 对象上），constructor 外声明的属性都是定义在原型上的，可以称为原型属性（即定义在 class 上）。
+类的所有实例共享一个原型对象 ，所以 proto 属性是相等的  由此，也可以通过 proto 来为类增加方法。使用实例的 proto 属性改写原型，会改变 Class 的原始定义，影响到所有实例，所以不推荐使用！
 
 Class 的静态方法
-加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用,如果静态方法包含this关键字，这个this指的是类，而不是实例。
-目前没有静态属性 只能类名.属性名创建
+加上 static 关键字，就表示该方法不会被实例继承，而是直接通过类来调用，如果静态方法包含 this 关键字，这个 this 指的是类，而不是实例。
+目前没有静态属性 只能类名。属性名创建
 
+类”的内部可以使用 get 和 set 关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为和做额外操作
 
-类”的内部可以使用get和set关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为和做额外操作
 # ES6 getter/setter
+
 ```javascript
 class Person {
 	constructor() {
@@ -43,7 +44,9 @@ class Person {
 ```
 
 # ES5 getter/setter
-1. 在对象字面量中书写get/set方法
+
+1. 在对象字面量中书写 get/set 方法
+
 ```javascript
 const obj = {
 	_name: '',          //加_ 用get,set获取和设置name   get,set方法名是name,返回和设置_name
@@ -56,7 +59,9 @@ const obj = {
 	}
 }
 ```
+
 2. Object.defineProperty
+
 ```javascript
 var obj = {
 	_name: ''
@@ -72,12 +77,14 @@ Object.defineProperty(obj, 'name', {
 	}
 });
 ```
-# ES6 name属性与new.target属性
 
-函数的name属性，返回该函数的函数名。
+# ES6 name 属性与 new.target 属性
 
-new.target属性  指向 !new关键字,后面的类   没有new,值就会等于undefined   在class或者ES5的构造函数中存在
-语法糖                                  //校验是不是使用new 来进行调用的
+函数的 name 属性，返回该函数的函数名。
+
+new.target 属性  指向 !new 关键字，后面的类   没有 new, 值就会等于 undefined   在 class 或者 ES5 的构造函数中存在
+语法糖                                  // 校验是不是使用 new 来进行调用的
+
 ```javascript
 function Car() {
 	// if (new.target !== Car) {
@@ -89,7 +96,8 @@ function Car() {
 }
 ```
 
-# 在ES5中模拟类   new和构造函数的原理
+# 在 ES5 中模拟类   new 和构造函数的原理
+
 ```javascript
 // (1) 创建一个新对象；
 // (2) 将构造函数的作用域赋给新对象（因此 this 就指向了这个新对象） ；
@@ -105,7 +113,8 @@ function Constructor(fn, args) {	//传入函数 和函数的参数
 }
 ```
 
-# ES6继承 extends关键字
+# ES6 继承 extends 关键字
+
 ```javascript
 class FEEngineer extends Human { 			//继承父类的属性和方法	构造时传入父类的属性 然后用super()可以调用 进行修改
 	constructor(name, age, sex, hobby, skill, salary) {	//就算不修改父类的属性也要调用super() 继承父类的属性
@@ -115,12 +124,14 @@ class FEEngineer extends Human { 			//继承父类的属性和方法	构造时�
 	}
 }
 ```
+
 # super
- 从本质上讲，this是一个指向本对象的指针, 然而super是一个Java关键字 只有在简洁表示法才能用 ！！！！！
- super可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。  可以拿到原型上的属性
 
-在调用super() 父类的this 始终是子类的this
-1. 作为父类构造函数调用  在子类构造函数中使用super(),相当于把this传给父类,然后跑一遍
-2. 作为对象的方式调用	1. 非静态方法中访问super -> 父类原型		2. 在静态方法中访问super -> 父类
+ 从本质上讲，this 是一个指向本对象的指针，然而 super 是一个 Java 关键字 只有在简洁表示法才能用 ！！！！！
+ super 可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。  可以拿到原型上的属性
 
-多态:同一个接口 在不同情况下做不一样的事情
+在调用 super() 父类的 this 始终是子类的 this
+1. 作为父类构造函数调用  在子类构造函数中使用 super(), 相当于把 this 传给父类，然后跑一遍
+2. 作为对象的方式调用	1. 非静态方法中访问 super -> 父类原型		2. 在静态方法中访问 super -> 父类
+
+多态：同一个接口 在不同情况下做不一样的事情
