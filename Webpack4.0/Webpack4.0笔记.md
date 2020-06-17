@@ -640,3 +640,30 @@ module.exports = {
     }
     //省略。。。
 ```
+
+### Lazy Loading 懒加载，Chunk 是什么？
+
+每个打包的 JS 文件都是一个 Chunk (minChunks)
+
+### 打包分析 -Preloading, Prefetching
+
+(analyse/ 分析） https://github.com/webpack/analyse
+
+```js
+// 指令变量
+const instructions = "webpack --profile --json > stats.json" //（打包过程中把 json 格式的项目描述文件放到 stats.json)
+```
+
+1. 首先要生成打包过程的描述文件 通过 script--dev-- 添加 instructions 指令，打包之后就会把 json 格式的项目描述文件放到 stats.json
+
+2. http://webpack.github.com/analyse 进入这个工具网站可以把描述文件上传进行工具化分析（官方的比较简单，下面也有一些 webpack 官方推荐的插件，功能比较全）
+
+如果我们以分离代码作为开始，那么就以检查模块作为结束，分析输出结果是很有用处的。官方分析工具 是一个好的初始选择。下面是一些社区支持 (community-supported) 的可选工具：
+
+https://www.webpackjs.com/guides/code-splitting/#bundle-%E5%88%86%E6%9E%90-bundle-analysis-
+
+1. webpack-chart: webpack 数据交互饼图。
+
+2. webpack-visualizer: 可视化并分析你的 bundle，检查哪些模块占用空间，哪些可能是重复使用的。（常用！!!）
+
+3. webpack-bundle-analyzer: 一款分析 bundle 内容的插件及 CLI 工具，以便捷的、交互式、可缩放的树状图形式展现给用户。
