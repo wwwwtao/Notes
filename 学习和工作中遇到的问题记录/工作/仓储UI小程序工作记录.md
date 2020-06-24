@@ -1,15 +1,34 @@
+# 项目写法
+
+1. 小程序请求封装（根据传参使用取消请求） 默认 config
+
+2. 首页判断
+
+3. 选择联系人 返回上一页 并设置 动态参数的值
+
 # 账号密码
 
 15173468345
 123456
 
+192.168.0.26
+
+## 豪哥
+
+18175112351
+123456
+
+192.168.0.63
+
+测试环境：http://skateboard.test.yongxinxue.com/
+
 # 修改记录
 
 ## 2020.0608
 
-1. 出入库增加仓库选择操作，更改的字段用红色标记出来了 （后端相关）
+1. 出入库增加仓库选择操作，更改的字段用红色标记出来了 （后端相关）------------- 已完成
 
-2. 新建发货单，增加选择仓库及发货商品类别操作 （等设计稿）
+2. 新建发货单，增加选择仓库及发货商品类别操作 （等设计稿）------------- 已完成
 
 3. 新增调拨清单（先画 copy 发货清单） 新建调拨单套娃新建发货单 等设计稿
 
@@ -17,188 +36,95 @@
 
 ## 2020.06.09
 
-1. 库存清单中增加原材料及根据仓库查看库存数量的页面（等设计稿）
+1. 库存清单中增加原材料及根据仓库查看库存数量的页面（等设计稿） ------------- 已完成
 
-2. 增加原材料详情页（先画 商品详情修改 添加库存信息）商品详情等设计稿 然后套娃
+2. 增加原材料详情页（商品详情修改 添加库存信息）------------- 已完成
 
-3. 增加联系人页面，新建配送和代发货单可添加联系人（先画）  建好 -- 等图中
+3. 增加联系人页面，新建配送和代发货单可添加联系人（先画）  ------------- 已完成 （还差返回上一个页面的逻辑）
 
 ## receiving 配送清单被删除（暂时先留着）
 
 # 接口
 
-### <!-- 登录 -->
+## 仓储接口
 
-1. 登录
-URL：/wx/login/wxLogin
-参数：mobile, password, code, openType（小程序类型，仓储小程序为 2)
-返回： 用户的 token
+### 公共方法
 
-2. 忘记密码
-URL：/wx/login/forgetPassword
-参数：mobile, validateCode（验证码）, code, openType（小程序类型，仓储小程序为 2)
-返回：用户的 token
+	GET 获取小程序菜单 /wx/storage/getMenu
 
-3. 获取用户的 token
-URL：/wx/login/getUserByCode
-参数：code， openType（小程序类型，仓储小程序为 2)
-返回：用户的 token
+	GET 小程序 - 商品类别列表 /wx/storage/productCategory
 
-4. 重置密码
-URL：/wx/user/resetPassword
-参数：password
-返回：操作成功
+	GET 小程序 - 选择联系人 /wx/storage/chooseContact  入参（contactType( 0. 公司员工 1. 供应商 2. 经销商 3. 加工厂）） 111
 
-5. 获取验证码              验证码默认 888888  获取验证码的接口有个 type    1 注册 2 登录 3 找回密码
-URL：/wx/register/sendValidateCode
-参数：mobile, type, openType
-返回：ok()
+    GET 小程序 - 新建产品数据源 /wx/storage/addProxyOrderProductList  入参（productType（商品类型）, productCategoryId（类别 ID)， productName（商品名字）, warehouseId（仓库 ID)）（update）
 
-6. 注册
-URL：/wx/register/register
-参数：mobile, validateCode（验证码）, password,openType（小程序类型，仓储小程序为 2)
-返回：ok()
+	GET 小程序 - 商品仓库及库存 /wx/storage/getProductStockAndCount  入参（productId（商品 ID)）
 
-7. 完善个人信息
-URL：/wx/user/updatePersonalInfo
-参数： email（邮箱）, gender(1 男，2 女），nickName（名称）
-返回：ok()
+	GET 小程序 - 获取仓库 list /wx/storage/getWarehouseList
 
-8. 1
+	GET 枚举 /common/xcxGetEnum?name=?
+		代发货 status name = ProxyOrderStatus
+		产品类型 name = ProductType
+		调拨状态 name = TransferOrderStatus (add)
 
-/wx/user/getPersonalInfo
-获取用户信息，不用传东西（请求头带 token 就行）
+### 微信小程序仓储 - 代发货清单 / 发货清单
 
-### <!-- 库存清单 -->
+	GET 小程序 - 代发货清单 / 发货清单列表 /wx/shipping/orderList  入参（productName（商品名字）, status（单状态）, isProxyOrder（是否是代发货）） 111
 
-1. 获取商品类别
-URL：wx/storage/getCategory
-入参：无
-返回：{
-    "msg": "操作成功",
-    "data": [
-        {
-            "name": "配饰",
-            "id": 5
-        },
-        {
-            "name": "轮子",
-            "id": 4
-        },
-        {
-            "name": "板面",
-            "id": 3
-        },
-        {
-            "name": "支架",
-            "id": 2
-        },
-        {
-            "name": "滑板",
-            "id": 1
-        }
-    ],
-    "success": true
-}
+	GET 小程序 - 代发货清单 / 发货清单详情 /wx/shipping/shippingOrderDetail  入参（shippingOrderId（货单 ID)） 111
 
-1. 根据商品类别获取商品
-URL：wx/storage/getProductsByCategory
-入参：类别 id
-返回：
-{
-    "msg": "操作成功",
-    "data": [
-        {
-            "unit": "个",                    // 单位
-            "code": "AS123",          // 商品代码
-            "name": "长滑板十代",
-            "id": 4,
-            "stock": 123                // 商品库存
-        },
-        {
-            "unit": "个",
-            "code": "AS123",
-            "name": "长滑板九代",
-            "id": 3,
-            "stock": 242
-        },
-        {
-            "unit": "个",
-            "code": "AS123",
-            "name": "长滑板八代",
-            "id": 2,
-            "stock": 23
-        },
-        {
-            "unit": "个",
-            "code": "AS123",
-            "name": "长滑板一代",
-            "id": 1,
-            "stock": 12
-        }
-    ],
-    "success": true
-}
+	POST 小程序 - 代发货清单详情修改状态 /wx/shipping/shippingOrderChangeStatus  入参（shippingOrderId（货单 ID)， status（要修改的状态）） 111
 
-### <!-- 扫码收货 -->
+	POST 小程序 - 代发货清单 保存 /wx/shipping/saveProxyOrder  入参（ShippingOrderDTO dto（对象接收数据）） 111
+	{
+		sendFactoryId（发货方 ID）
+		operatorEmployeeId（操作人 ID)
+		detailProductString（商品数组字符串）：
+		{
+			[
+			id
+			deliverCount（数量）
+			],
+			[
+			id
+			deliverCount（数量）
+			]
+		}
+	}
 
-1. 获取当前登录用户的收货单
-URL：wx/storage/receiptList
-入参：无    （需要登录之后带 token）
-返回：发货单列表
+### 微信小程序仓储 - 调拨单
 
-2. 根据收货单 ID 获取收货单详情
-URL：wx/storage/receiptDetail
-入参：id （收货单的 ID)
-返回：
-{
-    "msg": "操作成功",
-    "data": {
-        "receiverName": "章三",        		 // 收货人
-        "receiverMobile": "12345678910",    	  // 收货人电话
-        "products": [
-            {
-                "unit": "个",     			 // 单位
-                "count": 11,     			// 数量
-                "id": 11,         			 // 商品 ID
-                "productName": "长滑板八代"
-            },
-            {
-                "unit": "个",
-                "count": 10,
-                "id": 10,
-                "productName": "长滑板一代"
-            }
-        ]
-    },
-    "success": true
-}
+	GET 小程序 - 调拨单列表 /wx/transfer/orderList  入参（productName（商品名字）, status（单状态）） 111
 
-3. 收货时验证商品
-URL：wx/storage/checkProduct
-入参：orderDetailId（发货单 ID)  productId（商品 ID)
-返回：  若返回为空代表该商品不在收货单中
-{
-    "msg": "操作成功",
-    "data": {
-        "count": 10,
-        "id": 10,
-        "productId": 1,
-        "productName": "长滑板一代",
-        "received": true,                                 // 是否已收货   true 是
-        "shippingOrderDetailId": 1                        // 订单详情 ID
-    },
-    "success": true
-}
+	GET 小程序 - 调拨单详情 /wx/transfer/transferOrderDetail  入参（transferOrderId（调拨单 ID)） 111
 
-4. 收货时保存收货信息 （确认收货）
-URL：wx/storage/saveShipmentDetail
-入参：productArray（将商品列表的商品数据转为 json 数组字符串提交）actualCount
-返回：
-{
-    "msg": "操作成功",
-    "data": {
-        isAllReceived":true,                                     //true 全部收货， false 还有货物未完成
-    },
-    "success": true
-}
+	POST 小程序 - 调拨单 保存 /wx/transfer/saveTransferOrder  入参（TransferOrderDTO dto（对象接收数据） 111
+
+	{
+		fromEmployeeId（调出方操作人 ID）
+		toEmployeeId（接收方收货人 ID）
+		productType （产品类型）
+		fromWarehouseId （调出方仓库）
+		toWarehouseId（接收方仓库）
+		detailProductString（商品数组字符串）：
+		{
+			[
+			id
+			deliverCount（数量）
+			],
+			[
+			id
+			deliverCount（数量）
+			]
+		}
+	}
+
+### 微信小程序仓储 - 批次清单 (add)
+
+	GET 小程序 - 批次清单列表 /wx/stockIn/orderList  入参（orderNo（单号）） 111
+
+	GET 小程序 - 批次清单详情 /wx/stockIn/stockInDetail  入参（stockInId（入库单 id)）
+
+### 微信小程序仓储 - 收货 (add)
+
+	GET 小程序 - 操作管理 - 收货单列表 （包含调拨，采购数据） /wx/receiving/transferAndShippingList
