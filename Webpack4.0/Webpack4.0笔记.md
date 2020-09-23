@@ -312,6 +312,7 @@ const webpack = require('webpack');
       new webpack.HotModuleReplacementPlugin()
     ],
     //省略。。。
+  }
 ```
 
 #### module.hot.accept
