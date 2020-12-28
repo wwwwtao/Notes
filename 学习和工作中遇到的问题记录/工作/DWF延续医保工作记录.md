@@ -308,3 +308,145 @@ export default {
 
 表格直接 改派  添加了查询条件报错   
 
+
+
+```js
+/**
+ * 该插件为显示地图的插件，动态加载
+ */
+function setMapUnion(deptId) {
+    /**
+     * ajax获取联通事业部的所有项目组的销售额
+     */
+    var o1 = $("#acctmonth").val();
+    var o2 = $("#maxMonth").val();
+    var parData = {
+        acctmonth : o1,
+        maxMonth : o2,
+        deptId : deptId
+    };
+    var par = JSON.stringify(parData);
+    /**
+     * @author Administrator
+     * @params:参数设置：为地图各省份提供数据.
+     */
+    var provic;
+    var toCash;
+    $.ajax({
+        url : "CompanyFeeBusinessNew!setMapUnion.action",
+        data : {
+            par : par
+        },
+        cache : true,
+        async : false,
+        type : "post",
+        success : function(result) {
+            provic = result.provic;
+            toCash = result.toCash;
+        }
+    });
+    // ----------参数的转换
+    var text = null;
+    if (deptId == '5271') {
+        text = '联通事业部分分省份项目组销售额';
+    } else if (deptId == '7658') {
+        text = '电信事业部分分省份项目组销售额';
+    } else {
+        text = '移动事业部分分省份项目组销售额';
+    }
+    $("#map").css('width', $("#map").width());
+    require.config({
+        paths : {
+            echarts : '/pure/resources/echarts'
+        }
+    });
+    require([ 'echarts', 'echarts/chart/map' ], function DrawEchart(ec) {
+        var myChart = ec.init(document.getElementById("map"));
+        mapParams = {
+            title : {
+                text : text,
+                // subtext: '纯属虚构',
+                left : 'center'
+            },
+            tooltip : {
+                trigger : 'item'
+            },
+            legend : {
+                orient : 'vertical',
+                left : 'left',
+                data : [ '销售额' ]
+            },
+            toolbox : {
+                show : true,
+                orient : 'vertical',
+                left : 'right',
+                top : 'center',
+                feature : {
+                    dataView : {
+                        readOnly : false
+                    },
+                    restore : {},
+                    saveAsImage : {}
+                }
+            },
+            visualMap : {
+                min : 0,
+                max : 5000000,
+                text : [ 'High', 'Low' ],
+                realtime : false,
+                calculable : true,
+                inRange : {
+                    color : [ 'lightskyblue', 'yellow', 'orangered' ]
+                }
+            },
+            dataRange : {
+                min : 0,
+                max : 2500000,
+                x : 'left',
+                selectedMode : false,
+                y : 'bottom',
+                text : [ 'High', 'Low' ], // 文本，默认为数值文本
+                calculable : true,
+                color : [ '#EE6363', '#CCCCCC' ]
+            },
+            series : [ {
+                name : '销售额',
+                type : 'map',
+                mapType : 'china',
+                roam : false,
+                label : {
+                    normal : {
+                        show : true
+                    },
+                    emphasis : {
+                        show : true
+                    }
+                },
+                data : (function() {
+                    var res = [];
+                    var len = provic.length;
+                    while (len--) {
+                        res.push({
+                            name : provic[len],
+                            value : toCash[len]
+                        });
+                    }
+                    return res;
+                })(),
+                itemStyle : {
+                    normal : {
+                        color : '#BF3EFF',
+                        borderWidth : 0.5,
+                        borderColor : 'black',
+                        /* color: 'orange', */
+                        label : {
+                            show : false
+                        }
+                    }
+                }
+            } ]
+        };
+        myChart.setOption(mapParams);
+    });
+}
+```
