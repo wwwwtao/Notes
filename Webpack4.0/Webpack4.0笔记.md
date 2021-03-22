@@ -669,5 +669,50 @@ https://www.webpackjs.com/guides/code-splitting/#bundle-%E5%88%86%E6%9E%90-bundl
 
 3. webpack-bundle-analyzer: 一款分析 bundle 内容的插件及 CLI 工具，以便捷的、交互式、可缩放的树状图形式展现给用户。
 
-### css文件的代码分割
+### css 文件的代码分割
 
+1. 注意 tree shaking
+所以一般要设置"sideEffects": ["*.css"]
+
+### Webpack 与浏览器缓存 ( Caching )
+
+[contenthash]  -- 根据 content 内容产生的一个哈希字符串 content 不变哈希值不变
+
+```js
+module.exports = {
+    //...
+    output: {
+        filename: '[name].[contenthash].js',
+        path: path.resolve(__dirname, 'dist')  //打包输出文件地址
+    }
+}
+```
+
+webpack 把 业务代码 和 引用库的关联代码  叫 manifest
+老版本 webpack 中 业务代码和库的 js 中都有 manifest （所以哪怕代码内容不变 关联可能变了哈希值也会变），加一个 runtimeChunk 就会把关联代码单独拿出来放在 runtime.js 中
+
+### Shimming（垫片）
+
+```js
+module.exports = {
+    //...
+    plugins:[
+        new webpack.ProvidePlugin({
+            $: 'jquery' //模块有$这个字符串 就会自动在模块中引入jquery 然后把jquery赋值给$
+        })
+    ],
+    module:{
+        rules:[{
+            use:[{
+                loader:'imports-loader'?this=>window //把模块中的this指向window 
+            }]
+        }]
+    }
+}
+```
+ 
+ ### 环境变量的使用方法 
+
+利用全局变量 了解概念即可
+ 
+## Webpack 实战配置案例讲解
