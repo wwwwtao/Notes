@@ -74,7 +74,7 @@ image-compressor---https://www.jianshu.com/p/3ce3e3865ae2
 
 一个简单的 JavaScript 图像压缩器。使用浏览器的原生 canvas.toBlob API 做的压缩工作。一般使用此压缩是在客户端图像文件上传之前。
 
-npm install image-compressor.js // 注意是 image-compressor.js 不是 image-compressor 那是另一个包
+1. npm install image-compressor.js // 注意是 image-compressor.js 不是 image-compressor 那是另一个包
 
 ```js
 //file-loader 或者  url-loader
@@ -256,9 +256,9 @@ cheap-module-source-map  没有列映射 (column mapping) 的 source map，将 l
 
 ```js
   module.exports = {
-    //省略。。。
+    //...
   devtool: 'cheap-module-eval-source-map'
-    //省略。。。
+    //...
 ```
 
 ### 使用 Webpack-Dev-Server 提升开发效率（可以帮助你在代码发生变化后自动编译代码）
@@ -298,7 +298,7 @@ var webpackConfig = {
 const webpack = require('webpack');
 
   module.exports = {
-    //省略。。。
+    //...
    devServer:{  //修改和保存任意源文件，web 服务器就会自动重新加载编译后的代码
       hot:true, //开启HMR热更新
       hotOnly: true //即使热更新失效也不让浏览器刷新
@@ -311,7 +311,7 @@ const webpack = require('webpack');
       new webpack.NamedModulesPlugin(), //更容易查看要修补(patch)的依赖
       new webpack.HotModuleReplacementPlugin()
     ],
-    //省略。。。
+    //...
   }
 ```
 
@@ -346,11 +346,11 @@ https://www.babeljs.cn/setup#installation
 
 5. 配置 useBuiltIns 设置 polyfill 只转换用到的方法 代码如下 （配置按需引入 polyfill)
 
-6. Babel 的 options 太繁长，可以不写 去创建一个。babelr 文件写入配置选项
+6. Babel 的 options 太繁长，可以不写 去创建一个 .babelr 文件写入配置选项
 
 ```js
 module.exports = {
-    //省略。。。
+    //...
     module: {
         rules: [{
             test: /\.js$/,
@@ -367,7 +367,7 @@ module.exports = {
             }]
         }
     }
-    //省略。。。
+    //...
 ```
 
 #### polyfill 其他注意事项 （写库 第三方组件时 polyfill 的配置）transform-runtime
@@ -382,7 +382,7 @@ https://www.babeljs.cn/docs/babel-plugin-transform-runtime
 
 ```js
 module.exports = {
-    //省略。。。
+    //...
     module: {
         rules: [{
             test: /\.js$/,
@@ -403,7 +403,7 @@ module.exports = {
             }]
         }
     }
-    //省略。。。
+    //...
 
     //改变参数需要安装不同的npm包
     corejs option	Install command
@@ -474,12 +474,12 @@ https://www.webpackjs.com/guides/tree-shaking/
 
 // production生产环境下他已经默认写好了 也会默认压缩输出
 module.exports = {
-    //省略。。。
+    //...
         optimization: {  //优化
             usedExports: true
         }
     }
-    //省略。。。
+    //...
 ```
 
 ### Develoment 和 Production 模式的区分打包 （遵循逻辑分离，我们通常建议为每个环境编写彼此独立的 webpack 配置。)
@@ -555,14 +555,14 @@ webpack 作代码分割，异步代码不用管，同步代码只要配置 optim
 //异步代码  webpack会自动的作代码分割  babel-plugin-dynamic-import-webpack（这个babel插件可以让webpack使用预案写法import('异步组件')）
 //同步代码  以下配置写到公共的webpack.common.js配置文件里  webpack会自动的作代码分割
 module.exports = {
-    //省略。。。
+    //...
         optimization: {
             splitChunks: {
                 chunks: 'all'  //webpack会自动的作代码分割
             }
         }
     }
-    //省略。。。
+    //...
 ```
 
 ExtractTextPlugin: 用于将 CSS 从主应用程序中分离。
@@ -613,7 +613,7 @@ UI 组件库 chunk-elementUI
 
 ```js
 module.exports = {
-    //省略。。。
+    //...
     //SplitChunksPlugin 默认配置详解
         optimization: {
             splitChunks: {
@@ -639,7 +639,7 @@ module.exports = {
             }
         }
     }
-    //省略。。。
+    //...
 ```
 
 ### Lazy Loading 懒加载，Chunk 是什么？
@@ -704,15 +704,214 @@ module.exports = {
     module:{
         rules:[{
             use:[{
-                loader:'imports-loader'?this=>window //把模块中的this指向window 
+                loader:'imports-loader'?this=>window //把模块中的this指向window
             }]
         }]
     }
 }
 ```
- 
- ### 环境变量的使用方法 
+
+### 环境变量的使用方法
 
 利用全局变量 了解概念即可
- 
+
 ## Webpack 实战配置案例讲解
+
+### Library（组件库 库的打包） 的打包
+
+```js
+const path = require('path')
+
+module.exports = {
+    // ...
+    externals: ["lodash"], //打包过程中  如果遇到了lodash就忽略
+    externals: "lodash",   //不管在任何环境下 引入的lodash都取名叫lodash
+    externals: {           //不仅可以是数组,字符串 也可以是个对象
+        lodash: {
+            root: '_', //如果是通过script标签引入进来的 那么我要求script标签必须在页面上注入一个名字叫'_'的全局变量
+            commonjs: 'lodash'  //如果在commonjs的环境下被使用 我要求lodash加载的时候必须叫lodash
+        }
+    },
+    output: {
+        filename: 'bundle.js', //输出文件名
+        path: path.resolve(__dirname, 'dist'), //输出文件地址  此处表示当前目录下dist文件夹
+        library:'library', //可以通过script标签引入library
+        libraryTarget: 'umd' //通过任何形式引入我们的库  都可以引入的到 //也可以填写this，window，global 挂载在他们底下
+    }
+}
+```
+
+#### 怎么给别人用
+
+1. 注册一个 npm 账号
+2. npm publish（库的名字是不能相同的）
+3. 别人 npm install library 就可以使用了
+
+### PWA（渐进式 Web APP） 的打包配置
+
+其目的是通过各种 Web 技术实现与原生 App 相近的用户体验
+
+1. webpack 安装插件 WorkboxPlugin
+2. 在业务代码中应用 serviceWorker
+
+### TypeScript 的打包配置
+
+1.  npm install ts-loader
+
+2.  配置一个 tsconfig.json
+
+```js
+module.exports = {
+    entry: './src/index.tsx',
+    module: {
+        rules: [{
+            test: /\.tsx?$/, //打包的文件后缀
+            use: {          //打包用到的loader
+                loader: 'ts-loader',
+                exclude: /node_modules/
+            }
+        }]
+    },
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist')
+    }
+}
+```
+
+#### 我们引入一个库 希望这个库的方法能够也拥有类型检查
+
+1. npm install @type/lodash  // 安装之后就可以识别 lodash 的函数要用那些参数
+
+##### 怎么搜索安装 库对应的类型文件
+
+1. 打开 github 搜索 DefinitelyTyped
+2. 找到 TypeSearch-🔗链接 可以在里面搜索
+https://www.typescriptlang.org/dt/search/
+
+### 使用 WebpackDevServer 实现请求转发
+
+https://webpack.js.org/configuration/dev-server/#root
+
+```js
+module.exports = {
+  //...
+  devServer: {   //只有开发环境下才有作用
+    proxy: {
+      '/api': {
+        // index: '', // 启用根代理
+        // context: ['/auth', '/api'],  //如果要代理到同一目标的多个特定路径
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/api': '' },   //把请求地址中的/api替换成''
+        secure: false,  //实现对https网址的请求转发
+        changeOrigin: true,  // 有些对Origin(起源)做了限制   建议始终加上
+        headers: {  //HTTP响应中注入一些HTTP响应头
+            host: 'wt.com',
+            'X-Custom-Foo': 'bar',
+            cookie: 'cookie'
+        },
+        // 有时您不想代理所有内容。可以基于函数的返回值绕过代理。
+        // 在该功能中，您可以访问请求，响应和代理选项。
+        // 返回 null 或 undefined 继续使用代理处理请求。
+        // 返回 false 以为请求产生 404 错误。
+        // 返回提供服务的路径，而不是继续代理请求。
+        // 例如，对于浏览器请求，您想要提供 HTML 页面，但是对于 API 请求，您想要代理它。您可以执行以下操作：
+        bypass: function (req, res, proxyOptions) { //拦截的作用
+          if (req.headers.accept.indexOf('html') !== -1) {
+            console.log('跳过浏览器请求的代理.');
+            return '/index.html';
+          }
+        },
+      },
+    },
+  },
+};
+```
+
+### WebpackDevServer 解决单页面应用路由问题
+
+```js
+module.exports = {
+    //...
+    // historyApiFallback: true,   //对路径的请求转化到对根路径的请求 等价于任何路径转化到index.html
+    // 如果需要路由的history模式 后端需要去aginx或者阿帕奇服务器配置
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/$/, to: '/views/landing.html' },
+        { from: /^\/subpage/, to: '/views/subpage.html' },
+        { from: /./, to: '/views/404.html' },
+      ],
+    },
+    //...
+}
+```
+
+### EsLint 在 Webpack 中的配置
+
+#### 使用EsLint
+
+1. npx eslint --init    // 安装 EsLint
+
+2. EsLint 配置文件：.eslintrc.js
+
+```js
+//.eslintrc.js
+module.exports = {
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "rules": {
+        "把ESLint提示的规范复制到这里,赋值为0就可以不遵守这个规范": 0,
+    },
+    globals: {
+        document: false // document全局变量不允许进行覆盖
+    }
+}
+```
+
+3. VSCode 安装 ESLint 插件 根据错误提示手动修改代码规范
+
+#### 把 ESLint 结合在 Webpack 中
+
+1. npm install eslint-loader --save-dev
+
+```js
+//webpack.config.js
+module.exports = {
+    //...
+    module: {
+        devServer: {
+            overlay: true,  //当我们打包报错的时候 它会直接在浏览器弹出层报错
+        },
+        rules: [{
+                test: /\.js$/,
+                exclude: /node_modules/,  //不转换此文件夹中的
+                use: ['babel-loader','eslint-loader'],   //连接 webpack 和 js 文件
+                options: {
+                    // eslint选项（如有必要）
+                },
+            }]
+        }
+    }
+    //...
+```
+
+##### eslint-loader 已不推荐使用。请使用 eslint-webpack-plugin
+
+https://github.com/webpack-contrib/eslint-webpack-plugin
+
+1. npm install eslint-webpack-plugin --save-dev
+
+```js
+const ESLintPlugin = require('eslint-webpack-plugin');
+
+module.exports = {
+  // ...
+  plugins: [new ESLintPlugin(options)],
+  // ...
+};
+```
+
+
+
+
+### webpack 性能优化(1) 
