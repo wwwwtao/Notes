@@ -848,7 +848,7 @@ module.exports = {
 
 ### EsLint 在 Webpack 中的配置
 
-#### 使用EsLint
+#### 使用 EsLint
 
 1. npx eslint --init    // 安装 EsLint
 
@@ -911,7 +911,32 @@ module.exports = {
 };
 ```
 
+### webpack 性能优化
 
+#### （1）打包速度
 
+1. 跟上技术的迭代 （Node，Npm，Yarn）
 
-### webpack 性能优化(1) 
+2. 在尽可能少的模块上应用 Loader （比如 include：path.resolve(__dirname,'../src') 只在 src 下应用 babel-loaders）
+
+3. Plugin 尽可能精简并确保可靠
+
+4. resolve 参数合理配置
+
+```js
+//webpack.config.js
+module.exports = {
+    //...
+        resolve: {
+            extensions: ['.js','.jsx']  //引入一个文件的时候 我会去找以 .js 后缀的文件 然后再去找 .jsx
+            // mainFiles: ['index','child']    //引入某个目录下的文件 默认index 然后再去找child
+            alias: {    //别名
+                '@': path.resolve(__dirname,'src'),
+                '_c': path.resolve(__dirname, "src/components"),
+            }
+        }
+    }
+    //...
+```
+
+5. 使用 DIIPlugin 提高打包速度

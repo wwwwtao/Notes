@@ -1,0 +1,6 @@
+<view class="navbar custom-class" style='height:{{navHeight}}px;background-color:{{bgColor}}; opacity:{{opacity}};'>
+  <!-- <view class='navbar-title' style='top:{{navTop}}px'> -->
+  <view class='navbar-title' style='height:{{navHeight-navTop}}px;top:{{navTop}}px'>
+      <slot></slot>
+  </view>
+</view>
