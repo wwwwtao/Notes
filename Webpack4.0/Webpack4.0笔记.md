@@ -913,15 +913,15 @@ module.exports = {
 
 ### webpack 性能优化
 
-#### （1）打包速度
+#### 打包速度
 
-1. 跟上技术的迭代 （Node，Npm，Yarn）
+##### 1. 跟上技术的迭代 （Node，Npm，Yarn）
 
-2. 在尽可能少的模块上应用 Loader （比如 include：path.resolve(__dirname,'../src') 只在 src 下应用 babel-loaders）
+##### 2. 在尽可能少的模块上应用 Loader （比如 include：path.resolve(__dirname,'../src') 只在 src 下应用 babel-loaders）
 
-3. Plugin 尽可能精简并确保可靠
+##### 3. Plugin 尽可能精简并确保可靠
 
-4. resolve 参数合理配置
+##### 4. resolve 参数合理配置
 
 ```js
 //webpack.config.js
@@ -939,4 +939,240 @@ module.exports = {
     //...
 ```
 
-5. 使用 DIIPlugin 提高打包速度
+##### 5. 使用 DIIPlugin 提高打包速度 （第三方模块只打包一次）
+
+```js
+
+1.
+// webpack.dll.js
+const paht = require('paht')
+const webapck = require('webapck')
+module.exports = {
+    mode:'production',
+    entry: {
+        vendors: ['react', 'react-dom', 'lodash']
+    },
+    output: {
+        filename: '[name].dll.js',  //打包上面的第三方模块 到dll文件中 名称就是 vendors.dll.js
+        path: path.resolve(__dirname,'../dll'),
+        library: '[name]'
+    },
+    plugins: [
+        new webapck.DllPlugin({ //第三方模块映射到mainfest.json中
+            name: '[name]',
+            path: path.resolve(__dirname,'../dll/[name].mainfest.json')
+        })
+    ]
+}
+
+2.
+// webpack.common.js
+//npm install add-asset-html-webpack-plugin  给html页面上添加script
+module.exports = {
+    plugins: [
+        new AddAssetHtmlWebpackPlugin({ // 给html页面上添加script
+            filepath: path.resolve(__dirname,'../dll/vendors.dll.js')
+        }),
+        new webapck.DllReferencePlugin({    //打包index.js引入打三方模块的时候 会到vendors.mainfest.json 去找映射关系 找到了就直接去dll文件 去全局变量里去拿第三方模块
+            manifest: path.resolve(__dirname,'../dll/vendors.mainfest.json')
+        })
+    ]
+}
+
+3.
+// webpack.common.js
+// 使用node 自动添加plugins 不用重复在 plugins 中添加new AddAssetHtmlWebpackPlugin 和 new webapck.DllReferencePlugin
+
+const fs = require('fs')
+
+const files = fs.readdirSync(path.resolve('../dll'))
+files.forEach(file =>{
+    if(/.*\.dll.js/.test(file)){
+        plugins.push(
+            new AddAssetHtmlWebpackPlugin({ // 给html页面上添加script
+            filepath: path.resolve(__dirname,'../dll/',file)
+        })
+        )
+    }
+    if(/.*\.mainfest.json/.test(file)){
+        plugins.push(
+            new webapck.DllReferencePlugin({    //打包index.js引入打三方模块的时候 会到vendors.mainfest.json 去找映射关系 找到了就直接去dll文件 去全局变量里去拿第三方模块
+            manifest: path.resolve(__dirname,'../dll/',file)
+        })
+        })
+        )
+    }
+})
+```
+
+##### 6. 控制包文件大小
+
+##### 7. thread-loader,padrallel-webpack,happypack 多进程打包
+
+项目变的庞大，文件很多的情况下，采取多进程打包
+如果小项目，文件不多，无需开启多进程打包，反而会变慢，因为开启进程是需要花费时间的
+
+多进程打包：
+1. 安装 thread-loader
+npm i thread-loader -D
+
+```js
+  module.exports = {
+      entry: './src/js/index.js',
+      output: {
+        filename: 'js/built.[contenthash:10].js',
+        path: resolve(__dirname, 'build')
+      },
+      module: {
+        rules: [
+              {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: [
+                  /*
+                    开启多进程打包。
+                    进程启动大概为600ms，进程通信也有开销。
+                    只有工作消耗时间比较长，才需要多进程打包
+                  */
+                  {
+                    loader: 'thread-loader',
+                    options: {
+                      workers: 2 // 进程2个
+                    }
+                  },
+                  {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: [
+                        [
+                          '@babel/preset-env',
+                          {
+                            useBuiltIns: 'usage',
+                            corejs: { version: 3 },
+                            targets: {
+                              chrome: '60',
+                              firefox: '50'
+                            }
+                          }
+                        ]
+                      ],
+                      // 开启babel缓存
+                      // 第二次构建时，会读取之前的缓存
+                      cacheDirectory: true
+                    }
+                  }
+                ]
+              }
+        ]
+      }
+```
+
+##### 8. 合理使用 sourceMap
+
+##### 9. 结合 stats 分析打包结果
+
+##### 10. 开发环境内存编译 无用插件剔除
+
+### 多页面打包配置
+
+```js
+//webpack.config.js
+module.exports = {
+    //...
+        entry: {
+            main:'./src/index.js',
+            list:'./src/list.js'
+        },
+        plugins: [
+            new HtmlWebpackPlugin({
+            template: 'src/index.html',    //自动生成一个 html 文件， 以模板中的html为模板 加入生成的js文件script
+            filename: 'index.html',
+            chunks: ['runtime','vendors','main']
+            }),
+            new HtmlWebpackPlugin({
+            template: 'src/index.html',
+            filename: 'list.html',
+            chunks: ['runtime','vendors','list']
+            }),
+        ]
+    //...
+}
+
+const makePlugins = (configs) =>{
+    let plugins = [
+        new CleanWebpackPlugin(['dist',{
+            root: path.resolve(__dirname,'../')
+        }])
+    ]
+
+    Object.keys(config.entry).forEach(item=>{
+        plugins.push(
+            new HtmlWebpackPlugin({
+                template: 'src/index.html',
+                filename: `${item}.html`,
+                chunks: ['runtime','vendors',item]
+            })
+        )
+    })
+}
+```
+
+## Webpack 底层原理及脚手架工具分析
+
+### 如何编写一个 Loader
+https://www.webpackjs.com/api/loaders/
+创建一个文件夹 loaders -- 创建一个 replaceLoader.js 文件
+
+```js
+// loaders/replaceLoader.js
+
+const loaderUtils = require('loader-utils')
+/* source 接受的参数 --源代码*/
+module.exports = function(source) {
+    const Options = loaderUtils.getOptions(this)
+    const result = source.replace('lee',Options.name')
+
+    /*  无论是 return 还是 this.callback 都可以同步地返回转换后的 content 内容  */
+    // return source.replace('lee',this.query.name)
+    // this.callback( null,result,SourceMap,meta)
+
+    /*  对于异步 loader，使用 this.async 来获取 callback 函数   */
+    const callback = this.async();
+    someAsyncOperation(content, function(err, result) {
+        if (err) return callback(err);
+        callback(null, result, SourceMap, meta);
+    });
+}
+
+
+// 使用loader
+module.exports = {
+    mode:'development',   //开发环境打包 打包的代码不会被压缩
+    entry: './index.js',  //打包入口文件 可配置多个
+    module: {
+        rules: [{
+            test: /\.js/, //打包的文件后缀
+            use: [
+                {
+                    loader: path.resolve(__dirname, './loaders/replaceLoader.js'),
+                    options: {
+                        name: 'wt' //在loader代码中可以通过this.query 拿到options
+                                    //https://www.webpackjs.com/api/loaders/#this-query
+                                    // 官方推荐使用loader-utils
+                                    // const loaderUtils = require('loader-utils')  const Options = loaderUtils.getOptions(this)
+
+                    }
+                }
+            ]
+        }]
+    },
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist')  //打包输出文件地址
+    }
+}
+```
+
+### 如何编写一个 Plugin
+
+### Bundler 源码编写（模块分析 1）
