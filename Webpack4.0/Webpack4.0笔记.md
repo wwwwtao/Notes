@@ -1120,6 +1120,7 @@ const makePlugins = (configs) =>{
 ## Webpack 底层原理及脚手架工具分析
 
 ### 如何编写一个 Loader
+
 https://www.webpackjs.com/api/loaders/
 创建一个文件夹 loaders -- 创建一个 replaceLoader.js 文件
 
@@ -1139,7 +1140,7 @@ module.exports = function(source) {
     /*  对于异步 loader，使用 this.async 来获取 callback 函数   */
     const callback = this.async();
     someAsyncOperation(content, function(err, result) {
-        if (err) return callback(err);
+        if (err) b return callback(err);
         callback(null, result, SourceMap, meta);
     });
 }
@@ -1175,4 +1176,100 @@ module.exports = {
 
 ### 如何编写一个 Plugin
 
-### Bundler 源码编写（模块分析 1）
+https://www.webpackjs.com/api/plugins/
+创建一个文件夹 plugins -- 创建一个 copyright-webapck-plugin.js 文件
+
+```js
+
+// plugins/copyright-webapck-plugin.js
+class CopyrightWebpackPlugin {
+    /**
+    * 类的构造函数
+    * @param options webpack配置文件中定义并传递过来的参数
+    */
+    constructor(options){}
+    /**
+    * 调用插件会执行此方法
+    * @param compiler webpack实例
+    */
+    apply(compiler){
+        compiler.hooks.compile.tap('CopyrightWebpackPlugin',(compilation)=>{
+            console.log('compile');
+        })
+
+        /**
+        * 取决于不同的钩子类型，也可以在某些钩子上访问 tapAsync 和 tapPromise。
+        * @param 'CopyrightWebpackPlugin' 插件名字
+        * @param compilation function函数--第一个参数是跟这次打包相关的所有内容
+        */
+        compiler.hooks.emit.tapAsync('CopyrightWebpackPlugin',(compilation,Callback)=>{
+            // console.log('emit');
+            compilation.assets['copyright.txt'] = { //打包会生成一个copyright.txt文件
+                source: function(){ //内容
+                    return 'copyright by wt'
+                },
+                size: function(){   //文件大概有多大
+                    return 15   //15个字符长度
+                }
+            }
+            Callback();
+        })
+    }
+}
+module.exports = CopyrightWebpackPlugin
+
+//  使用plugin -- webpack.config.js
+//  1. 引入
+const CopyrightWebpackPlugin = require('./plugins/copyright-webapck-plugin.js')
+
+module.exports = {
+    mode:'development',
+    entry: {
+        main: './index.js',
+    },
+    plguins: [  //2. 使用
+        new CopyrightWebpackPlugin({
+            name:'wt'   //会被  constructor 构造函数接收
+        })
+    ],
+    output: {
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist')
+    }
+}
+```
+
+#### 快速查看 compilation 参数的内容
+
+```js
+1.
+//package.json
+"scripts": {
+    "debug":"node --inspect --inspect-brk node_modules/webpack/bin/webpack.js"  //执行webpack 传递inspect和inspect-brk参数 表示开启调试模式 和 第一行打断点
+}
+
+2. 在插件运行代码中打断点 写debugger
+```
+
+### Bundler 源码编写（模块分析 1）  看 bundler/bundler.js 文件
+
+1. 创建一个文件夹 bundler
+创建 bundler/src/index.js bundler/src/message.js bundler/src/word.js 文件
+
+2. 创建一个 bundler/bundler.js 文件 并安装 node.js
+
+3. npm install cli-highlight    （高亮显示代码的工具 打包出来的代码在控制台中可以高亮查看）
+
+4. npm install @babel/parser    （帮助我们分析源代码）
+
+5. npm install @babel/traverse  （帮助我们快速找到 import 节点）
+
+6. npm install @babel/core  (babel 核心模块）
+
+7. npm install --save-dev @babel/preset-env
+
+## Create-React-App 和 Vue-Cli 3.0 脚手架工具配置分析
+
+### 通过 CreateReactApp 深入学习 Webpack 配置
+
+### Vue CLI 3 的配置方法及课程总结
