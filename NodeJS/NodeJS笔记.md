@@ -323,3 +323,89 @@ con.end()
 创建 库 表 SQL 语句的语法和使用
 
 nodejs 连接 mysql， 应用到 API
+
+## 登陆
+
+核心： 登陆校验 & 登陆信息存储
+
+cookie 和 session
+
+session 写入 redis（内存数据库）
+
+### cookie
+
+1. 存储再浏览器的一段字符串（最大 5kb）
+2. 跨域不共享
+3. 格式如 k1=v1；
+4. 每次发送 http 请求，会将请求域（要访问的页面）的 cookie 一起发送给 server
+5. server 可以修改 cookie 并返回给浏览器
+6. 浏览器也可以通过 js 修改 cookie（有限制）
+
+#### server 端 nodejs 操作 cookie
+
+res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${getCookieExpires()}`)
+
+### session
+
+上一节的问题：用 cookie 会暴露 username
+如何解决：cookie 中存储 userid，server 端对应 username
+解决方案：session 即 server 端存储用户信息
+
+```js
+ // 解析 session
+    let needSetCookie = false
+    let userId = req.cookie.userid
+    if (userId) {
+        if (!SESSION_DATA[userId]) {
+            SESSION_DATA[userId] = {}
+        }
+    } else {
+        needSetCookie = true
+        userId = `${Date.now()}_${Math.random()}`
+        SESSION_DATA[userId] = {}
+    }
+    req.session = SESSION_DATA[userId]
+    // cookie + session 登陆部分个人理解笔记：
+    // 1. 每次都从请求cookier中拿userID
+    // 2. 判断拿到没有 没有就设一个userID并Set-Cookie
+    // 3. 根据SESSION_DATA查userID的值 并赋值给req.session
+    // 4. 然后在每个请求里面判断req.session(在登陆时要设置好的 看步骤5) 有且没过期就是已登陆 否则就是没登陆
+
+    // 5. 登陆了！！！在登陆时设置好req.session 是重点!!! 登陆的时候设置的req.session 会同步设置存到SESSION_DATA中!!!
+```
+
+#### cookie 和 session 的区别：
+
+1、cookie 数据存放在客户的浏览器上，session 数据放在服务器上。
+2、cookie 不是很安全，别人可以分析存放在本地的 COOKIE 并进行 COOKIE 欺骗 考虑到安全应当使用         session。
+3、session 会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能考虑到减轻服务器性能方面，应当使用 COOKIE。
+4、单个 cookie 保存的数据不能超过 4K，很多浏览器都限制一个站点最多保存 20 个 cookie。
+5、所以个人建议：
+   将登陆信息等重要信息存放为 SESSION
+   其他信息如果需要保留，可以放在 COOKIE 中
+
+session 和 cookie 的生命周期
+    Session 存储在服务器端，一般放在服务器的内存中（为了高速存取），Sessinon 在用户访问第一次访问服务器时创建，需要注意只有访问 JSP、Servlet 等程序时才会创建 Session，只访问 HTML、IMAGE 等静态资源并不会创建 Session，可调用 request.getSession(true) 强制生成 Session。
+
+#### session 的问题
+
+目前 session 直接是 js 变量  也就是 SESSION_DATA 是一个对象，放在 nodejs 进程内存中
+
+1. 进程内存有限，访问量过大，内存暴增怎么办
+2. 正式线上运行是多线程，进程之间内存无法共享
+
+解决方案：redis
+
+### redis
+
+1. web server 最常用的缓存数据库，数据放在内存中
+2. 相比于 mysql，访问速度快（内存和硬盘不是一个数量级的）
+3. 但是成本更高，可存储的数据量更小（内存的硬伤）
+
+相当于将 web server 和 redis 拆分成两个单独的服务
+双方都是独立的，都是可扩展的
+
+为什么 session 不放在 mysql 中？
+1. 因为 session 访问频繁，对性能要求极高
+2. session 可不考虑断电丢失数据的问题（数据不是很重要，大不了重新登陆 同时也是内存的硬伤，做配置也可以断电不丢失）
+3. session 数据量不会太大（相比与 mysql 中存储的数据）
