@@ -229,10 +229,6 @@ API 的一部分
 
 ## 数据存储
 
-### 建库
-
-### 建表
-
 ### 表操作
 
 ```sql
@@ -278,51 +274,53 @@ EXCEPT 运算符通过包括所有在 TABLE1 中但不在 TABLE2 中的行并消
 INTERSECT 运算符通过只包括 TABLE1 和 TABLE2 中都有的行并消除所有重复行而派生出一个结果表。当 ALL 随 INTERSECT 一起使用时 (INTERSECT ALL)，不消除重复行。
 ```
 
-### node 连接 mysql
+### nodejs 连接 mysql
 
 npm install mysql
 
 ```js
 // index.js
+
+// // 创建连接对象
+// const con = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'wen19980714',
+//     port: '3306',
+//     database: 'myblog'
+// })
+
 const mysql = require('mysql')
+// 根据 NODE_ENV 区分配置
+const { MYSQL_CONF } = require('../conf/db')
 
 // 创建连接对象
-const con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'wen19980714',
-    port: '3306',
-    database: 'myblog'
-})
+const con = mysql.createConnection(MYSQL_CONF)
 
 // 开始连接
 con.connect()
 
-// 执行sql语句
-const sql = 'select * from users;'
-con.query(sql, (err, result) => {
-    if (err) {
-        console.error(err);
-        return
-    }
-    console.log(result);
-})
+// 统一执行sql语句
+function exec(sql) {
+    const promise = new Promise((reslove, reject) => {
+        con.query(sql, (err, result) => {
+            if (err) {
+                reject(err)
+                return
+            }
+            reslove(result)
+        })
+    })
+    return promise
+}
 
-// 关闭连接
-con.end()
+module.exports = {
+    exec    //封装 exec 函数，API 使用 exec 操作数据库
+}
+
+// // 关闭连接
+// con.end()
 ```
-
-根据 NODE_ENV 区分配置
-
-封装 exec 函数，API 使用 exec 操作数据库
-
-### 总结
-
-安装 Mysql 和 workbench
-
-创建 库 表 SQL 语句的语法和使用
-
-nodejs 连接 mysql， 应用到 API
 
 ## 登陆
 
@@ -398,6 +396,8 @@ session 和 cookie 的生命周期
 
 ### redis
 
+#### 介绍
+
 1. web server 最常用的缓存数据库，数据放在内存中
 2. 相比于 mysql，访问速度快（内存和硬盘不是一个数量级的）
 3. 但是成本更高，可存储的数据量更小（内存的硬伤）
@@ -409,3 +409,80 @@ session 和 cookie 的生命周期
 1. 因为 session 访问频繁，对性能要求极高
 2. session 可不考虑断电丢失数据的问题（数据不是很重要，大不了重新登陆 同时也是内存的硬伤，做配置也可以断电不丢失）
 3. session 数据量不会太大（相比与 mysql 中存储的数据）
+
+#### 安装
+
+MAC 使用 brew install redis
+用 2 个终端执行
+执行 redis-server
+执行 redis-cli
+
+#### nodejs 连接 redis
+
+npm install redis
+
+```js
+// index.js
+const redis = require('redis')
+const { REDIS_CONF } = require('../conf/db')
+
+// 创建客户端
+const redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
+redisClient.on('error', err => {
+    console.log(err);
+})
+
+function set(key, val) {
+    if (typeof val === 'object') {
+        val = JSON.stringify(val)
+    }
+    redisClient.set(key, val, redis.print)
+}
+function get(key) {
+    const promise = new Promise((reslove, reject) => {
+        redisClient.get(key, (err, val) => {
+            if (err) {
+                reject(err)
+                return
+            }
+            if (val == null) {
+                reslove(null)
+                return
+            }
+
+            try {
+                reslove(
+                    JSON.parse(val)
+                )
+            } catch (error) {
+                reslove(val)
+            }
+        })
+    })
+    return promise
+}
+
+module.exports = {
+    set,
+    get
+}
+// // 退出
+// redisClient.quit()
+```
+
+### nginx
+
+高性能 web 服务器 开源免费
+一般用于做静态服务，负载均衡
+反向代理
+
+#### 安装
+
+brew install nginx
+
+打开配置文件
+Mac： sudo vim /usr/local/etc/nginx/nginx.conf
+nginx -t    // 测试配置文件格式是否正确
+nginx // 启动
+nginx -s reload // 重启
+nginx -s stop   // 停止
