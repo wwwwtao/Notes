@@ -92,12 +92,6 @@ console.log(sun)    //node b.js -- 3
 
 ## 接口（不用任何框架）
 
-### http 概述
-
-DNS 解析（根据域名知道 ip 地址），建立 TCP 链接（三次握手），发送 http 请求
-serer 接收到 http 请求，处理，并返回
-客户端接收到返回数据，处理数据
-
 ### nodejs 处理 http 请求
 
 #### nodejs 处理 get 请求
@@ -209,13 +203,7 @@ server.listen(8000)
 使用 nodemon 监测文件变化，自动重启 node
 使用 cross-env 设置环境变量，兼容 mac linux 和 windows
 
-### 开发接口
-
-看项目文件夹
-
-### 开发路由
-
-看项目文件夹
+### 开发接口，路由（看项目文件夹）
 
 ### 补充：路由 和 API
 
@@ -226,6 +214,8 @@ url（路由） `api/blog/list`
 路由：
 API 的一部分
 后端系统内部的一个定义
+
+# 原生开发
 
 ## 数据存储
 
@@ -486,3 +476,198 @@ nginx -t    // 测试配置文件格式是否正确
 nginx // 启动
 nginx -s reload // 重启
 nginx -s stop   // 停止
+
+## 日志
+
+1. 访问日志（access log）
+2. 自定义日志（自定义事件，错误记录）
+3. nodejs 文件操作，nodejs stream（性能）
+4. 日志功能开发和使用
+5. 日志文件拆分，日志内容分析
+
+### stream（IO 操作的性能瓶颈）（项目在根目录下 NodejsWebServerBlog/stream-test）
+
+#### 日志拆分
+
+实现方式：linux 的 crontab 命令，即定时任务
+设置格式： *****command （5 课星号分别代表：分钟 小时 日期 月份 星期几 ）
+将 access 拷贝并重命名 2021.5.17.access.log
+清空 access.log 文件 继续积累日志
+
+主要是运维用 shell 脚本
+
+#### 日志分析
+
+<!-- readline.js -->
+
+使用 nodejs 的 readline （基于 stream，效率高）
+
+## 安全
+
+server 端攻击方式多 预防方式也多
+本课只讲常用的 web server 层面的
+有些需要硬件和服务支持（OP 支持），如 DDOS
+
+1. sql 注入：窃取数据库内容
+攻击方式：输入一个 sql 片段 ，最终拼接成一段攻击代码
+预防措施：使用 mysql 的 escape 函数输入内容即可
+
+2. xss 攻击：窃取前端的 cookie
+攻击方式：输入 js 代码让浏览器执行
+预防措施：
+防范 XSS 是需要后端 RD 和前端 RD 共同参与的系统工程
+转义应该在输出 HTML 时进行，而不是在提交用户输入时。
+不同的上下文，如 HTML 属性、HTML 文字内容、HTML 注释、跳转链接、内联 JavaScript 字符串、内联 CSS 样式表等，所需要的转义规则不一致。
+业务 RD 需要选取合适的转义库，并针对不同的上下文调用不同的转义规则。
+其他安全措施：
+HTTP-only Cookie: 禁止 JavaScript 读取某些敏感 Cookie，攻击者完成 XSS 注入后也无法窃取此 Cookie。
+验证码：防止脚本冒充用户提交危险操作。
+npm i xss --save // 预防 xss 攻击的 npm 包
+给可能会被 xss 攻击的参数用 xss 方法包一下
+
+3. 密码加密：保护用户信息
+万一数据库被攻破，用户信息是不应该泄露的
+
+```js
+//NodejsWebServerBlog/blog1/src/utils/cryp.js
+const crypto = require('crypto')
+
+// 密匙
+const SECRET_KEY = 'WJiol_8776#'
+
+// md5 加密
+function md5(content) {
+    let md5 = crypto.createHash('md5')
+    return md5.update(content).digest('hex')
+}
+
+// 加密函数
+function genPassword(password) {
+    const str = `password=${password}&key=${SECRET_KEY}`
+    return md5(str)
+}
+
+module.exports = {
+    genPassword
+}
+```
+
+# express 框架开发
+
+## 安装 express-generator 脚手架
+
+1. npm install express-generator -g
+2. express 文件夹名字
+
+## 介绍 app.js
+
+```js
+var createError = require('http-errors');   //处理错误提示
+var express = require('express');   // express框架
+var path = require('path');         // nodejs的path模块 处理路径
+var cookieParser = require('cookie-parser');    //解析cookie
+var logger = require('morgan');     // 记录日志log
+
+var indexRouter = require('./routes/index');    // 路由
+var usersRouter = require('./routes/users');    // 路由
+
+var app = express();    // 初始化一个app 本次http请求的实例
+
+// view engine setup //试图引擎相关 纯后端不管
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
+
+app.use(logger('dev'));     // 记录日志log
+app.use(express.json());    // 处理 post请求数据 执行这步之后 req.body 可以拿到postData
+app.use(express.urlencoded({ extended: false }));   // 设置Content-type 让POST请求兼容所有的Content-type
+app.use(cookieParser());    // 经过这步之后可以在路由中 req.cookies拿到cookie
+// app.use(express.static(path.join(__dirname, 'public')));    // 可以通过这个注册 让访问静态文件的时候 返回静态文件 也是前端的 不管
+
+app.use('/', indexRouter); // 注册路由 第一个参数是路由文件对应的（父路径）根路径  相当于可以给路由设置2个路径
+app.use('/users', usersRouter); // 注册路由
+
+// catch 404 and forward to error handler //处理错误提示
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'dev' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+module.exports = app;
+
+```
+
+## express 中间件机制 / app.use 和 next
+
+## 登陆
+
+使用 express-session 和 connect-redis
+
+```js
+npm i express-session
+const session = require('express-session')
+app.use(session({
+  secret: 'WJiol#23123_',
+  cookie: {
+    // path: '/',  //默认
+    // httpOnly: true, //默认
+    maxAge: 24 * 60 * 60 * 1000
+  }
+}));
+```
+
+```js
+npm i redis connect-redis --save
+const RedisStore = require('connect-redis')(session) // connect-redis 插件
+const redisClient = require('./db/redis') //redis 连接对象
+let sessionStore = new RedisStore({
+  client: redisClient //client-客户端
+})
+app.use(session({ //注册之后 可在 req.session 中取到session
+  secret: 'WJiol#23123_',
+  cookie: {
+    // path: '/',   // 默认配置
+    // httpOnly: true,  // 默认配置
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  store: sessionStore
+}))
+```
+
+## 日志
+
+access log 记录 使用脚手架推荐的 morgan
+
+自定义日志使用 console.log 和 console.error 即可
+
+```js
+var path = require('path');
+const fs = require('fs')
+var logger = require('morgan');
+
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  // 开发环境
+  app.use(logger('dev'));
+} else {
+  // 线上环境
+  const fullFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(fullFileName, {
+    flags: 'a'
+  })
+  app.use(logger('combined', {
+    stream: writeStream
+  }));
+}
+```
+
+## 中间件原理 (NodejsWebServerBlog/lib/express/like-express.js）
