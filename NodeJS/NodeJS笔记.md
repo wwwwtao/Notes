@@ -567,6 +567,8 @@ var express = require('express');   // express框架
 var path = require('path');         // nodejs的path模块 处理路径
 var cookieParser = require('cookie-parser');    //解析cookie
 var logger = require('morgan');     // 记录日志log
+const session = require('express-session')  // 处理session插件
+const RedisStore = require('connect-redis')(session) // connect-redis 插件
 
 var indexRouter = require('./routes/index');    // 路由
 var usersRouter = require('./routes/users');    // 路由
@@ -577,11 +579,39 @@ var app = express();    // 初始化一个app 本次http请求的实例
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
-app.use(logger('dev'));     // 记录日志log
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {  // 记录日志log
+  // 开发环境
+  app.use(logger('dev'));
+} else {
+  // 线上环境
+  const fullFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(fullFileName, {
+    flags: 'a'
+  })
+  app.use(logger('combined', {
+    stream: writeStream
+  }));
+}
+
 app.use(express.json());    // 处理 post请求数据 执行这步之后 req.body 可以拿到postData
 app.use(express.urlencoded({ extended: false }));   // 设置Content-type 让POST请求兼容所有的Content-type
 app.use(cookieParser());    // 经过这步之后可以在路由中 req.cookies拿到cookie
 // app.use(express.static(path.join(__dirname, 'public')));    // 可以通过这个注册 让访问静态文件的时候 返回静态文件 也是前端的 不管
+
+const redisClient = require('./db/redis') //redis 连接对象
+let sessionStore = new RedisStore({
+  client: redisClient //client-客户端
+})
+app.use(session({ //注册之后 可在 req.session 中取到session
+  secret: 'WJiol#23123_',
+  cookie: {
+    // path: '/',   // 默认配置
+    // httpOnly: true,  // 默认配置
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  store: sessionStore
+}))
 
 app.use('/', indexRouter); // 注册路由 第一个参数是路由文件对应的（父路径）根路径  相当于可以给路由设置2个路径
 app.use('/users', usersRouter); // 注册路由
@@ -671,3 +701,225 @@ if (ENV !== 'production') {
 ```
 
 ## 中间件原理 (NodejsWebServerBlog/lib/express/like-express.js）
+
+# Koa2 框架开发
+
+## 安装 koa-generator 脚手架
+
+1. npm install koa-generator -g
+2. koa2 文件夹名字
+
+## 介绍 app.js
+
+```js
+const Koa = require('koa')
+const app = new Koa()
+const views = require('koa-views')  // 前端相关的 对应views文件夹里的
+const json = require('koa-json')    // 处理postdata JSON格式处理的
+const onerror = require('koa-onerror')  // 错误监测
+const bodyparser = require('koa-bodyparser') // postdata req.body 相关
+const logger = require('koa-logger')  //日志相关
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
+const path = require('path')
+const fs = require('fs')
+const morgan = require('koa-morgan')
+
+const { REDIS_CONF } = require('./conf/db')
+
+const index = require('./routes/index')
+const users = require('./routes/users')
+const user = require('./routes/user')
+const blog = require('./routes/blog')
+
+// error handler
+onerror(app)
+
+// middlewares
+
+// 处理post上传的数据 enableTypes:接收的格式 把post字符串 变成 json格式
+app.use(bodyparser({
+  enableTypes: ['json', 'form', 'text']
+}))
+app.use(json())
+
+app.use(logger()) //日志相关
+app.use(require('koa-static')(__dirname + '/public')) //前端相关
+
+app.use(views(__dirname + '/views', { //前端相关
+  extension: 'pug'
+}))
+
+// logger
+app.use(async (ctx, next) => { //日志相关
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`) //打印请求耗时
+})
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  // 开发环境
+  app.use(morgan('dev'));
+} else {
+  // 线上环境
+  const fullFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(fullFileName, {
+    flags: 'a'
+  })
+  app.use(morgan('combined', {
+    stream: writeStream
+  }));
+}
+
+// session 配置
+app.keys = ['WJiol#23123_']
+app.use(session({
+  // 配置 cookie
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  // 配置 redis
+  store: redisStore({
+    all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+  })
+}))
+
+// routes
+app.use(index.routes(), index.allowedMethods()) //allowedMethods  就是当前接口运行的method。 比如，一个提供数据的接口，就可以设置为GET， 当客户端发送POST请求时，就会直接返回失败。
+app.use(users.routes(), users.allowedMethods())
+app.use(user.routes(), user.allowedMethods())
+app.use(blog.routes(), blog.allowedMethods())
+
+// error-handling
+app.on('error', (err, ctx) => {
+  console.error('server error', err, ctx)
+});
+
+module.exports = app
+
+```
+
+## 登陆
+
+使用 koa-generic-session 和 koa-redis
+
+```js
+// npm i koa-generic-session koa-redis redis
+// session 配置
+app.keys = ['WJiol#23123_']
+app.use(session({
+  // 配置 cookie
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  // 配置 redis
+  store: redisStore({
+    all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+  })
+}))
+```
+
+## 日志
+
+access log 记录 使用 morgan (morgan 仅支持 express 所以要安装 koa-morgan 兼容实现）
+
+自定义日志使用 console.log 和 console.error 即可
+
+```js
+// npm i koa-morgan
+var path = require('path');
+const fs = require('fs')
+var logger = require('koa-morgan');
+
+const ENV = process.env.NODE_ENV
+if (ENV !== 'production') {
+  // 开发环境
+  app.use(logger('dev'));
+} else {
+  // 线上环境
+  const fullFileName = path.join(__dirname, 'logs', 'access.log')
+  const writeStream = fs.createWriteStream(fullFileName, {
+    flags: 'a'
+  })
+  app.use(logger('combined', {
+    stream: writeStream
+  }));
+}
+```
+
+## 中间件原理 (NodejsWebServerBlog/lib/koa2/like-koa2.js）
+
+# 上线与配置 PM2
+
+### PM2 介绍 也是 PM2 的核心价值
+
+1. 进程守护，系统崩溃自动重启
+2. 多进程，充分利用 cpu 和内存
+3. 自带日志记录功能
+
+### 下载安装
+
+npm install pm2 -g
+
+### 常用命令
+
+pm2 start ... （可以接配置文件）
+pm2 list  （看启动的服务列表）
+pm2 restart<AppName>/<id> （重启）
+pm2 stop<AppName>/<id> ,pm2 delete<AppName>/<id>
+pm2 info<AppName>/<id> （看服务的基本信息）
+pm2 log<AppName>/<id> （看进程的日志）
+pm2 monit<AppName>/<id> （看进程的 cpu 和内存信息）
+
+### 进程守护
+
+pm2 遇到进程崩溃，会自动重启
+
+### 配置
+
+新建 PM2 配置文件 （包括进程数量，日志文件目录等）
+
+```json
+// pm2.conf.json 配置文件
+{
+    "apps": {
+        "name": "pm2-test-server", // 服务进程的名字
+        "script": "app.js", //启动的文件
+        "watch": true,  //监听文件变化 自动重启 （开发需要，线上不一定）
+        "ignore_watch": [   //不需要监听的
+            "node_modules",
+            "logs"
+        ],
+        "instances": 4, // 设置多进程
+        "error_file": "logs/err.log", // 错误日志
+        "out_file": "logs/out.log",   // console.log 打印的日志
+        "log_date_format": "YYYY-MM-DD HH:mm:ss"  // 日志日期格式
+    }
+}
+```
+
+修改 PM2 启动命令，重启
+
+```json
+// package.json
+{
+    "scripts": {
+        "prd": "cross-env NODE_ENV=production pm2 start pm2.conf.json    "
+    }
+}
+```
+
+### 多进程
+
+为何使用？：操作系统会限制一个进程的最大可用内存
+无法利用机器全部内存和多核 cpu 的优势
+
+#### 关于运维
+
+一般由专业的 OP 人员和部门来处理
+中小型推荐使用云服务 如 阿里云的 node 平台
