@@ -13,7 +13,7 @@ const webpack = require('webpack');
 // 	useBuiltIns: 'usage'
 // }]]
 
-// 1. 创建一个 postcss.config.js 配置文件
+// 1. 创建一个 postcss.config.js 配置文件 //解析CSS文件并且添加浏览器前缀到CSS规则
 // 2. npm install autoprefixer -D （安装 autoprefixer 插件）
 // 3. postcss.config.js 配置如下
 // module.exports = {
