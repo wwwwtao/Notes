@@ -75,7 +75,7 @@ reduce() 把结果继续和序列的下一个元素做累积计算，该方法�
 
 11. find() 方法返回 数组中 满足提供的测试函数 的第一个元素的值。否则返回 undefined。 （查找出数组中符合条件比如 id 相同的一项）
 
-12. Array.includes() 函数判断Array是否包含某一元素 它直接返回 true 或者 false 可以判断 NaN  indexOf 不能判断是否有 NaN, 但是可以定位
+12. Array.includes() 函数判断 Array 是否包含某一元素 它直接返回 true 或者 false 可以判断 NaN  indexOf 不能判断是否有 NaN, 但是可以定位
 
 some(): 返回一个 boolean，判断是否有元素是否符合 func 条件
 
