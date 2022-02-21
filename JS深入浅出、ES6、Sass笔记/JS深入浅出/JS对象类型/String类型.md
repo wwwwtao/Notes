@@ -106,3 +106,11 @@ slice方法不修改原字符串。
 14. includes() 方法用于判断字符串是否包含指定的子字符串。
 如果找到匹配的字符串则返回 true，否则返回 false。
 注意： includes() 方法区分大小写。
+
+15. repeat() 方法字符串复制指定次数。
+```js
+复制字符串 "Runoob" 两次:
+
+var str = "Runoob";
+str.repeat(2); //RunoobRunoob
+```
