@@ -73,6 +73,31 @@ valueOf()	返回数组对象的原始值。
 若 a 小于 b，排序后 a 应该在 b 之前，则返回一个小于 0 的值。  function(a,b){ return a - b} 小的在前面（升序） a 比 b 小，a 在前面，也就是返回负值 a 继续在前面
 若 a 等于 b，则返回 0。
 若 a 大于 b，则返回一个大于 0 的值。
+
+* 使用例子：newArray.sort(sortBy('number',false)) //表示根据number属性降序排列;若第二个参数不传递，默认表示升序排序
+     * @param attr 排序的属性 如number属性
+     * @param rev true表示升序排列，false降序排序
+     * */
+    sortBy: function(attr,rev){
+        //第二个参数没有传递 默认升序排列
+        if(rev ==  undefined){
+            rev = 1;
+        }else{
+            rev = (rev) ? 1 : -1;
+        }
+        
+        return function(a,b){
+            a = a[attr];
+            b = b[attr];
+            if(a < b){
+                return rev * -1;
+            }
+            if(a > b){
+                return rev * 1;
+            }
+            return 0;
+        }
+    }
 ```
 
 ## slice(start [,end])   
