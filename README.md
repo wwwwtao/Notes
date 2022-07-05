@@ -2,7 +2,7 @@
 
 个人在工作中每天都会使用到的笔记，记录了常用的配置（比如 Axios 的配置 [Axios笔记](./TypeScript/Axios笔记.md)，Webpack 配置 等等） 常用 API 的功能和使用方法 (JS 深入浅出>>>JS 对象类型），欢迎克隆一部分进行参考；
 
-有空的话就会写一下博客，欢迎 star 和 watch。博客已迁移到 https://wwwwtao-blog-pi.vercel.app/
+有空的话就会写一下博客，欢迎 star 和 watch。博客已迁移到 [博客](https://wwwwtao-blog-pi.vercel.app/)
 
 ## 目录结构：
 
