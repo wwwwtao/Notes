@@ -158,7 +158,7 @@ reduce() 可以作为一个高阶函数，用于函数的 compose。
 
 #### 参数
 ```js
-function(total,currentValue, index,arr)
+function(total,currentValue, currentIndex,arr)
   // total	必需。初始值, 或者计算结束后的返回值。
   // currentValue	必需。当前元素
   // currentIndex	可选。当前元素的索引
