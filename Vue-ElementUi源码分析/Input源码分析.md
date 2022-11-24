@@ -623,7 +623,7 @@ showClear 等这些计算属性考虑了很多种情况：
 
 也就是说这里将el-form的相关数据注入了进来，因为 input 组件一般是伴随着 Form 表单出现，当 input 事件被触发时，需要通知其父组件的触发相关事件。
 
-有关依赖注入的详细解释可以看 Vue 官方文档(https://cn.vuejs.org/v2/guide/components-edge-cases.html#%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5)
+有关依赖注入的详细解释可以看 Vue 官方文档(https://cn.vuejs.org/api/composition-api-dependency-injection.html#composition-api-brdependency-injection)
 
 ### 监听属性
 再来看一下 watch 里面都做了什么（坚持一下，就快完了！！！）

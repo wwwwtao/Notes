@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root">
+    <div>
+      <div>
+        <p>{{name}}-{{message}}</p>
+      </div>
+    </div>
+    <p>{{name}}</p>
+    <p>{{message}}</p>
+  </div>
+
+  <script>
+    // 1. 拿到模板
+    // 2. 拿到数据（data）
+    // 3. 将数据与模板结合，得到的是HTML（DOM元素）
+    // 4. 放到页面中去
+
+    // 1. 拿到模板
+    let tmpNode = document.querySelector('#root')
+    // 2. 拿到数据
+    let data = {
+      data: 'YK菌',
+      message: '好帅啊'
+    }
+    // 3. 将数据放到模板中 （用递归）
+    function complier(template, data){
+      let childNodes = template.childNodes // 取出子元素
+      for (let i = 0; i< childNodes.length; i++){
+        let type = childNodes[i].nodeType
+        if(type === 3){
+          // 文本节点，可以判断里面是否有双括号插值
+          let text = childNodes[i].nodeValue
+          // 正则表达式
+          let rSplint = /\{\{(.+?)\}\}/g;
+          // 看有没有双大括号
+          text.replace(rSplint, function(_, g){
+
+          })
+        }else if(type === 1){
+          // 表示元素，看是否有子元素，判断子元素是否需要插值
+          complier(childNodes[i], data)
+        }
+      }
+    } 
+  </script>
+</body>
+
+</html>

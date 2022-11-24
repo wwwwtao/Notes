@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function smartRepeat(templateStr) {
+      let i = 0
+      let stackNumber = []
+      let stackString = []
+
+      let rest = templateStr
+
+      while (i < templateStr.length - 1) {
+
+        // 剩余部分
+        rest = templateStr.substring(i);
+
+        // 看剩余部分是不是以数字和[开头
+        if (/^\d+\[/.test(rest)) {
+          // 得到数字
+          let times = Number(rest.match(/^(\d+)\[/)[1])
+          // 将数字和空字符串分别入对应的栈
+          stackNumber.push(times)
+          stackString.push('')
+
+          // 指针向后移动数字的位数 ，再加上[这一位
+          i += times.toString().length + 1
+        } else if (/^\w+\]/.test(rest)) {
+          // 剩余部分是字母数字下划线和]开头的
+          // 捕获[]中的内容
+          let word = rest.match(/^(\w+)\]/)[1]
+          // 将字符栈顶改为当前字母
+          stackString[stackString.length - 1] = word
+          // 指针右移，移动到]的位置
+          i += word.length
+        } else if (rest[0] === ']') {
+          let word = stackString.pop()
+          let times = stackNumber.pop()
+
+          // 将word重复times次，插入到栈顶字符串后面
+          let newStr = word.repeat(times)
+          stackString[stackString.length - 1] += newStr
+          i++
+        }
+        console.log(i, stackNumber, stackString)
+      }
+      return stackString[0].repeat(stackNumber[0])
+    }
+
+    let result = smartRepeat('2[4[abc]3[b]]')
+    console.log(result)
+  </script>
+</body>
+
+</html>

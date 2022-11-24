@@ -15,6 +15,9 @@ fpNumInput(e) {
   })
 }
 
+// 只能输入数字正整数
+const zz2 = new RegExp("^[0-9]*[1-9][0-9]*$");
+
 // 1.只能输入数字
 const inputRule = /[^\d]/g	 
 
@@ -82,4 +85,20 @@ export function orderDealInputVal(value) {
 	  value.substring(0, 9);
 	return value;
 }
+
+
+// 十五位正负数位两位小数位，其他字符不让输入
+export const clearNoNum = value => {
+  value = value.replace(/[^-\d.]/g, ""); //清除"-","数字"和"."以外的字符
+  value = value.replace(/^[.]/, ""); //禁止第一个字符为.
+  value = value.replace("-.", ""); //禁止前两个字符为-.
+  value = value.replace(/\-{2,}/g, "-"); //只保留第一个-, 清除多余的
+  value = value.replace("-", "$##$##$").replace(/\-/g, "").replace("$##$##$", "-");
+  value = value.replace(/\.{2,}/g, "."); //只保留第一个., 清除多余的
+  value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+  value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); //只能输入两个小数
+  value = value.indexOf(".") > 0 ? value.split(".")[0].substring(0, 15) + "." + value.split(".")[1] : value.substring(0, 15);
+  return value;
+};
+
 ```
