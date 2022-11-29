@@ -183,6 +183,105 @@ public class UserServiceImpl implements UserService {
 
 ```xml
     <!-- applicationContext.xml -->
+
+    <!-- context命名空间 -->
+    <beans
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
     <!--  注解的组件扫描  -->
     <context:component-scan base-package="com.wwwwtao"></context:component-scan>
+
+    <context:component-scan base-package="com.wwwwtao">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 ```
+
+![还需使用注解替代的配置](./images/%E8%BF%98%E9%9C%80%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E6%9B%BF%E4%BB%A3%E7%9A%84%E9%85%8D%E7%BD%AE.png)
+
+![Spring新注解](./images/Spring%E6%96%B0%E6%B3%A8%E8%A7%A3.png)
+
+### Spring 集成 Junit
+
+![Spring集成Junit步骤](./images/Spring%E9%9B%86%E6%88%90Junit%E6%AD%A5%E9%AA%A4.png)
+
+```xml
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactI d>
+        <version>5.0.6.RELEASE</version>
+    </dependency>
+```
+
+```java
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @ContextConfiguration("classpath:applicationContext.xml")
+    public class SpringJunitTest {
+
+        @Autowired
+        private UserService userService;
+
+        @Test
+        public void test1(){
+            userService.say();
+        }
+    }
+```
+
+### Spring 集成 web 环境
+
+![ApplicationContext应用上下文获取方式](./images/ApplicationContext%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F.png)
+
+![Spring提供获取应用上下文的工具](./images/Spring%E6%8F%90%E4%BE%9B%E8%8E%B7%E5%8F%96%E5%BA%94%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%9A%84%E5%B7%A5%E5%85%B7.png)
+
+1. 导入 Spring 集成 web 的坐标
+
+```xml
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-web</artifactId>
+    <version>5.0.6.RELEASE</version>
+</dependency>
+```
+
+2. 配置 ContextLoaderListener 监听器
+
+```xml
+<!-- 全局参数 -->
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+</context-param>
+<!-- Spring的监听器 -->
+<listener>
+    <listener-class>
+        org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+</listener>
+```
+
+## SpringMVC
+
+### SpringMVC 简介及开发步骤
+
+![SpringMVC简介及开发步骤](./images/SpringMVC%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%BC%80%E5%8F%91%E6%AD%A5%E9%AA%A4.png)
+
+### SpringMVC 组件解析
+
+![SpringMCVC执行流程0](./images/SpringMCVC%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B0.png)
+
+![SpringMCVC执行流程1](./images/SpringMCVC%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B1.png)
+
+### SpringMVC 注解解析
+
+![@RequestMapping - 注解解析](./images/%40RequestMapping%E6%B3%A8%E8%A7%A3%E8%A7%A3%E6%9E%90.png)
+
+### SpringMVC XML 配置解析
+
+![视图解析器默认配置](./images/%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE.png)
+
+![SpringMVC相关组件](./images/SpringMVC%E7%9B%B8%E5%85%B3%E7%BB%84%E4%BB%B6.png)
+
+### SpringMVC 数据响应

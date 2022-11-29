@@ -21,13 +21,13 @@ React setState 引起局部重新刷新。为了达到更好的性能，React �
 
 React hook 底层是基于链表（Array）实现，每次组件被 render 的时候都会顺序执行所有的 hooks，因为底层是链表，每一个 hook 的 next 是指向下一个 hook 的，所以要求开发者不能在不同 hooks 调用中使用判断条件，因为 if 会导致顺序不正确，从而导致报错。如下代码会报错：
 
-![img](https://pica.zhimg.com/50/v2-ca7fff5fb2ead62c7cafd54f9c57af63_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-ca7fff5fb2ead62c7cafd54f9c57af63_1440w.jpg?source=1940ef5c)
+![React Hook--链表](./images/React%20Hook--%E9%93%BE%E8%A1%A8.jpeg)!
 
 相反，vue hook 只会被注册调用一次**，vue 之所以能避开这些麻烦的问题，根本原因在于它对数据的响应是基于响应式的，是对数据进行了代理的。他不需要链表进行 hooks 记录，它对数据直接代理观察。**
 
 **但是 Vue 这种响应式的方案，也有自己的困扰。**比如 useState() （实际上 evan 命名为 value()）返回的是一个 value wrapper （包装对象）。一个包装对象只有一个属性：.value ，该属性指向内部被包装的值。**我们知道在 JavaScript 中，原始值类型如 string 和 number 是只有值，没有引用的。不管是使用 Object.defineProperty 还是 Proxy，我们无法追踪原始变量后续的变化。**因此 Vue 不得不返回一个包装对象，不然对于基本类型，它无法做到数据的代理和拦截。这算是因为设计理念带来的一个非常非常微小的  side effect。从 Evan you 的截图中，我圈了出来：
 
-![img](https://pica.zhimg.com/50/v2-0391f6c60de325684aeb230614bf81ae_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-0391f6c60de325684aeb230614bf81ae_1440w.jpg?source=1940ef5c)
+![vue .value](./images/vue%20.value.jpeg)
 
 简单说一下我个人的看法：事实上，**Mobx** **在 React 社区很流行，Mobx** **采用了响应式的思想，**实际上 Vue 也采用了几乎相同的反应系统。在一定程度上，**React + Mobx** **也可以被认为是更繁琐的 Vue。所以开发者习惯组合使用它们，那么（也许）选择 Vue 会更合理。**
 
@@ -40,22 +40,21 @@ React hook 底层是基于链表（Array）实现，每次组件被 render 的�
 
 • React 事件系统庞大而复杂。其中，它暴漏给开发者的事件不是原生事件，是 React 包装过合成事件，并且**非常重要的一点是，合成事件是池化**的。也就是说不同的事件，可能会共享一个合成事件对象。另外一个细节是，React 对所有事件都进行了代理，将所有事件都绑定 document 上。请读者**仔细体会**下面的代码：
 
-![img](https://pic2.zhimg.com/50/v2-ab3a9062c0b8072e0c78c6ca934c4f82_720w.jpg?source=1940ef5c)![img](https://pic2.zhimg.com/80/v2-ab3a9062c0b8072e0c78c6ca934c4f82_1440w.jpg?source=1940ef5c)
+![React事件系统1](./images/React%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F1.jpeg)
 
-![img](https://pic1.zhimg.com/50/v2-7b19e37dec9abc98a5cf8ddca8000830_720w.jpg?source=1940ef5c)![img](https://pic1.zhimg.com/80/v2-7b19e37dec9abc98a5cf8ddca8000830_1440w.jpg?source=1940ef5c)
+![React事件系统2](./images/React%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F2.jpeg)
 
-![img](https://pic2.zhimg.com/50/v2-4ce4caebe450ca6a2835be2c43fd56a6_720w.jpg?source=1940ef5c)![img](https://pic2.zhimg.com/80/v2-4ce4caebe450ca6a2835be2c43fd56a6_1440w.jpg?source=1940ef5c)
-
+![React事件系统3](./images/React%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F3.jpeg)
 **你告诉我他们的输出值好不好？**
 
 - 另外，React 中事件处理函数中**的 this 默认不指向组件实例。**我就懒得再细说这个了。
 - Vue 事件系统我不多讲，大家看图：
 
-![img](https://pic1.zhimg.com/50/v2-01269e5072b868802c2f303d1b09f1ab_720w.jpg?source=1940ef5c)![img](https://pic1.zhimg.com/80/v2-01269e5072b868802c2f303d1b09f1ab_1440w.jpg?source=1940ef5c)
+![React事件系统4](./images//React%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F4.jpeg)
 
 - 当然 Vue 事件处理函数中**的 this 默认指向组件实例。**连源码都写的那么“清晰易懂”
 
-![img](https://pica.zhimg.com/50/v2-58584c381902841e8e30c9678c5d9f68_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-58584c381902841e8e30c9678c5d9f68_1440w.jpg?source=1940ef5c)
+![Vue事件系统1](./images/Vue%20%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F1.jpeg)
 
 简单说一下我个人的看法，**从事件 API** **上我们就能看出前端框架在设计的一个不同思路： React 设计是改变开发者，提供强大而复杂的机制，开发者按照我的来；Vue 是适应开发者，让开发者怎么爽怎么来。**
 
@@ -65,9 +64,9 @@ React hook 底层是基于链表（Array）实现，每次组件被 render 的�
 
 Vue3.0 提出的动静结合的 DOM diff 思想，**我个人认为是 Vue 近几年在“创新”上的一个很好体现。**之所以能够做到动静结合的 DOM diff，或者把这个问题放的更大：之所以能够做到预编译优化，是因为 Vue core 可以静态分析 template，在解析模版时，整个 parse 的过程是利用正则表达式顺序解析模板，当解析到开始标签、闭合标签、文本的时候都会分别执行对应的回调函数，来达到构造 AST 树的目的。
 
-![img](https://pic3.zhimg.com/50/v2-ac043c3d0339b4439cd3d0a19366067f_720w.jpg?source=1940ef5c)![img](https://pic3.zhimg.com/80/v2-ac043c3d0339b4439cd3d0a19366067f_1440w.jpg?source=1940ef5c)
+![Vue编译](./images/Vue%E7%BC%96%E8%AF%91.webp)
 
-![img](https://pic3.zhimg.com/50/v2-1004378ca13a0cdae8a99bc05e437e99_720w.jpg?source=1940ef5c)![img](https://pic3.zhimg.com/80/v2-1004378ca13a0cdae8a99bc05e437e99_1440w.jpg?source=1940ef5c)
+![Vue编译1](./images//Vue%E7%BC%96%E8%AF%911.jpeg)
 
 
 
@@ -79,7 +78,7 @@ Vue 需要做数据双向绑定，需要进行数据拦截或代理，那它就�
 
 但是，**在 React 框架之外，我们作为开发者还是可以通过[工程化](https://www.zhihu.com/search?q=工程化&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A724759264})手段达到类似的目的，**因为我们能够接触到 JSX 编译成 React.createElement 的整个过程。开发者在项目中开发 babel 插件，实现 JSX 编译成 React.createElement，那么优化手段就是是从编写 babel 插件开始：
 
-![img](https://pic3.zhimg.com/50/v2-18f209cb9e06d5d2c92ccb8518a44bfb_720w.jpg?source=1940ef5c)![img](https://pic3.zhimg.com/80/v2-18f209cb9e06d5d2c92ccb8518a44bfb_1440w.jpg?source=1940ef5c)
+![React编译](./images/React%E7%BC%96%E8%AF%91.jpeg)
 
 **（这里我不再展开优化的原理和代码实现了，不增加额外的“心智负担”，感兴趣的同学可以关注我，或者关注 GIAC 全球互联网架构大会我的分享）**
 
@@ -89,11 +88,11 @@ Prepack 同样是 FaceBook 团队的作品。**它让你编写普通的 JavaScri
 
 我就用 Prepack 结合 React 尝了个鲜：
 
-![img](https://pica.zhimg.com/50/v2-e760599d64ff8b34a37cc4dd8adf9578_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-e760599d64ff8b34a37cc4dd8adf9578_1440w.jpg?source=1940ef5c)
+![img](https://pica.zhimg.com/50/v2-e760599d64ff8b34a37cc4dd8adf9578_720w.jpg?source=1940ef5c)
 
 对比：
 
-![img](https://pica.zhimg.com/50/v2-d6eab0819908ada6a9b1c11f2ec731af_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-d6eab0819908ada6a9b1c11f2ec731af_1440w.jpg?source=1940ef5c)
+![img](https://pica.zhimg.com/50/v2-d6eab0819908ada6a9b1c11f2ec731af_720w.jpg?source=1940ef5c)
 
 **这不正是 React 梦寐以求的吗？**
 
@@ -105,24 +104,23 @@ Prepack 同样是 FaceBook 团队的作品。**它让你编写普通的 JavaScri
 
 最后，上一个借助 Babel plugin AST 实现一个类似预编译优化：remove inline functions 的小例子。
 
-![img](https://pica.zhimg.com/50/v2-45b2d7f9785875cb237285323256dbb7_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-45b2d7f9785875cb237285323256dbb7_1440w.jpg?source=1940ef5c)
+![预编译优化：remove inline functions 的小例子前](./images/%E9%A2%84%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%9Aremove%20inline%20functions%20%E7%9A%84%E5%B0%8F%E4%BE%8B%E5%AD%90%20%E5%89%8D.jpeg)
 
 预编译后：
 
-![img](https://pica.zhimg.com/50/v2-3c548a28f29780302e2eb6d8dd0cce3f_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-3c548a28f29780302e2eb6d8dd0cce3f_1440w.jpg?source=1940ef5c)
-
+![预编译优化：remove inline functions 的小例子后](./images/%E9%A2%84%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%9Aremove%20inline%20functions%20%E7%9A%84%E5%B0%8F%E4%BE%8B%E5%AD%90%E5%90%8E.webp)
 
 
 **考量和设计一个前端解决方案的时候，向上扩展和向下兼容是非常重要的。Vue** **向上扩展就是 React，Vue** **向下兼容后就类似于 jQuery，[渐进式](https://www.zhihu.com/search?q=渐进式&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A724759264})有时候比革命性更符合时代的要求。**
 
 比如这个文稿页使用 React 渲染富文本生成的完整页面：
 
-![img](https://pica.zhimg.com/50/v2-7aba71f7bb2c30adbdd26d33148a39fe_720w.jpg?source=1940ef5c)![img](https://pica.zhimg.com/80/v2-7aba71f7bb2c30adbdd26d33148a39fe_1440w.jpg?source=1940ef5c)
+![img](https://pica.zhimg.com/50/v2-7aba71f7bb2c30adbdd26d33148a39fe_720w.jpg?source=1940ef5c)
 
-![img](https://pic3.zhimg.com/50/v2-6bba02d9feb3730a28c2b1b03ed46cb3_720w.jpg?source=1940ef5c)![img](https://pic3.zhimg.com/80/v2-6bba02d9feb3730a28c2b1b03ed46cb3_1440w.jpg?source=1940ef5c)
+![img](https://pic3.zhimg.com/50/v2-6bba02d9feb3730a28c2b1b03ed46cb3_720w.jpg?source=1940ef5c)
 
 后端返回了富文本内容，过了几天产品的需求是实现：
 
-![img](https://pic2.zhimg.com/50/v2-57b72d01c3177eb31e3be320ccd4f5cd_720w.jpg?source=1940ef5c)![img](https://pic2.zhimg.com/80/v2-57b72d01c3177eb31e3be320ccd4f5cd_1440w.jpg?source=1940ef5c)
+![img](https://pic2.zhimg.com/50/v2-57b72d01c3177eb31e3be320ccd4f5cd_720w.jpg?source=1940ef5c)
 
 添加笔记，且在划线高亮当前行后添加笔记内容，以及点击弹出动态 tooltip 等等。。。想想用 React 该怎么做，且做的符合 React 思想？
