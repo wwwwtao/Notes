@@ -285,3 +285,59 @@ public class UserServiceImpl implements UserService {
 ![SpringMVC相关组件](./images/SpringMVC%E7%9B%B8%E5%85%B3%E7%BB%84%E4%BB%B6.png)
 
 ### SpringMVC 数据响应
+
+![页面跳转-返回字符串](./images/%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC-%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2.png)
+
+![页面跳转-返回ModelAndView](./images/%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC-%E8%BF%94%E5%9B%9EModelAndView.png)
+
+![回写数据-返回字符串](./images/%E5%9B%9E%E5%86%99%E6%95%B0%E6%8D%AE-%E8%BF%94%E5%9B%9E%E5%AD%97%E7%AC%A6%E4%B8%B2.png)
+
+##### 回写数据 - 回写 Json
+
+```xml
+    <!-- 依赖 -->
+    <!-- 回写数据-回写Json -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>2.9.5</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.9.5</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>2.9.0</version>
+    </dependency>
+```
+
+```java
+    @RequestMapping(value="/quick9")
+    @ResponseBody
+    public String save9() {
+        User user = new User();
+        user.setName("wwwwtao");
+        user.setAge(18);
+        // 使用JSON转换工具将对象转换成json格式字符串
+        ObjectMapper objecctMapper = new ObjectMapper();
+        String json = objecctMapper.writeValueAsString(user);
+        return json;
+    }
+```
+
+![回写数据-返回对象或集合(可被下面的注解驱动代替)](./images/%E5%9B%9E%E5%86%99%E6%95%B0%E6%8D%AE-%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E6%88%96%E9%9B%86%E5%90%88.png)
+```xml
+    <!-- applicationContext.xml -->
+    <!-- mvc命名空间 -->
+    <beans
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--  mvc的注解驱动  -->
+    <mvc:annotation-driven/>
+```
