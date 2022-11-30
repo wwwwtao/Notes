@@ -329,6 +329,7 @@ public class UserServiceImpl implements UserService {
 ```
 
 ![回写数据-返回对象或集合(可被下面的注解驱动代替)](./images/%E5%9B%9E%E5%86%99%E6%95%B0%E6%8D%AE-%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E6%88%96%E9%9B%86%E5%90%88.png)
+
 ```xml
     <!-- applicationContext.xml -->
     <!-- mvc命名空间 -->
@@ -341,3 +342,74 @@ public class UserServiceImpl implements UserService {
     <!--  mvc的注解驱动  -->
     <mvc:annotation-driven/>
 ```
+
+### SpringMVC 获得请求数据
+
+**@RequestBody 注解**
+* 在方法上指定 @RequestBody 代表返回数据而非页面
+* contentType 为 application/json;charset=UTF-8 时，在形参数里指定 @RequestBody 可直接接收集合数据而无需使用 POJO 进行包装
+![请求数据乱码问题](./images/%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98.png)
+
+![@RequestParam注解](./images/%40requestParam%E6%B3%A8%E8%A7%A3.png)
+
+![自定义类型转换器](./images/%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%99%A8.png)
+
+![@RequestHeader获取请求头和@CookieValue获取Cookie](./images/%40RequestHeader%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%40CookieValue%E8%8E%B7%E5%8F%96Cookie.png)
+
+#### SpringMVC 访问静态资源
+
+```xml
+<mvc:resourcess mapping="/js/**" location="/js/" />
+<mvc:default-servlet-handler/>
+```
+
+#### SpringMVC 文件上传
+
+![文件上传原理](./images/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8E%9F%E7%90%86.png)
+
+**文件上传步骤**
+* 导入 filepload 和 io 坐标
+* 配置文件上传解析器
+* 编写文件上传编码
+
+```xml
+<!-- pom.xml -->
+<!-- * 导入filepload和io坐标 -->
+ <dependency>
+    <groupId>commons-fileupload</groupId>
+    <artifactId>commons-fileupload</artifactId>
+    <version>1.3.3</version>
+</dependency>
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.6</version>
+</dependency>
+```
+
+```xml
+<!-- spring-mvc.xml -->
+<!-- * 配置文件上传解析器 -->
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <!-- 上传文件总大小 -->
+    <property name="maxInMemorySize" value="5242800" />
+    <!-- 上传单个文件大小 -->
+    <property name="maxUploadSizePerFile" value="5242800" />
+    <!-- 上传文件的编码类型 -->
+    <property name="defaultEncoding" value="UTF-8" />
+</bean>
+```
+
+```java
+// * 编写文件上传编码
+@RequestMapping(value="/quick20")
+@ResponseBody
+public void save20(String name, MultipartFile uploadFile) throws IOException {
+    // 获取文件名称
+    String originalFilename = uploadFile.getOriginalFilename();
+    // 保存文件
+    uploadFile.transferTo(new File("C:\\upload\\"+originalFilename));
+}
+```
+
+## Spring JdbcTemplate
