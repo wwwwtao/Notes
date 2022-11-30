@@ -412,4 +412,11 @@ public void save20(String name, MultipartFile uploadFile) throws IOException {
 }
 ```
 
-## Spring JdbcTemplate
+### Spring JdbcTemplate 开发步骤
+
+1. 导入 spring-jdbc 和 spring-tx 坐标
+2. 创建数据库表和实体
+3. 创建 JdbcTemplate 对象
+4. 执行数据库操作
+![Spring管理JdbcTemplate对象](./images/Spring%E7%AE%A1%E7%90%86JdbcTemplate%E5%AF%B9%E8%B1%A1.png)
+![JdbcTemplate基本使用](./images/JdbcTemplate%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8.png)
