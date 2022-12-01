@@ -420,3 +420,17 @@ public void save20(String name, MultipartFile uploadFile) throws IOException {
 4. 执行数据库操作
 ![Spring管理JdbcTemplate对象](./images/Spring%E7%AE%A1%E7%90%86JdbcTemplate%E5%AF%B9%E8%B1%A1.png)
 ![JdbcTemplate基本使用](./images/JdbcTemplate%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8.png)
+
+### SpringMVC 拦截器
+
+![SPringMVC拦截器](./images/SPringMVC%E6%8B%A6%E6%88%AA%E5%99%A8.png)
+
+![xml配置拦截器](./images/xml%E9%85%8D%E7%BD%AE%E6%8B%A6%E6%88%AA%E5%99%A8.png)
+
+![拦截器方法说明](./images/%E6%8B%A6%E6%88%AA%E5%99%A8%E6%96%B9%E6%B3%95%E8%AF%B4%E6%98%8E.png)
+
+### SpringMVC 异常处理机制
+
+![异常处理思路](./images/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.png)
+
+![简单异常处理器SimoleMappingExceptionResolver](./images/%E7%AE%80%E5%8D%95%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8SimoleMappingExceptionResolver.png)
