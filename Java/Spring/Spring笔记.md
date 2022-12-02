@@ -434,3 +434,44 @@ public void save20(String name, MultipartFile uploadFile) throws IOException {
 ![异常处理思路](./images/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%80%9D%E8%B7%AF.png)
 
 ![简单异常处理器SimoleMappingExceptionResolver](./images/%E7%AE%80%E5%8D%95%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8SimoleMappingExceptionResolver.png)
+
+#### 自定义异常
+
+![自定义异常](./images/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8.png)
+
+```xml
+<!-- spring-mvc.xml -->
+<bean class="com.xxx..resolver.myExceptionResolver"
+```
+
+### Spring AOP ![](./课程笔记/基础框架8笔记/Spring笔记/spring_day03/AOP和事务.md)
+
+![AOP相关概念](./images/AOP%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5.png)
+
+#### xml 方式实现 AOP
+
+```xml
+<!-- pom.xml -->
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.8.13</version>
+</dependency>
+```
+
+```xml
+<!-- applicationContext.xml -->
+<!-- 目标对象 -->
+<bean id="target" class="com.wwwwtao.aop.Target"></bena>
+<!-- 切面对象 -->
+<bean id="myAspect" class="com.wwwwtao.aop.MyAspect"></bena>
+
+<!-- 配置织入 -->
+<aop:config>
+    <!-- 声明切面 -->
+    <aop:aspect ref="myAspect">
+        <!-- 切面 -->
+        <aop:before method="before" pointcut="execution(public void com.wwwwtao.aop.Target.save())"></aop:before>
+    </aop:aspect>
+</aop:config>
+```
