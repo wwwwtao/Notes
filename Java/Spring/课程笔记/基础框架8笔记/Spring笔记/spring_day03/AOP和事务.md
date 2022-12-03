@@ -2641,6 +2641,7 @@ public class SpringConfig {
   * READ_COMMITTED : 读已提交
   * REPEATABLE_READ : 重复读取
   * SERIALIZABLE: 串行化
+  ![事务的隔离级别](../../../../images/%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.webp)
 
 介绍完上述属性后，还有最后一个事务的传播行为，为了讲解该属性的设置，我们需要完成下面的案例。
 

@@ -482,6 +482,15 @@ public void save20(String name, MultipartFile uploadFile) throws IOException {
 
 ![TransactionManager 事务的定义信息对象](./images/TransactionManager.png))
 
-![事务的传播行为](./images/%E4%BA%8B%E5%8A%A1%E7%9A%84%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA.png)
+![TransactionStatus](./images/TransactionStatus.png)
 
-![TransactionStatus](./images/TransactionStatus)
+@Transactional 可以写在接口类上、接口方法上、实现类上和实现类方法上
+* 写在接口类上，该接口的所有实现类的所有方法都会有事务
+* 写在接口方法上，该接口的所有实现类的该方法都会有事务
+* 写在实现类上，该类中的所有方法都会有事务
+* 写在实现类方法上，该方法上有事务
+* **建议写在实现类或实现类的方法上**==**
+
+![事务的隔离级别](./images/%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.webp)
+
+![事务的传播行为](./images/%E4%BA%8B%E5%8A%A1%E7%9A%84%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA.png)
