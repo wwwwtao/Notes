@@ -96,3 +96,11 @@
 ![MyBatis的DAO层代理开发方式](./assets/MyBatis%E7%9A%84DAO%E5%B1%82%E4%BB%A3%E7%90%86%E5%BC%80%E5%8F%91%E6%96%B9%E5%BC%8F.png)
 
 ### MyBatis 多表操作
+
+![MyBatis多表配置方式](./assets/Mybatis%20%E5%A4%9A%E8%A1%A8%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F.png)
+
+![Mybatis的常用注解](./assets/Mybatis%E7%9A%84%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3.png)
+![Mybatis的注解1](./assets/Mybatis%E6%B3%A8%E8%A7%A31.png)
+![Mybatis的注解2](./assets/Mybatis%E6%B3%A8%E8%A7%A32.png)
+![Mybatis一对一的注解开发.png](./assets/Mybatis%E4%B8%80%E5%AF%B9%E4%B8%80%E7%9A%84%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91.png)
+![Mybatis一对多的注解开发.png](./assets/Mybatis%E4%B8%80%E5%AF%B9%E5%A4%9A%E7%9A%84%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91.png)
