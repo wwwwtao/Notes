@@ -60,3 +60,28 @@ Vue.js 会定义一些工具方法，这里所定义的工具方法与 core 中�
 // ├── constant.js     # 定义了一些全局需要用到的常量
 // ├── util.js         # 共用的一些工具方法
 ```
+
+
+
+```js
+// // 从 vue 源码中找到缩写函数的含义
+// function installRenderHelpers (target) {
+//     target._o = markOnce;
+//     target._n = toNumber;
+//     target._s = toString;
+//     target._l = renderList;
+//     target._t = renderSlot;
+//     target._q = looseEqual;
+//     target._i = looseIndexOf;
+//     target._m = renderStatic;
+//     target._f = resolveFilter;
+//     target._k = checkKeyCodes;
+//     target._b = bindObjectProps;
+//     target._v = createTextVNode;
+//     target._e = createEmptyVNode;
+//     target._u = resolveScopedSlots;
+//     target._g = bindObjectListeners;
+//     target._d = bindDynamicKeys;
+//     target._p = prependModifier;
+// }
+```
