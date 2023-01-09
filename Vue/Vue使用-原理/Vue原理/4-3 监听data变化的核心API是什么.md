@@ -10,6 +10,8 @@
 
 缺点 3. 无法原生监听数组，需要特殊处理
 
+proxy 在 vue 里快仅仅是因为 deep proxy 是懒加载的。defineProperty 是 proxy 的 30 倍以上的性能，用 proxy 只是因为 exotic object（数组）没办法监听到而已
+
 #### 4-4 如何深度监听 data 变化
 
 缺点 1. 得递归到底，一次性计算量大（得想办法不一次性监听完）
