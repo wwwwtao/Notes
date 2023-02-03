@@ -69,7 +69,7 @@ IETF 的 QUIC 标准集成了 TLS 1.3 版本，1.3 版本更简练，建立 TLS 
 
   主要目的防止 server 端一直等待，浪费资源。
 
-## 自己的理解：
+### 自己的理解：
 
   第一次 客户端 - 服务端 Seq=0（我不知道有没有被成功接收的数据）
 
@@ -387,57 +387,45 @@ response.writeHead(200,{
 
 ## 缓存头 Cache-Control 的含义和使用 （客户端缓存）
 
-### 可缓存性
+- 可缓存性
 
 public （谁都可以缓存）
-
 private （发送请求方可以缓存）
-
 no-cache （你可以在本地缓存 缓存要在服务器验证 才可以使用）
 
-### 到期
+- 到期
 
 max-age=<seconds> （规定过期时间）
-
 s-maxage=<seconds> （代理服务器的到期时间）
-
 max-stale=<seconds> （即便缓存已经过期了 只要在 max-stale 的时间内 依然可以使用这个缓存）
 
-### 重新验证
+- 重新验证
 
 must-revalidate （设置了 must-revalidate 的缓存 如果已经过期 则必须去原服务端发送请求重新获取数据验证是否真的已经过期了）
-
 proxy-revalidate （缓存服务器过期了 必须去原服务器重新请求一遍）
 
-### 其他
+- 其他
 
 no-store （本地 和 代理都不能存储缓存）
-
 no-transform （不允许代理服务器对返回内容进行压缩之类的）
 
-## 缓存验证头 Last-Modified 和 Etag 的使用
-
-### Last-Modified（上次修改时间）
+- 缓存验证头 Last-Modified（上次修改时间）
 
 对比上次修改时间来验证资源是否需要更新
-
 配合 If-Modified-Since 或者 If-Unmodified-Since 使用
 
-### Etag（数据签名）
+- 缓存验证头 Etag（数据签名）
 
 常见于对资源的内容进行哈希计算，对比资源的签名判断是否使用缓存
-
 配合 If-Match 或者 If-None-Match 使用
 
-### 使用方法 (Chrome 勾选 Disable cache 就不会发送带缓存的头了）)
+- 使用方法 (Chrome 勾选 Disable cache 就不会发送带缓存的头了）)
 
 1. 服务端响应头（response headers） 设置 缓存验证头
-
 2. 浏览器在第二次发送请求 会在请求头（request headers）中，把对应的验证缓存的头带上（If-Modified-Since,If-None-Match）
-
 3. 在服务端做判断验证是否可以使用缓存
 
-```javascript
+```js
 if (request.url === '/script.js') {
     // const html = fs.readFileSync('test.html', 'utf-8')
     const etag = request.headers['if-none-match']
@@ -460,6 +448,77 @@ if (request.url === '/script.js') {
     }
   }
 ```
+
+## 浏览器缓存机制（超详细总结） 原文链接：https://blog.csdn.net/weixin_54350973/article/details/128211574
+
+1. 缓存理解
+
+  - **缓存定义**：浏览器在本地磁盘上将用户之前请求的数据存储起来，当访问着再次需要修改数据的时候，无需再次发送请求，直接从浏览器本地获取数据
+
+  - **缓存的好处**：
+    减少请求的个数
+    节省带宽，避免浪费不必要的网络资源
+    减轻服务器压力
+    提高浏览器网页的加载速度，提高用户体验
+
+2. 缓存分类
+
+  - **强存缓**
+    不会向服务器发送请求，直接从本地缓存中获取数据
+    请求资源的状态码为：200 ok （from memory cache）
+
+  - **协商缓存**
+    想服务器发送请求，服务器会根据请求的资源判断是否命中协商缓存
+    如果命中，则返回 304 状态码通知浏览器从缓存中读取资源
+
+  - **强缓存 & 协商缓存的共同点**
+    都是从浏览器端读取资源
+
+  - **强缓存 VS 协商缓存的不同点**
+    强缓存不发请求给服务器
+    协商缓存发请求给我服务器，根据服务器返回的信息决定是否使用缓存
+
+3. 强缓存的 header 参数
+
+  - **expires**：（到期；有效期）
+    这是 http1.0 中的规范它的值为一个绝对时间的 GMT 格式的字符串，如：Mon,10 Jun 2015 21:31:12 GMT，如果发送请求的时间在 expires 之前，那么本地缓存始终有效，否则就会发送请求到服务器来获取
+
+  - **cache-control**：max-age = number（缓存控制）
+    这是 http1.1 出现的 header 信息，主要是利用该字段的 max-age 来来进行判断，他是一个相对值；资源第一次的请求时间和 Cache-Control 设定的有效期，计算出一个资源过期时间，再拿这个过期时间跟当前的请求时间比较，如果请求时间在过期时间之前，就能命中缓存，否则就不行
+
+  **注意：当 cache-control 与 Expires 共存的时候 cache-control 的优先级更高**
+
+4. 协商缓存的 header 参数
+
+  **重点：协商缓存都是由服务器来确定缓存资源是否可用，使用客户端与服务器要通过某种标识来进行通信，从而让服务器判断请求资源是否可以缓存访问**
+
+  - **Last-Modified/if-Modified-Since**: 二者的值都是 GMT 格式的时间字符串
+    1. 浏览器第一次跟服务器请求一个资源，服务器在返回这个资源的同时，在 response 的 header 加上 Last-Modified 的 header，这个 header 标识这个资源在服务器的最后修改时间
+    2. 浏览器再次跟服务器请求这个资源时，在 request 的 header 上加上 if-Modified-Since 的 header，这个 header 的值就是上一个请求时返回的 Last-Modified 的值
+    3. 服务器再次收到资源请求时根据浏览器传过来 if-Modified-Since 和资源在服务器上的最后修改时间判断资源是否有变化，如果没有变化则返回 304 Not Modified，但是不会返回资源内容；如果有变化，就正常返回资源内容。当服务器返回 304 Not Modified 的响应时，response header 中不会添加 Last-Modified 的 header，因为既然资源没有变化，那么 Last-Modified 也就不会改变，这是服务器返回 304 时的 response header
+    4. 浏览器收到 304 的响应后就会从缓存中加载资源
+    5. 如果协商缓存没有命中，浏览器直接从服务器加载资源时，Last-Modified 的 Header 在重新加载的时候会被更新，下次请求时，If-Modified-Since 会启动上次返回的 Last-Modified 值
+
+    ![缓存](./images/%E7%BC%93%E5%AD%98.png)
+
+    ```
+      解释一下上方图片，看懂了就可以理解啦：
+      1. 图中有绿色框为我们服务器（浏览器请求），当我们发起请求后，浏览器成功后会放回数据，并在请求头中返回 Last-Modified=‘过期时间’
+      2. 以后我们每次发起请求都会在请求头中添加 If-Modified-Since = ‘过期时间’，服务器中的该资源的最后修改时间比对，如果比对成功，时间没变，则代表缓存命中，直接走缓存；如果缓存没命中，则服务器发送新数据下来，并还会派发新的 Last-Modified
+    ```
+
+  - **Etag/If-None-Match**
+    1. 这两个值是由服务器生成的每个资源的唯一标识字符串，只要资源有变化这个值就会变化
+    2. 判断过程与 Last-Modified/If-Modified-Since 类似
+
+  - **既生 Last-Modified 何生 Etag HTTP1.1 中 Etag 的出现主要是为了解决几个 Last-Modified 比较难解决的问题**
+    - 某些服务器不能精确的得到文件的最后修改时间
+    - 某些文件修改非常频繁，比如在秒以下的时间内进行修改，（比方是 1s 内修改了 N 次），If-Modified-Since 能检查到精度是 s 级，这种修改无法判断（或者是 UNiX 记录 MTIME 只能精确到秒）
+
+### 小结：
+
+    - 利用 Etag 能够更加精确的控制缓存，因为 Etag 是服务器自动生成或者由开发者生成的对应资源在服务器端的唯一标识符
+    - Last-Modified 与 ETag 是可以一起使用的，服务器会优先验证 Etag，一致的情况下，才会继续对比 Last-Modified, 最后才决定是否返回 304
 
 ## cookie 和 session
 
