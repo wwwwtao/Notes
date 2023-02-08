@@ -233,7 +233,11 @@ export function parseHTML (html, options) {
     index += n // 当前字符流的读入位置
     html = html.substring(n)
   }
-  // parse 开始标签
+  
+  /**
+   * parse 开始标签
+   * @returns 只有当变量end存在时，即能够确定确实解析到了一个开始标签的时候parseStartTag函数才会有返回值，并且返回值是match对象，其他情况下parseStartTag全部返回undefined。
+   */
   function parseStartTag () {
     /**
      * 如果匹配成功，那么start 将是一个包含两个元素的数组：第一个元素是标签的开始部分(包含< 和 标签名称)；第二个元素是捕获组捕获到的标签名称。
@@ -248,15 +252,23 @@ export function parseHTML (html, options) {
         start: index // 初始值为 index，是当前字符流读入位置在整个 html 字符串中的相对位置。
       }
       advance(start[0].length) // 在源字符中截取已经编译完成的字符
+
+      
       let end, attr
+      /**
+       *  第一个条件是：没有匹配到开始标签的结束部分，这个条件的实现方式主要使用了 startTagClose 正则，并将结果保存到 end 变量中。
+          第二个条件是：匹配到了属性，主要使用了attribute正则。
+          总结下这个while循环成立要素：没有匹配到开始标签的结束部分，并且匹配到了开始标签中的属性，这个时候循环体将被执行，直到遇到开始标签的结束部分为止。
+          接下来在循环体内做了两件事，首先调用advance函数，参数为attr[0].length即整个属性的长度。然后会将此次循环匹配到的结果push到前面定义的match对象的attrs数组中。
+       */
       while (!(end = html.match(startTagClose)) && (attr = html.match(dynamicArgAttribute) || html.match(attribute))) {
         attr.start = index
         advance(attr[0].length)
         attr.end = index
         match.attrs.push(attr)
       }
-      if (end) {
-        match.unarySlash = end[1]
+      if (end) {  // 只有当变量end存在，即匹配到了开始标签的结束部分时，才能说明这是一个完整的开始标签
+        match.unarySlash = end[1] // 如果end[1]不为undefined，那么说明该标签是一个一元标签（一元斜杠） ‘/’
         advance(end[0].length)
         match.end = index
         return match
