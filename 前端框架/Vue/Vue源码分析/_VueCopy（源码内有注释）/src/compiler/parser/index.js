@@ -34,18 +34,29 @@ import {
   getAndRemoveAttrByRegex
 } from '../helpers'
 
-export const onRE = /^@|^v-on:/
-export const dirRE = process.env.VBIND_PROP_SHORTHAND
+// 匹配以字符 @ 或 v-on: 开头的字符串，主要作用是检测标签属性名是否是监听事件的指令。
+export const onRE = /^@|^v-on:/ 
+// 匹配以字符 v- 或 @ 或 : 开头的字符串，主要作用是检测标签属性名是否是指令。在Vue中所有以 v- 开头的属性都被认为是指令，另外@字符是 v-on 的缩写，: 字符是 v-bind 的缩写。
+export const dirRE = process.env.VBIND_PROP_SHORTHAND 
   ? /^v-|^@|^:|^\.|^#/
   : /^v-|^@|^:|^#/
+// 匹配 v-for 属性的值，并捕获 in 或 of 前后的字符串。
 export const forAliasRE = /([\s\S]*?)\s+(?:in|of)\s+([\s\S]*)/
+// 这个也是匹配v-for的属性值，不过比之前要稍微复杂点：列表渲染 v-for（https://cn.vuejs.org/v2/guide/list.html#%E7%94%A8-v-for-%E6%8A%8A%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E5%AF%B9%E5%BA%94%E4%B8%BA%E4%B8%80%E7%BB%84%E5%85%83%E7%B4%A0)需要先了解下这个。
 export const forIteratorRE = /,([^,\}\]]*)(?:,([^,\}\]]*))?$/
+/**
+ *  这个捕获组用来捕获要么以字符 ( 开头，要么以字符 ) 结尾的字符串，或者两者都满足
+    那么这个正则的作用是什么呢？我们在讲解正则 forIteratorRE 时有个细节不知道大家注意到了没有，就是 forIteratorRE 正则所匹配的字符串是 'obj, index' ，而不是 '(obj, index)' ，这两个字符串的区别就在于第二个字符串拥有左右括号，所以在使用 forIteratorRE 正则之前，需要使用 stripParensRE 正则去掉字符串 '(obj, index)' 中的左右括号，实现方式很简单:
+    "(obj, index)".replace(stripParensRE, "")
+ */
 const stripParensRE = /^\(|\)$/g
 const dynamicArgRE = /^\[.*\]$/
-
+// argRE正则用来匹配指令编写中的参数，并且拥有一个捕获组，用来捕获参数的名字。 其中 v-on 为指令，click为传递给 v-on 指令的参数，stop 为修饰符。
 const argRE = /:(.*)$/
+// 该正则用来匹配以字符:或字符串 v-bind: 开头的字符串，主要用来检测一个标签的属性是否是绑定(v-bind)。
 export const bindRE = /^:|^\.|^v-bind:/
 const propBindRE = /^\./
+// 该正则用来匹配修饰符的，但是并没有捕获任何东西,但你可以用match、exec等方法获取与当前正则匹配成功的信息。
 const modifierRE = /\.[^.\]]+(?=[^\]]*$)/g
 
 const slotRE = /^v-slot(:|$)|^#/
@@ -70,6 +81,14 @@ let platformMustUseProp
 let platformGetTagNamespace
 let maybeComponent
 
+/**
+ * 
+ * @param {*} tag 
+ * @param {*} attrs 
+ * @param {*} parent 
+ * @returns 
+ * @description 创建一个元素的描述对象。
+ */
 export function createASTElement (
   tag: string,
   attrs: Array<ASTAttr>,
@@ -87,35 +106,38 @@ export function createASTElement (
 }
 
 /**
- * Convert HTML string to AST.
+ * Convert HTML string to AST. （将HTML字符串转换为AST。）
  */
 export function parse (
   template: string,
   options: CompilerOptions
 ): ASTElement | void {
-  warn = options.warn || baseWarn
+  warn = options.warn || baseWarn // warn$2 函数 毋庸置疑它作用是用来打印警告信息的
 
-  platformIsPreTag = options.isPreTag || no
-  platformMustUseProp = options.mustUseProp || no
-  platformGetTagNamespace = options.getTagNamespace || no
-  const isReservedTag = options.isReservedTag || no
+  platformIsPreTag = options.isPreTag || no // platformIsPreTag 函数是一个编译器选项，其作用是通过给定的标签名字判断该标签是否是 pre 标签。
+  platformMustUseProp = options.mustUseProp || no // platformMustUseProp 该函数也是一个编译器选项，其作用是用来检测一个属性在标签中是否要使用元素对象原生的 prop 进行绑定。
+  platformGetTagNamespace = options.getTagNamespace || no // platformGetTagNamespace 该函数是一个编译器选项，其作用是用来获取元素(标签)的命名空间。
+  const isReservedTag = options.isReservedTag || no  // 
   maybeComponent = (el: ASTElement) => !!el.component || !isReservedTag(el.tag)
 
   transforms = pluckModuleFunction(options.modules, 'transformNode')
   preTransforms = pluckModuleFunction(options.modules, 'preTransformNode')
   postTransforms = pluckModuleFunction(options.modules, 'postTransformNode')
 
-  delimiters = options.delimiters
+  delimiters = options.delimiters // delimiters 它的值为 options.delimiters 属性，它的值就是在创建 Vue 实例对象时所传递的 delimiters 选项。
 
-  const stack = []
-  const preserveWhitespace = options.preserveWhitespace !== false
+  const stack = []  // stack 初始值是一个空数组，作用在上个章节我们讲到，回退操作为了让子元素描述对象的parent属性能够正确指向其父元素。
+  const preserveWhitespace = options.preserveWhitespace !== false // preserveWhitespace 是一个布尔值并且它的值与编译器选项中的options.preserveWhitespace选项有关，只要 options.preserveWhitespace 的值不为false，那么 preserveWhitespace 的值就为真。其中 options.preserveWhitespace 选项用来告诉编译器在编译 html 字符串时是否放弃标签之间的空格，如果为 true 则代表放弃。
   const whitespaceOption = options.whitespace
-  let root
-  let currentParent
-  let inVPre = false
-  let inPre = false
-  let warned = false
+  let root  // root 存储最终生成的AST。
+  let currentParent // currentParent 通过上章节了解到，该变量维护元素描述对象之间的父子关系。
+  let inVPre = false  // inVPre 初始值：false。标识当前解析的标签是否在拥有 v-pre (跳过这个元素和它的子元素的编译过程。)的标签之内。
+  let inPre = false // inPre 初始值：false。标识当前正在解析的标签是否在 <pre></pre> 标签之内。
+  let warned = false  // warned 初始值：false。用来打印警告信息的函数，只不过 warnOnce 函数就如它的名字一样，只会打印一次警告信息，并且 warnOnce 函数也是通过调用 warn 函数来实现的。          
 
+  /**
+   * @description warnOnce 函数就如它的名字一样，只会打印一次警告信息，并且 warnOnce 函数也是通过调用 warn 函数来实现的。
+   */
   function warnOnce (msg, range) {
     if (!warned) {
       warned = true
@@ -200,15 +222,15 @@ export function parse (
   function checkRootConstraints (el) {
     if (el.tag === 'slot' || el.tag === 'template') {
       warnOnce(
-        `Cannot use <${el.tag}> as component root element because it may ` +
-        'contain multiple nodes.',
+        `Cannot use <${el.tag}> as component root element because it may ` + // 不能将＜$｛el.tag｝＞用作组件根元素，因为它可能`
+        'contain multiple nodes.',                                           // '包含多个节点。'
         { start: el.start }
       )
     }
     if (el.attrsMap.hasOwnProperty('v-for')) {
       warnOnce(
-        'Cannot use v-for on stateful component root element because ' +
-        'it renders multiple elements.',
+        'Cannot use v-for on stateful component root element because ' + // '无法在有状态组件根元素上使用v-for，因为'
+        'it renders multiple elements.',                                 //  '它呈现多个元素。'
         el.rawAttrsMap['v-for']
       )
     }
@@ -223,17 +245,19 @@ export function parse (
     shouldDecodeNewlinesForHref: options.shouldDecodeNewlinesForHref,
     shouldKeepComment: options.comments,
     outputSourceRange: options.outputSourceRange,
+
     start (tag, attrs, unary, start, end) {
-      // check namespace.
-      // inherit parent ns if there is one
+      // check namespace.（检查命名空间。）
+      // inherit parent ns if there is one（继承父ns（如果有））
       const ns = (currentParent && currentParent.ns) || platformGetTagNamespace(tag)
 
-      // handle IE svg bug
+      // handle IE svg bug （处理IE SVG相关bug）
       /* istanbul ignore if */
       if (isIE && ns === 'svg') {
         attrs = guardIESVGBug(attrs)
       }
 
+      // 在start 钩子函数中首先定义了 element 变量，它就是元素节点的描述对象，接着判断root 是否存在，如果不存在则直接将 element 赋值给 root 。
       let element: ASTElement = createASTElement(tag, attrs, currentParent)
       if (ns) {
         element.ns = ns
@@ -251,8 +275,8 @@ export function parse (
         attrs.forEach(attr => {
           if (invalidAttributeRE.test(attr.name)) {
             warn(
-              `Invalid dynamic argument expression: attribute names cannot contain ` +
-              `spaces, quotes, <, >, / or =.`,
+              `Invalid dynamic argument expression: attribute names cannot contain ` + // 无效的动态参数表达式：属性名称不能包含`
+              `spaces, quotes, <, >, / or =.`,                                         // `空格、引号、<、>、/或=.`，
               {
                 start: attr.start + attr.name.indexOf(`[`),
                 end: attr.start + attr.name.length
@@ -272,7 +296,7 @@ export function parse (
         )
       }
 
-      // apply pre-transforms
+      // apply pre-transforms （应用预变换）
       for (let i = 0; i < preTransforms.length; i++) {
         element = preTransforms[i](element, options) || element
       }
@@ -294,14 +318,38 @@ export function parse (
         processIf(element)
         processOnce(element)
       }
-
+      
+      // 判断root 是否存在，如果不存在则直接将 element 赋值给 root
       if (!root) {
+        /**
+         * {
+            type: 1,
+            tag,  // div
+            attrsList: attrs,
+            attrsMap: makeAttrsMap(attrs),
+            rawAttrsMap: {},
+            parent, // null
+            children: []
+          }
+         */
         root = element
         if (process.env.NODE_ENV !== 'production') {
-          checkRootConstraints(root)
+          checkRootConstraints(root) // 检查根元素符合约束
         }
       }
 
+      /**
+       * 当一个元素为非一元标签时，会设置 currentParent 为该元素的描述对象，所以此时currentParent也是
+       * {
+          type: 1,
+          tag,  // div
+          attrsList: attrs,
+          attrsMap: makeAttrsMap(attrs),
+          rawAttrsMap: {},
+          parent, // null
+          children: []
+        }
+       */
       if (!unary) {
         currentParent = element
         stack.push(element)
@@ -310,6 +358,9 @@ export function parse (
       }
     },
 
+    /**
+     * @describe 
+     */
     end (tag, start, end) {
       const element = stack[stack.length - 1]
       // pop stack
@@ -392,6 +443,7 @@ export function parse (
         }
       }
     },
+
     comment (text: string, start, end) {
       // adding anything as a sibling to the root node is forbidden
       // comments should still be allowed, but ignored
