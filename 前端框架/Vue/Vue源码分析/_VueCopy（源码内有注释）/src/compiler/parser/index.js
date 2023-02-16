@@ -117,7 +117,7 @@ export function parse (
   platformIsPreTag = options.isPreTag || no // platformIsPreTag 函数是一个编译器选项，其作用是通过给定的标签名字判断该标签是否是 pre 标签。
   platformMustUseProp = options.mustUseProp || no // platformMustUseProp 该函数也是一个编译器选项，其作用是用来检测一个属性在标签中是否要使用元素对象原生的 prop 进行绑定。
   platformGetTagNamespace = options.getTagNamespace || no // platformGetTagNamespace 该函数是一个编译器选项，其作用是用来获取元素(标签)的命名空间。
-  const isReservedTag = options.isReservedTag || no  // 
+  const isReservedTag = options.isReservedTag || no  // 判断一个标签是否是保留标签，我们可以知道，如果一个标签是html标签，或者是svg标签，那么这个标签即是保留标签。
   maybeComponent = (el: ASTElement) => !!el.component || !isReservedTag(el.tag)
 
   transforms = pluckModuleFunction(options.modules, 'transformNode')
@@ -146,13 +146,23 @@ export function parse (
   }
 
   function closeElement (element) {
-    trimEndingWhitespace(element)
+    trimEndingWhitespace(element) // 删除尾随空白节点
     if (!inVPre && !element.processed) {
       element = processElement(element, options)
     }
     // tree management
+    /**
+     * 当 stack 为空的情况下会执行 else if 语句块内的代码, 那stack 什么情况下才为空呢？
+     * 前面已经多次提到每当遇到一个非一元标签时就会将该标签的描述对象放进数组，并且每当遇到一个结束标签时都会将该标签的描述对象从 stack 数组中拿掉，那也就是说在只有一个根元素的情况下，正常解析完成一段 html 代码后 stack 数组应该为空，
+     * 或者换个说法，即当 stack 数组被清空后则说明整个模板字符串已经解析完毕了，但此时 start 钩子函数仍然被调用了，这说明模板中存在多个根元素，这时 if 语句块内的代码将被执行
+     */
     if (!stack.length && element !== root) {
-      // allow root elements with v-if, v-else-if and v-else
+      // allow root elements with v-if, v-else-if and v-else （允许具有v-if、v-else-if和v-else的根元素）
+      /**
+       *  我们知道在编写 Vue 模板时的约束是必须有且仅有一个被渲染的根元素，但你可以定义多个根元素，只要能够保证最终只渲染其中一个元素即可，能够达到这个目的的方式只有一种，那就是在多个根元素之间使用 v-if 或 v-else-if 或 v-else 。
+        root 对象中的 .if 属性、.elseif 属性以及 .else 属性都是哪里来的，它们是在通过 processIf 函数处理元素描述对象时，如果发现元素的属性中有 v-if 或 v-else-if 或 v-else ，则会在元素描述对象上添加相应的属性作为标识。
+        上面代码如果第一个根元素上有 .if 的属性，而非第一个根元素 element 有 .elseif 属性或者 .else 属性，这说明根元素都是由 v-if、v-else-if、v-else 指令控制的，同时也保证了被渲染的根元素只有一个。
+       */
       if (root.if && (element.elseif || element.else)) {
         if (process.env.NODE_ENV !== 'production') {
           checkRootConstraints(element)
@@ -163,6 +173,7 @@ export function parse (
         })
       } else if (process.env.NODE_ENV !== 'production') {
         warnOnce(
+          // 组件模板应仅包含一个根元素。如果在多个元素上使用v-If，使用v-else-if链接它们
           `Component template should contain exactly one root element. ` +
           `If you are using v-if on multiple elements, ` +
           `use v-else-if to chain them instead.`,
@@ -170,43 +181,59 @@ export function parse (
         )
       }
     }
-    if (currentParent && !element.forbidden) {
+    if (currentParent && !element.forbidden) { // 这里的条件要成立，则说明当前元素存在父级( currentParent )，并且当前元素不是被禁止的元素
+
+      /**
+       * 如果一个标签使用 v-else-if 或 v-else 指令，那么该元素的描述对象实际上会被添加到对应的v-if 元素描述对象的 ifConditions 数组中，而非作为一个独立的子节点
+       */
       if (element.elseif || element.else) {
         processIfConditions(element, currentParent)
       } else {
+        
+        /**
+         * 如果当前元素没有使用 v-else-if 或 v-else 指令，那么还会判断当前元素是否使用了 slot-scope 特性, 
+           如果一个元素使用了 slot-scope 特性，那么该元素的描述对象会被添加到父级元素的 scopedSlots 对象下，
+           也就是说使用了 slot-scope 特性的元素与使用了v-else-if 或 v-else 指令的元素一样，他们都不会作为父级元素的子节点，
+           对于使用了 slot-scope 特性的元素来讲它们将被添加到父级元素描述对象的 scopedSlots 对象下。
+         */
         if (element.slotScope) {
           // scoped slot
-          // keep it in the children list so that v-else(-if) conditions can
-          // find it as the prev node.
+          // keep it in the children list so that v-else(-if) conditions can (将其保留在子列表中，以便v-else（-if）条件可以)
+          // find it as the prev node. (找到它作为prev节点)
           const name = element.slotTarget || '"default"'
           ;(currentParent.scopedSlots || (currentParent.scopedSlots = {}))[name] = element
         }
+
+        /**
+         * 在 else 语句块内，会把当前元素描述对象添加到父级元素描述对象 ( currentParent ) 的children 数组中，
+           同时将当前元素对象的 parent 属性指向父级元素对象，这样就建立了元素描述对象间的父子级关系
+         */
         currentParent.children.push(element)
         element.parent = currentParent
       }
     }
 
-    // final children cleanup
-    // filter out scoped slots
+    // final children cleanup （最终子项清理）
+    // filter out scoped slots （筛选出作用域插槽）
     element.children = element.children.filter(c => !(c: any).slotScope)
-    // remove trailing whitespace node again
+    // remove trailing whitespace node again （再次删除尾随空白节点）
     trimEndingWhitespace(element)
 
-    // check pre state
+    // check pre state （检查预状态）
     if (element.pre) {
       inVPre = false
     }
     if (platformIsPreTag(element.tag)) {
       inPre = false
     }
-    // apply post-transforms
+    // apply post-transforms （应用后变换）
     for (let i = 0; i < postTransforms.length; i++) {
       postTransforms[i](element, options)
     }
   }
 
   function trimEndingWhitespace (el) {
-    // remove trailing whitespace node
+    // remove trailing whitespace node（删除尾随空白节点）
     if (!inPre) {
       let lastNode
       while (
@@ -219,6 +246,7 @@ export function parse (
     }
   }
 
+  // 检查根元素符合约束 - 检查当前元素是否符合作为根元素的要求
   function checkRootConstraints (el) {
     if (el.tag === 'slot' || el.tag === 'template') {
       warnOnce(
@@ -246,13 +274,32 @@ export function parse (
     shouldKeepComment: options.comments,
     outputSourceRange: options.outputSourceRange,
 
+    /**
+     * 
+     * @param {*} tag 标签名字 tag
+     * @param {*} attrs 该标签的属性数组attrs
+     * @param {*} unary 是否是一元标签的标识
+     * @param {*} start 
+     * @param {*} end 
+     */
     start (tag, attrs, unary, start, end) {
       // check namespace.（检查命名空间。）
       // inherit parent ns if there is one（继承父ns（如果有））
+      /**
+       * 开头定义了 ns 变量，它的值为标签的命名空间，如何获取当前元素的命名空间呢？首先检测currentParent 变量是否存在，我们知道 currentParent 变量为当前元素的父级元素描述对象，如果当前元素存在父级并且父级元素存在命名空间，则使用父级的命名空间作为当前元素的命名空间。
+        如果父级元素不存在或父级元素没有命名空间那么会调用platformGetTagNamespace函数，platformGetTagNamespace 函数只会获取 svg 和 math 这两个标签的命名空间，但这两个标签的所有子标签都会继承它们两个的命名空间。
+       */
       const ns = (currentParent && currentParent.ns) || platformGetTagNamespace(tag)
 
       // handle IE svg bug （处理IE SVG相关bug）
       /* istanbul ignore if */
+      /**
+       * 这里通过isIE来判断宿主环境是不是IE浏览器，并且前元素的命名空间为svg， 如果是通过guardIESVGBug处理当前元素的属性数组attrs，并使用处理后的结果重新赋值给attrs变量。为什么要这么做？大家可以访问[IE 11]( http://osgeo-org.1560.x6.nabble.com/WFS-and-IE-11-td5090636.html )了解这个 bug的详情，该问题是svg标签中渲染多余的属性，如下svg标签：
+          <svg xmlns:feature="http://www.openplans.org/topp"></svg>
+          被渲染为：
+          <svg xmlns:NS1="" NS1:xmlns:feature="http://www.openplans.org/topp"></svg>
+          标签中多了 'xmlns:NS1="" NS1:' 这段字符串，解决办法也很简单，将整个多余的字符串去掉即可。而 guardIESVGBug 函数就是用来修改NS1:xmlns:feature属性并移除xmlns:NS1="" 属性的。
+       */
       if (isIE && ns === 'svg') {
         attrs = guardIESVGBug(attrs)
       }
@@ -260,7 +307,7 @@ export function parse (
       // 在start 钩子函数中首先定义了 element 变量，它就是元素节点的描述对象，接着判断root 是否存在，如果不存在则直接将 element 赋值给 root 。
       let element: ASTElement = createASTElement(tag, attrs, currentParent)
       if (ns) {
-        element.ns = ns
+        element.ns = ns // 在元素对象上添加 ns 属性，其值为命名空间的值
       }
 
       if (process.env.NODE_ENV !== 'production') {
@@ -286,21 +333,43 @@ export function parse (
         })
       }
 
+      /**
+       * 这里的作用就是判断在非服务端渲染情况下，当前解析的开始标签是否是禁止在模板中使用的标签。哪些是禁止的呢？
+        看 isForbiddenTag 函数：
+       */
       if (isForbiddenTag(element) && !isServerRendering()) {
-        element.forbidden = true
-        process.env.NODE_ENV !== 'production' && warn(
-          'Templates should only be responsible for mapping the state to the ' +
+        element.forbidden = true // 在当前元素的描述对象上添加 element.forbidden 属性，并将其值设置为true。 (表示为被禁止的)
+        process.env.NODE_ENV !== 'production' && warn( // 模板应仅负责将状态映射到用户界面。避免在模板中放置带有副作用的标记，例如＜$｛tag｝＞“+”，因为它们不会被解析
+          'Templates should only be responsible for mapping the state to the ' + 
           'UI. Avoid placing tags with side-effects in your templates, such as ' +
-          `<${tag}>` + ', as they will not be parsed.',
+          `<${tag}>` + ', as they will not be parsed.',  
           { start: element.start }
         )
       }
 
       // apply pre-transforms （应用预变换）
+      /**
+       * 如上代码中使用 for 循环遍历了preTransforms 数组，preTransforms 是通过pluckModuleFunction 函数从options.modules 选项中筛选出名字为preTransformNode 函数所组成的数组。
+        实际上 preTransforms 数组中只有一个 preTransformNode 函数该函数只用来处理 input 标签
+       */
       for (let i = 0; i < preTransforms.length; i++) {
         element = preTransforms[i](element, options) || element
       }
 
+      /**
+       * 可以看到这里会有大量的process*的函数，这些函数是做什么用的呢？实际上process* 系列函数的作用就是对元素描述对象做进一步处理，
+         比如其中一个函数叫做 processPre，这个函数的作用就是用来检测元素是否拥有v-pre 属性，如果有v-pre 属性则会在 element 描述对象上添加一个 pre 属性，如下：
+          {
+            type: 1,
+            tag,
+            attrsList: attrs,
+            attrsMap: makeAttrsMap(attrs),
+            parent,
+            children: [],
+            pre: true
+          }
+         总结：所有process* 系列函数的作用都是为了让一个元素的描述对象更加充实，使这个对象能更加详细地描述一个元素
+       */
       if (!inVPre) {
         processPre(element)
         if (element.pre) {
@@ -313,7 +382,7 @@ export function parse (
       if (inVPre) {
         processRawAttrs(element)
       } else if (!element.processed) {
-        // structural directives
+        // structural directives （结构指令）
         processFor(element)
         processIf(element)
         processOnce(element)
@@ -340,7 +409,7 @@ export function parse (
 
       /**
        * 当一个元素为非一元标签时，会设置 currentParent 为该元素的描述对象，所以此时currentParent也是
-       * {
+          {
           type: 1,
           tag,  // div
           attrsList: attrs,
@@ -348,7 +417,8 @@ export function parse (
           rawAttrsMap: {},
           parent, // null
           children: []
-        }
+          }
+         老生常谈的总结：每当遇到一个非一元标签都会将该元素的描述对象添加到stack数组，并且currentParent 始终存储的是 stack 栈顶的元素，即当前解析元素的父级。
        */
       if (!unary) {
         currentParent = element
@@ -372,56 +442,84 @@ export function parse (
       closeElement(element)
     },
 
+    /**
+     * 
+     * @param {*} text 
+     * @param {*} start 
+     * @param {*} end 
+     * @returns 
+     * @description 当解析器遇到文本节点时，如上代码中的 chars 钩子函数就会被调用，并且接收该文本节点的文本内容作为参数
+     */
     chars (text: string, start: number, end: number) {
+      /**
+       * 首先判断了 currentParent 变量是否存在，我们知道 currentParent 变量指向的是当前节点的父节点:。
+         如果 currentParent 变量不存在说明什么问题？
+            1：没有根元素，只有文本。
+            2: 文本在根元素之外。
+         当遇到第一种情况打印警告信息:"模板必须要有根元素"，第二种情况打印警告信息:" 根元素外的文本将会被忽略"。
+       */
       if (!currentParent) {
         if (process.env.NODE_ENV !== 'production') {
           if (text === template) {
             warnOnce(
-              'Component template requires a root element, rather than just text.',
+              'Component template requires a root element, rather than just text.', // 模板必须要有根元素
               { start }
             )
           } else if ((text = text.trim())) {
             warnOnce(
-              `text "${text}" outside root element will be ignored.`,
+              `text "${text}" outside root element will be ignored.`, // 根元素外的文本将会被忽略
               { start }
             )
           }
         }
         return
       }
+
       // IE textarea placeholder bug
+      // 这段代码是用来解决 IE 浏览器中渲染 <textarea> 标签的 placeholder 属性时存在的 bug 的。具体的问题大家可以查看这个 issue(https://link.zhihu.com/?target=https%3A//github.com/vuejs/vue/issues/4098) 
       /* istanbul ignore if */
-      if (isIE &&
-        currentParent.tag === 'textarea' &&
-        currentParent.attrsMap.placeholder === text
-      ) {
+      if (isIE && currentParent.tag === 'textarea' && currentParent.attrsMap.placeholder === text) {
         return
       }
+
       const children = currentParent.children
+      // 判断了条件 inPre || text.trim() 的真假，如果为 true，检测了当前文本节点的父节点是否是文本标签，如果是文本标签则直接使用原始文本，否则使用decodeHTMLCached 函数对文本进行解码
       if (inPre || text.trim()) {
         text = isTextTag(currentParent) ? text : decodeHTMLCached(text)
       } else if (!children.length) {
-        // remove the whitespace-only node right after an opening tag
+        // remove the whitespace-only node right after an opening tag(删除开头标记后的仅空白节点)
+        // inPre || text.trim() 如果为 false，检测当前节点的父节点有没有子元素,如果当前节点的父节点没有子元素则也不会保留空格
         text = ''
-      } else if (whitespaceOption) {
+      } else if (whitespaceOption) { // 如果有whitespaceOption（空白选项）
         if (whitespaceOption === 'condense') {
-          // in condense mode, remove the whitespace node if it contains
-          // line break, otherwise condense to a single space
+          // in condense mode, remove the whitespace node if it contains （在压缩模式下，如果空白节点包含换行符）
+          // line break, otherwise condense to a single space （否则压缩为单个空格）
           text = lineBreakRE.test(text) ? '' : ' '
         } else {
           text = ' '
         }
       } else {
+        // inPre || text.trim() 如果为 false，检测 preserveWhitespace 是否为 true 。
+        // preserveWhitespace 是一个布尔值代表着是否保留空格，只有它为真的情况下才会保留空格。
+        // 但即使 preserveWhitespace 常量的值为真，如果当前节点的父节点没有子元素则也不会保留空格.(此处源码已经改动到了第一个else if)
+        // 换句话说，编译器只会保留那些 不存在于开始标签之后的空格。
         text = preserveWhitespace ? ' ' : ''
       }
       if (text) {
         if (!inPre && whitespaceOption === 'condense') {
-          // condense consecutive whitespaces into single space
+          // condense consecutive whitespaces into single space （将连续空白空间压缩为单个空间）
           text = text.replace(whitespaceRE, ' ')
         }
         let res
         let child: ?ASTNode
-        if (!inVPre && text !== ' ' && (res = parseText(text, delimiters))) {
+        /**
+         *  判断当前元素未使用v-pre 指令，text不为空，使用 parseText 函数成功解析当前文本节点的内容 
+         *  1. 当前解析的元素使用v-pre 指令
+            2. text 为空
+            3. parseText 解析失败
+            只要以上三种情况中，有一种情况出现则代码会来到else...if 分支的判断
+         */
+        if (!inVPre && text !== ' ' && (res = parseText(text, delimiters))) { // 如果文本节点包含了 Vue 语法中的字面量表达式，parseText 函数的作用就是用来解析这段包含了字面量表达式的文本的。
           child = {
             type: 2,
             expression: res.expression,
@@ -429,6 +527,11 @@ export function parse (
             text
           }
         } else if (text !== ' ' || !children.length || children[children.length - 1].text !== ' ') {
+          /**
+           *  1. 文本内容不是空格
+              2. 文本内容是空格，但是该文本节点的父节点还没有子节点(即 !children.length )
+              3. 文本内容是空格，并且该文本节点的父节点有子节点，但最后一个子节点不是空格
+           */
           child = {
             type: 3,
             text
@@ -506,8 +609,8 @@ export function processElement (
 ) {
   processKey(element)
 
-  // determine whether this is a plain element after
-  // removing structural attributes
+  // determine whether this is a plain element after （确定这是否是一个普通元素）
+  // removing structural attributes（删除结构属性）
   element.plain = (
     !element.key &&
     !element.scopedSlots &&
@@ -620,15 +723,23 @@ function processIf (el) {
   }
 }
 
+/**
+ * 
+ * @param {*} el 当前元素描述对象 element 
+ * @param {*} parent 父级元素的描述对象 currentParent
+ * @description
+ */
 function processIfConditions (el, parent) {
-  const prev = findPrevElement(parent.children)
+  const prev = findPrevElement(parent.children) // findPrevElement 函数是去查找到当前元素的前一个元素描述对象，并将其赋值给 prev 常量
   if (prev && prev.if) {
-    addIfCondition(prev, {
+    // addIfCondition 不用多说如果prev 、prev.if 存在，调用 addIfCondition 函数在当前元素描述对象添加 ifConditions 属性，传入的对象存储相关信息
+    addIfCondition(prev, {  
       exp: el.elseif,
       block: el
     })
   } else if (process.env.NODE_ENV !== 'production') {
     warn(
+      // V-${el.elseif？（'else-if='+el.elseif+'）：'else'}在元素<${el.tag}>上使用，没有相应的V-IF
       `v-${el.elseif ? ('else-if="' + el.elseif + '"') : 'else'} ` +
       `used on element <${el.tag}> without corresponding v-if.`,
       el.rawAttrsMap[el.elseif ? 'v-else-if' : 'v-else']
@@ -644,6 +755,7 @@ function findPrevElement (children: Array<any>): ASTElement | void {
     } else {
       if (process.env.NODE_ENV !== 'production' && children[i].text !== ' ') {
         warn(
+          // v-if和v-else（-if）之间的文本“${children[i].text.trim（）}”将被忽略
           `text "${children[i].text.trim()}" between v-if and v-else(-if) ` +
           `will be ignored.`,
           children[i]
@@ -654,11 +766,16 @@ function findPrevElement (children: Array<any>): ASTElement | void {
   }
 }
 
+/**
+ * 
+ * @param {*} el 
+ * @param {*} condition 
+ */
 export function addIfCondition (el: ASTElement, condition: ASTIfCondition) {
   if (!el.ifConditions) {
     el.ifConditions = []
   }
-  el.ifConditions.push(condition)
+  el.ifConditions.push(condition) // 具有 v-else-if 或 v-else 属性的元素的描述对象会被添加到具有 v-if 属性的元素描述对象的 .ifConnditions 数组中
 }
 
 function processOnce (el) {
@@ -1000,11 +1117,19 @@ function makeAttrsMap (attrs: Array<Object>): Object {
   return map
 }
 
-// for script (e.g. type="x/template") or style, do not decode content
+// for script (e.g. type="x/template") or style, do not decode content (对于脚本（例如type=“x/template”）或样式，不解码内容)
 function isTextTag (el): boolean {
   return el.tag === 'script' || el.tag === 'style'
 }
 
+/**
+ * 
+ * @description style，script 都是在禁止名单中,但通过isForbiddenTag 也发现一个彩蛋。
+    <script type="text/x-template" id="hello-world-template">
+      <p>Hello hello hello</p>
+    </script>
+    当定义模板的方式如上，在 <script> 元素上添加 type="text/x-template" 属性。 此时的script不会被禁止。
+ */
 function isForbiddenTag (el): boolean {
   return (
     el.tag === 'style' ||
@@ -1018,6 +1143,7 @@ function isForbiddenTag (el): boolean {
 const ieNSBug = /^xmlns:NS\d+/
 const ieNSPrefix = /^NS\d+:/
 
+// 处理IE SVG相关bug,修改NS1:xmlns:feature属性并移除xmlns:NS1="" 属性的
 /* istanbul ignore next */
 function guardIESVGBug (attrs) {
   const res = []

@@ -186,7 +186,7 @@ export function parseHTML (html, options) {
           !comment.test(rest) &&
           !conditionalComment.test(rest)
         ) {
-          // < in plain text, be forgiving and treat it as text
+          // < in plain text, be forgiving and treat it as text (在纯文本中，要宽容并将其视为文本)
           next = rest.indexOf('<', 1)
           if (next < 0) break
           textEnd += next
@@ -234,6 +234,7 @@ export function parseHTML (html, options) {
     if (html === last) {
       options.chars && options.chars(html)
       if (process.env.NODE_ENV !== 'production' && !stack.length && options.warn) {
+        // 模板末尾的标记格式错误
         options.warn(`Mal-formatted tag at end of template: "${html}"`, { start: index + html.length })
       }
       break

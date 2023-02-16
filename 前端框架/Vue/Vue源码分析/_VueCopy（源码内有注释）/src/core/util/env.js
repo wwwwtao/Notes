@@ -34,8 +34,8 @@ if (inBrowser) {
   } catch (e) {}
 }
 
-// this needs to be lazy-evaled because vue may be required before
-// vue-server-renderer can set VUE_ENV
+// this needs to be lazy-evaled because vue may be required before （这需要延迟评估，因为之前可能需要vue）
+// vue-server-renderer can set VUE_ENV （vue服务器渲染器可以设置vue_ENV）
 let _isServer
 export const isServerRendering = () => {
   if (_isServer === undefined) {

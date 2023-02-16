@@ -11,6 +11,13 @@ export function baseWarn (msg: string, range?: Range) {
 }
 /* eslint-enable no-unused-vars */
 
+/**
+ * 
+ * @param {*} modules 
+ * @param {*} key 
+ * @returns 
+ * @description 检测在modules 数组中的成员对象是否有key属性，如果有"采摘"出来，组成一个新的数组。
+ */
 export function pluckModuleFunction<F: Function> (
   modules: ?Array<Object>,
   key: string

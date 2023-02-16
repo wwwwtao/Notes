@@ -41,8 +41,8 @@ export function getTagNamespace (tag: string): ?string {
   if (isSVG(tag)) {
     return 'svg'
   }
-  // basic support for MathML
-  // note it doesn't support other MathML elements being component roots
+  // basic support for MathML (对MathML的基本支持)
+  // note it doesn't support other MathML elements being component roots (注意，它不支持作为组件根的其他MathML元素)
   if (tag === 'math') {
     return 'math'
   }

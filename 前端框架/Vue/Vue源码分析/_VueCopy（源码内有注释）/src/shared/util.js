@@ -102,6 +102,10 @@ export function toNumber (val: string): number | string {
 /**
  * Make a map and return a function for checking if a key (制作一个映射并返回一个函数，用于检查是否有一个键)
  * is in that map.
+ * @param {*} str 一个以逗号分隔的字符串 
+ * @param {*} expectsLowerCase 是否小写
+ * @returns 根据生成的 map 产生的函数
+ * @description 描述：makeMap 函数首先根据一个字符串生成一个 map，然后根据该 map 产生一个新函数，新函数接收一个字符串参数作为 key，如果这个 key 在 map 中则返回 true，否则返回 undefined。
  */
 export function makeMap (
   str: string,
@@ -148,7 +152,7 @@ export function hasOwn (obj: Object | Array<*>, key: string): boolean {
 }
 
 /**
- * Create a cached version of a pure function.
+ * Create a cached version of a pure function.(创建纯函数的缓存版本)
  */
 export function cached<F: Function> (fn: F): F {
   const cache = Object.create(null)
