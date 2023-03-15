@@ -906,7 +906,7 @@ module.exports = {
     //...
 ```
 
-##### 5. 使用 DIIPlugin 提高打包速度 （第三方模块只打包一次）
+##### 5. 使用 DIIPlugin 提高打包速度 （第三方模块只打包一次） （你是否需要 webpack dll https://zhuanlan.zhihu.com/p/84595664）
 
 ```js
 
@@ -1072,36 +1072,25 @@ https://juejin.cn/post/6844903652956569608#heading-14
 https://juejin.im/post/5b5d6d6f6fb9a04fea58aabc
 
 它内置的代码分割策略是这样的：
-
-新的 chunk 是否被共享或者是来自 node_modules 的模块
-
-新的 chunk 体积在压缩之前是否大于 30kb
-
-按需加载 chunk 的并发请求数量小于等于 5 个（太多了就不分了 不然 http 请求次数太多）
-
-页面初始加载时的并发请求数量小于等于 3 个（太多了就不分了 不然 http 请求次数太多）
-
+1. 新的 chunk 是否被共享或者是来自 node_modules 的模块
+2. 新的 chunk 体积在压缩之前是否大于 30kb
+3. 按需加载 chunk 的并发请求数量小于等于 5 个（太多了就不分了 不然 http 请求次数太多）
+4. 页面初始加载时的并发请求数量小于等于 3 个（太多了就不分了 不然 http 请求次数太多）
 它内置的代码分割策略很好很不错，但有些场景下这些规则可能就显得不怎么合理了。比如我有一个管理后台，它大部分的页面都是表单和 Table，我使用了一个第三方 table 组件（比如 element table），几乎后台每个页面都需要它，但它的体积也就 15kb，不具备单独拆包的标准，它就这样被打包到每个页面的 bundle 中了，这就很浪费资源了。这种情况下建议把大部分页面能共用的组件单独抽出来，合并成一个 component-vendor.js 的包（后面会介绍）
 
-##### 拆包策略：
+- 拆包策略：
+	基础类库 chunk-libs
+	UI 组件库 chunk-elementUI
+	自定义共用组件 / 函数 chunk-commons
+	低频组件 chunk-eachrts/chunk-xlsx 等
+	业务代码 lazy-loading xxxx.js
 
-基础类库 chunk-libs
+- 持久化缓存：
+	使用 runtimeChunk 提取 manifest，使用 script-ext-html-webpack-plugin 等插件内联到 index.html 减少请求
+	使用 HashedModuleIdsPlugin 固定 moduleId
+	使用 NamedChunkPlugin 结合自定义 nameResolver 来固定 chunkId
 
-UI 组件库 chunk-elementUI
-
-自定义共用组件 / 函数 chunk-commons
-
-低频组件 chunk-eachrts/chunk-xlsx 等
-
-业务代码 lazy-loading xxxx.js
-
-##### 持久化缓存：
-
-使用 runtimeChunk 提取 manifest，使用 script-ext-html-webpack-plugin 等插件内联到 index.html 减少请求
-
-使用 HashedModuleIdsPlugin 固定 moduleId
-
-使用 NamedChunkPlugin 结合自定义 nameResolver 来固定 chunkId
+ CDN，组件库的按需引入，减小第三方依赖的体积，Gzip 压缩
 
 ### 多页面打包配置
 

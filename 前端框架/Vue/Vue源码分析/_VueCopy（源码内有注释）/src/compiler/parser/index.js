@@ -145,6 +145,11 @@ export function parse (
     }
   }
 
+  /**
+   * 
+   * @param {*} element 
+   * @description 作用有两个: 第一个是对数据状态的还原，第二个是调用后置处理转换钩子函数
+   */
   function closeElement (element) {
     trimEndingWhitespace(element) // 删除尾随空白节点
     if (!inVPre && !element.processed) {
@@ -429,13 +434,17 @@ export function parse (
     },
 
     /**
-     * @describe 
+     * @describe 当解析 html 字符串遇到结束标签的时候
+       在之前的文章中我们讲过解析器遇到非一元标签的开始标签时，会将该标签的元素描述对象设置给 currentParent 变量，
+       代表后续解析过程中遇到的所有标签都应该是 currentParent 变量所代表的标签的子节点，同时还会将该标签的元素描述对象添加到 stack 栈中。
+       而当遇到结束标签的时候则意味着 currentParent 变量所代表的标签以及其子节点全部解析完毕了，
+       此时我们应该把 currentParent 变量的引用修改为当前标签的父标签，这样我们就将作用域还原给了上层节点，以保证解析过程中正确的父子关系。
      */
     end (tag, start, end) {
       const element = stack[stack.length - 1]
-      // pop stack
+      // pop stack 将当前节点出栈
       stack.length -= 1
-      currentParent = stack[stack.length - 1]
+      currentParent = stack[stack.length - 1] // 读取出栈后 stack 栈中的最后一个元素作为 currentParent 变量的值
       if (process.env.NODE_ENV !== 'production' && options.outputSourceRange) {
         element.end = end
       }
@@ -547,9 +556,10 @@ export function parse (
       }
     },
 
+    /** @description 普通文本节点与注释节点的元素描述对象的类型是一样的都是 3 ，不同的是注释节点的元素描述对象拥有 isComment 属性，并且该属性的值为 true，目的就是用来与普通文本节点作区分的。 */
     comment (text: string, start, end) {
-      // adding anything as a sibling to the root node is forbidden
-      // comments should still be allowed, but ignored
+      // adding anything as a sibling to the root node is forbidden 禁止向根节点添加任何同级节点
+      // comments should still be allowed, but ignored 注释仍应被允许，但被忽略
       if (currentParent) {
         const child: ASTText = {
           type: 3,
@@ -576,6 +586,22 @@ export function parse (
 	`
 }
 
+/**
+ * 
+ * @param {ASTElement} el 
+ * @example
+ * processPre<el>
+ * ⬇️
+ * {
+    type: 1,
+    tag,
+    attrsList: attrs,
+    attrsMap: makeAttrsMap(attrs),
+    parent,
+    children: [],
+    pre: true
+   }
+ */
 function processPre (el) {
   if (getAndRemoveAttr(el, 'v-pre') != null) {
     el.pre = true

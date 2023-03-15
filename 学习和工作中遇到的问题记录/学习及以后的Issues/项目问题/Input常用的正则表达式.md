@@ -86,19 +86,37 @@ export function orderDealInputVal(value) {
 	return value;
 }
 
+```
 
-// 十五位正负数位两位小数位，其他字符不让输入
-export const clearNoNum = value => {
-  value = value.replace(/[^-\d.]/g, ""); //清除"-","数字"和"."以外的字符
-  value = value.replace(/^[.]/, ""); //禁止第一个字符为.
-  value = value.replace("-.", ""); //禁止前两个字符为-.
-  value = value.replace(/\-{2,}/g, "-"); //只保留第一个-, 清除多余的
-  value = value.replace("-", "$##$##$").replace(/\-/g, "").replace("$##$##$", "-");
-  value = value.replace(/\.{2,}/g, "."); //只保留第一个., 清除多余的
+
+
+```html
+<el-input
+  v-model="formData.authorizeCoef"
+  @input="e => (formData.authorizeCoef = dealInputVal(e, this.Limits, { min: 1, max: 2 }))"
+></el-input>
+```
+```js
+// 十五位整数位两位小数位，其他字符不让输入
+export function dealInputVal(value, callback, cbArg) {
+  value = value.replace(/^0*(0\.|[1-9])/, "$1");
+  value = value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+  value = value.replace(/^\./g, ""); //验证第一个字符是数字而不是字符
+  value = value.replace(/\.{1,}/g, "."); //只保留第一个.清除多余的
   value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-  value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); //只能输入两个小数
+  value = value.replace(/^(\-)*(\d*)\.(\d\d).*$/, "$1$2.$3"); //只能输入两个小数
   value = value.indexOf(".") > 0 ? value.split(".")[0].substring(0, 15) + "." + value.split(".")[1] : value.substring(0, 15);
+  if (callback && typeof callback === "function") {
+    value = callback(value, cbArg);
+  }
   return value;
-};
+}
 
+
+// 限制范围
+export function Limits(value, cbArg) {
+  if (Number(value) < cbArg.min) value = String(cbArg.min);
+  if (Number(value) > cbArg.max) value = String(cbArg.max);
+  return String(value);
+}
 ```

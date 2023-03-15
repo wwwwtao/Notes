@@ -8,9 +8,9 @@ let isPlatformReservedTag
 const genStaticKeysCached = cached(genStaticKeys)
 
 /**
- * Goal of the optimizer: walk the generated template AST tree
- * and detect sub-trees that are purely static, i.e. parts of
- * the DOM that never needs to change.
+ * Goal of the optimizer: walk the generated template AST tree 
+ * and detect sub-trees that are purely static, i.e. parts of 
+ * the DOM that never needs to change. 
  *
  * Once we detect these sub-trees, we can:
  *
@@ -18,13 +18,28 @@ const genStaticKeysCached = cached(genStaticKeys)
  *    create fresh nodes for them on each re-render;
  * 2. Completely skip them in the patching process.
  */
+/**
+ *优化器的目标：遍历生成的模板AST树
+ *并检测纯静态的子树，即
+ *无需更改的DOM。
+ *
+ *一旦我们检测到这些子树，我们就可以：
+ *
+ * 1. 将它们提升为常量，这样我们就不再需要
+ *在每次重新渲染时为它们创建新节点；
+ * 2. 在修补过程中完全跳过它们。
+*/
 export function optimize (root: ?ASTElement, options: CompilerOptions) {
   if (!root) return
+  // isStaticKey 获取 genStaticKeysCached函数返回值, 获取 makeMap (点此查看) 函数返回值引用
   isStaticKey = genStaticKeysCached(options.staticKeys || '')
+
+  // isPlatformReservedTag 获取编译器选项 isReservedTag 的引用，检查给定的字符是否是保留的标签。
   isPlatformReservedTag = options.isReservedTag || no
-  // first pass: mark all non-static nodes.
+
+  // first pass: mark all non-static nodes. 第一遍：标记静态节点？ 标记非静态节点？
   markStatic(root)
-  // second pass: mark static roots.
+  // second pass: mark static roots. 第二遍：标注静态根节点
   markStaticRoots(root, false)
 }
 
@@ -38,9 +53,9 @@ function genStaticKeys (keys: string): Function {
 function markStatic (node: ASTNode) {
   node.static = isStatic(node)
   if (node.type === 1) {
-    // do not make component slot content static. this avoids
-    // 1. components not able to mutate slot nodes
-    // 2. static slot content fails for hot-reloading
+    // do not make component slot content static. this avoids 不要使component slot内容静态。这样可以避免
+    // 1. components not able to mutate slot nodes 1. 组件无法更改插槽节点
+    // 2. static slot content fails for hot-reloading 2. 静态插槽内容无法进行热重新加载
     if (
       !isPlatformReservedTag(node.tag) &&
       node.tag !== 'slot' &&
@@ -98,7 +113,7 @@ function markStaticRoots (node: ASTNode, isInFor: boolean) {
 }
 
 function isStatic (node: ASTNode): boolean {
-  if (node.type === 2) { // expression
+  if (node.type === 2) { // expression 表达式
     return false
   }
   if (node.type === 3) { // text
