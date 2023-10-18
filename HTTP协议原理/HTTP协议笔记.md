@@ -163,6 +163,23 @@ POST /user/signin HTTP/1.1
 <!-- 请求地址  -->
 
 Host: passport.cnblogs.com
+1. Host
+表示当前请求要被发送的目的地，说白了就是当前请求发送到哪里，host 代表的是接收这个请求的目的地的 host，仅包括域名和端口号，如 test.pay.com:8090。在任何类型请求中，request 都会包含此 header 信息。
+
+<!-- 起源是来自哪里 -->
+
+Origin: https://passport.cnblogs.com
+2. Origin
+表示当前请求资源所在页面的协议和域名，用来说明请求从哪里发起的，如 http://test.my.com，
+特别注意：
+这个参数一般只存在于 CORS 跨域请求中，普通请求没有这个 header！
+如果有 Origin 参数，我们可以看到 response 有对应的 header：Access-Control-Allow-Origin
+
+<!-- 提供上下文服务器，告诉服务器我是从哪里来的，一般用于网站流量统计。 -->
+
+Referer: https://passport.cnblogs.com/user/signin?ReturnUrl=http://www.cnblogs.com/fighter007/p/8422868.html
+3. Referer
+表示当前请求资源所在页面的完整路径：协议 + 域名 + 查询参数（注意不包含锚点信息），如 http://test.my.com/p/GHB2021081702-001/index.html?a=1&b=2，所有类型的请求都包含此 header。
 
 <!-- Connection 决定当前的事务完成后，是否会关闭网络连接。如果该值是“keep-alive”，网络连接就是持久的，不会关闭，使得对同一个服务器的请求可以继续在该连接上完成。 -->
 
@@ -172,17 +189,9 @@ Connection: keep-alive
 
 Content-Length: 557
 
-<!-- 起源是来自哪里 -->
-
-Origin: https://passport.cnblogs.com
-
 <!-- 表明是 ajax 异步请求 -->
 
 X-Requested-With: XMLHttpRequest
-
-<!-- 提供上下文服务器，告诉服务器我是从哪里来的，一般用于网站流量统计。 -->
-
-Referer: https://passport.cnblogs.com/user/signin?ReturnUrl=http://www.cnblogs.com/fighter007/p/8422868.html
 
 <!-- 浏览器申明自己接收的编码方式：通常指定压缩、是否支持压缩、支持什么方式压缩（gzip/default） -->
 
