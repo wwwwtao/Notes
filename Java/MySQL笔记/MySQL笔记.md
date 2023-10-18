@@ -111,7 +111,52 @@ INSERT INTO 表名 VALUES (值1, 2值, ...),(值1, 值2, ...),(值1, 值2, ...);
 
 ##### UPDATE 修改数据
 
+```SQL
+UPDATE 表名 SET 字段名1 = 值1, 字段名2 = 值2, ... [WHERE 条件];
+```
+
+注意：
+1. 没有条件则会修改整张表
+
 ##### DELETE 删除数据
+
+```SQL
+DELETE FROM 表名 [WHERE 条件];
+```
+
+注意：
+1. 没有条件则会删除整张表
+2. DELETE 语句不能删除某个字段的值（可以使用 update）
+
+#### DQL（数据查询）
+
+```SQL
+SELECT
+  字段列表
+FROM
+  表名列表
+WHERE
+  条件列表
+GROUP BY
+  分组字段列表
+HAVING
+  分组后条件列表
+ORDER BY
+  排序字段列表
+LIMIT
+  分页参数
+```
+
+##### DQL- 基本查询
+
+```sql
+-- 查询多个字段
+SELECT 字段1,字段2,字段3... FROM 表名;
+SELECT * FROM 表名;
+
+-- 设置别名
+SELECT 字段1[AS 别名1], 字段2[AS 别名2] ... FROM 表名;
+```
 
 ## MySQL 进阶
 
