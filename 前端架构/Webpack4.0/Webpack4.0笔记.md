@@ -1193,6 +1193,18 @@ module.exports = {
 }
 ```
 
+#### webpack 中 loader 在哪个 hook 触发的？
+
+在 webpack 中，loader 的执行是在构建过程的 module 阶段触发的。具体来说，loader 的执行是在 webpack 的  `normalModuleLoader`  阶段进行的。
+
+ `normalModuleLoader`  是 webpack 构建过程中的一个关键阶段，它在  `beforeCompile`  钩子之后、 `afterCompile`  钩子之前执行。在这个阶段，webpack 会根据配置中的 loader 规则，对模块进行匹配和处理，并将模块转换为可执行的 JavaScript 代码。
+
+在  `normalModuleLoader`  阶段，webpack 会按照配置中的 loader 规则，依次调用匹配的 loader 来处理模块。每个 loader 接收模块的内容作为输入，并根据配置的转换规则对其进行处理，最终输出转换后的代码。
+
+通过 loader 的执行，我们可以对模块进行各种转换和处理，例如转换 ES6 语法、处理 CSS、压缩代码等。loader 的执行顺序是根据配置中的 loader 规则的顺序来确定的，可以通过配置文件中的  `module.rules`  字段来指定 loader 的执行顺序。
+
+总结来说，webpack 中的 loader 是在构建过程的 module 阶段触发的，具体是在  `normalModuleLoader`  阶段进行的。在这个阶段，webpack 会根据 loader 规则对模块进行匹配和处理，以完成代码的转换和处理。
+
 ### 如何编写一个 Plugin
 
 https://www.webpackjs.com/api/plugins/
@@ -1270,7 +1282,7 @@ module.exports = {
 2. 在插件运行代码中打断点 写debugger
 ```
 
-### Bundler 源码编写  看 bundler/bundler.js 文件
+### Bundler 源码编写  看 bundler/bundler.js 文件 ![源码打包机 包含模块分析器,依赖图谱,代码生成](./bundler/bundler.js)
 
 1. 创建一个文件夹 bundler
 创建 bundler/src/index.js bundler/src/message.js bundler/src/word.js 文件
@@ -1286,6 +1298,16 @@ module.exports = {
 6. npm install @babel/core  (babel 核心模块）
 
 7. npm install --save-dev @babel/preset-env
+
+### loader 和 plugin 本质区别是啥？
+
+loader 和 plugin 是 webpack 中两个不同的概念，用于实现不同的功能。
+
+1. Loader（加载器）：Loader 是 webpack 的一个核心概念，用于对模块的源代码进行转换。它可以将非 JavaScript 资源（如 CSS、图片、字体等）转换为 JavaScript 可以处理的模块。Loader 在 webpack 的构建过程中作为转换器的角色，负责将不同类型的文件转换为模块。Loader 可以通过配置文件中的  `module.rules`  字段进行配置和使用。
+
+2. Plugin（插件）：Plugin 是 webpack 的扩展机制，用于在构建过程中执行更广泛的任务。它可以在整个构建过程中的不同阶段执行自定义的操作，如优化资源、注入变量、生成额外的文件等。Plugin 可以通过配置文件中的  `plugins`  字段进行配置和使用。它们是通过调用 webpack 提供的钩子函数来实现的，可以在构建过程的不同阶段插入自定义的逻辑。
+
+因此，loader 和 plugin 在 webpack 中的本质区别在于它们的功能和作用。Loader 主要用于模块转换，将非 JavaScript 资源转换为 JavaScript 可以处理的模块；而 Plugin 则用于执行更广泛的任务，可以在构建过程中的不同阶段插入自定义的逻辑。它们共同构成了 webpack 的灵活和可扩展的构建系统。
 
 ## Create-React-App 和 Vue-Cli 3.0 脚手架工具配置分析
 
