@@ -412,9 +412,9 @@ export function createPatchFunction (backend) {
     let newEndVnode = newCh[newEndIdx]
     let oldKeyToIdx, idxInOld, vnodeToMove, refElm
 
-    // removeOnly is a special flag used only by <transition-group>
-    // to ensure removed elements stay in correct relative positions
-    // during leaving transitions
+    // removeOnly is a special flag used only by <transition-group> removeOnly是一个特殊标志，仅由＜transition group＞使用
+    // to ensure removed elements stay in correct relative positions 以确保移除的元件保持在正确的相对位置
+    // during leaving transitions 在离开过渡期间
     const canMove = !removeOnly
 
     if (process.env.NODE_ENV !== 'production') {
@@ -422,29 +422,67 @@ export function createPatchFunction (backend) {
     }
 
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+      // 首先不是判断1234命中查找 而是要略过已经加undenfined标记的东西
       if (isUndef(oldStartVnode)) {
         oldStartVnode = oldCh[++oldStartIdx] // Vnode has been moved left
       } else if (isUndef(oldEndVnode)) {
         oldEndVnode = oldCh[--oldEndIdx]
-      } else if (sameVnode(oldStartVnode, newStartVnode)) {
+      } 
+      // 1. 新前和旧前命中
+      else if (sameVnode(oldStartVnode, newStartVnode)) {
         patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)
         oldStartVnode = oldCh[++oldStartIdx]
         newStartVnode = newCh[++newStartIdx]
-      } else if (sameVnode(oldEndVnode, newEndVnode)) {
+      }
+      // 2. 新后和旧后命中
+      else if (sameVnode(oldEndVnode, newEndVnode)) {
         patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue, newCh, newEndIdx)
         oldEndVnode = oldCh[--oldEndIdx]
         newEndVnode = newCh[--newEndIdx]
-      } else if (sameVnode(oldStartVnode, newEndVnode)) { // Vnode moved right
+      }
+      // 3. 新后和旧前命中
+      else if (sameVnode(oldStartVnode, newEndVnode)) { // Vnode moved right
         patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue, newCh, newEndIdx)
+        // 新前指向的节点，移动到旧后之后
         canMove && nodeOps.insertBefore(parentElm, oldStartVnode.elm, nodeOps.nextSibling(oldEndVnode.elm))
         oldStartVnode = oldCh[++oldStartIdx]
         newEndVnode = newCh[--newEndIdx]
-      } else if (sameVnode(oldEndVnode, newStartVnode)) { // Vnode moved left
+      }
+      // 4. 新前和旧后命中
+      else if (sameVnode(oldEndVnode, newStartVnode)) { // Vnode moved left
         patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue, newCh, newStartIdx)
+        /**
+         *  var nodeOps = Object.freeze({
+              createElement: createElement$1,
+              createElementNS: createElementNS,
+              createTextNode: createTextNode,
+              createComment: createComment,
+              insertBefore: insertBefore,
+              removeChild: removeChild,
+              appendChild: appendChild,
+              parentNode: parentNode,
+              nextSibling: nextSibling,
+              tagName: tagName,
+              setTextContent: setTextContent,
+              setStyleScope: setStyleScope
+            });
+         *  function insertBefore (parentNode, newNode, referenceNode) {
+              parentNode.insertBefore(newNode, referenceNode);
+            }
+         */
+        // 新前指向的节点，移动到旧前之前
         canMove && nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm)
         oldEndVnode = oldCh[--oldEndIdx]
         newStartVnode = newCh[++newStartIdx]
-      } else {
+      } 
+      // 5. 四种命中查找都没有找到
+      else {
+        /**
+         * oldKeyToIdx 是一个Map  是oldCh的key和index的map映射 
+         * {
+         *    key(oldCh的key): value(oldCh的index)
+         * }
+         */
         if (isUndef(oldKeyToIdx)) oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx)
         idxInOld = isDef(newStartVnode.key)
           ? oldKeyToIdx[newStartVnode.key]

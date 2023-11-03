@@ -1,4 +1,4 @@
-#https://juejin.im/post/5d5639c7e51d453b5c1218b4  require时，exports和module.exports的区别你真的懂吗？
+# https://juejin.im/post/5d5639c7e51d453b5c1218b4  require 时，exports 和 module.exports 的区别你真的懂吗？
 
 1. require 重复引入问题
 
@@ -13,7 +13,7 @@ Node.js 默认先从缓存中加载模块，一个模块被加载一次之后，
 但是面试官要是问你为什么是同步还是异步的呢？
 
 一个作为公共依赖的模块，当然想一次加载出来，同步更好
-模块的个数往往是有限的，而且 Node.js 在 require 的时候会自动缓存已经加载的模块，再加上访问的都是本地文件，产生的IO开销几乎可以忽略。
+模块的个数往往是有限的，而且 Node.js 在 require 的时候会自动缓存已经加载的模块，再加上访问的都是本地文件，产生的 IO 开销几乎可以忽略。
 
 3. require() 的缓存策略
 
@@ -26,9 +26,9 @@ console.log(require.cache)
 
 4. exports 与 module.exports 区别
 
-js文件启动时
+js 文件启动时
 在一个 node 执行一个文件时，会给这个文件内生成一个 exports 和 module 对象，
-而module又有一个 exports 属性。他们都指向一块{}内存区域。
+而 module 又有一个 exports 属性。他们都指向一块{}内存区域。
 
 ```javascript
 exports = module.exports = {};
@@ -37,4 +37,4 @@ exports = module.exports = {};
     简而言之，区分他们之间的区别就是 exports 只是 module.exports的引用，辅助后者添加内容用的。用内存指向的方式更好理解。 */
 ```
 
-5. 建议：在使用的时候更建议大家使用module.exports
+5. 建议：在使用的时候更建议大家使用 module.exports

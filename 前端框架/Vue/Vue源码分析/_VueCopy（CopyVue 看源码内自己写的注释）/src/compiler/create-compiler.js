@@ -5,6 +5,9 @@ import { detectErrors } from './error-detector'
 import { createCompileToFunctionFn } from './to-function'
 
 export function createCompilerCreator (baseCompile: Function): Function {
+
+  /**
+   */
   return function createCompiler (baseOptions: CompilerOptions) {
     /**
      * 
@@ -65,6 +68,9 @@ export function createCompilerCreator (baseCompile: Function): Function {
         var model$1 = {
           preTransformNode: preTransformNode
         };
+
+        可以看到 klass$1、style$1、model$1 都是对象，且 klass$1、style$1 输出基本相同，只有staticKeys字段有所区别。而 model$1 对象只包含 preTransformNode 属性。
+
         我们用到了在细讲。
 
         第三个属性:directives 值是三个属性 (model、text、html) 的对象,且属性的值都是函数。

@@ -108,7 +108,7 @@ Prepack 同样是 FaceBook 团队的作品。**它让你编写普通的 JavaScri
 
 预编译后：
 
-![预编译优化：remove inline functions 的小例子后](./images/%E9%A2%84%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%9Aremove%20inline%20functions%20%E7%9A%84%E5%B0%8F%E4%BE%8B%E5%AD%90%E5%90%8E.webp)
+![预编译优化：remove inline functions 的小例子后](./images/%E9%A2%84%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%EF%BC%9Aremove%20inline%20functions%20%E7%9A%84%E5%B0%8F%E4%BE%8B%E5%AD%90%E5%90%8E.jpeg)
 
 
 **考量和设计一个前端解决方案的时候，向上扩展和向下兼容是非常重要的。Vue** **向上扩展就是 React，Vue** **向下兼容后就类似于 jQuery，[渐进式](https://www.zhihu.com/search?q=渐进式&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A724759264})有时候比革命性更符合时代的要求。**

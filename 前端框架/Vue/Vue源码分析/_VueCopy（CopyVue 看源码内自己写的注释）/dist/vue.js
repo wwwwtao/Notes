@@ -7703,6 +7703,10 @@
 
   /*  */
 
+  /**
+   * 以上代码可知 parseStyleText 函数是由 cached 函数创建的高阶函数，parseStyleText 接收内联样式字符串作为参数并返回解析后的对象。
+   
+   */
   var parseStyleText = cached(function (cssText) {
     var res = {};
     var listDelimiter = /;(?![^(]*\))/g;
@@ -9121,9 +9125,20 @@
   /*  */
 
   function transformNode (el, options) {
+    // 定义 warn 常量，它是一个函数，用来打印警告信息。
     var warn = options.warn || baseWarn;
+
+    // 接着使用 getAndRemoveAttr 函数从元素描述对象上获取绑定的 class 属性的值，并将其保存在 staticClass 常量中。
     var staticClass = getAndRemoveAttr(el, 'class');
+
+    // 接着进入一段if条件语句：
     if (staticClass) {
+      /**
+       * 这里使用 parseText 函数解析该值，如果解析成功则说明你在非绑定的class属性中使用了字面量表达式，例如：
+          <div class="{{ message ? 'message' : '' }}"></div>
+          这时 Vue 会打印警告信息，提示你使用如下这种方式替代：
+          <div :class="{ 'message': message }"></div>
+       */
       var res = parseText(staticClass, options.delimiters);
       if (res) {
         warn(
@@ -9135,15 +9150,43 @@
         );
       }
     }
+
+    // 再往下是这样一段代码：
     if (staticClass) {
+      // 如果非绑定的 class 属性值存在，则将该值保存在元素描述对象的 el.staticClass 属性中。
       el.staticClass = JSON.stringify(staticClass);
     }
+
+    // 或者使用 getBindingAttr 函数获取绑定的class属性的值，
     var classBinding = getBindingAttr(el, 'class', false /* getStatic */);
+    // 如果绑定的 class 属性的值存在，则将该值保存在 el.classBinding 属性中。
     if (classBinding) {
       el.classBinding = classBinding;
     }
+
+  /**
+   * 
+    做一个简短的总结:
+
+    非绑定的class属性值保存在元素描述对象的el.staticClass属性中，假设有如下模板：
+    <div class="box"></div>
+    则该标签元素描述对象的 el.staticClass 属性值为：
+    el.staticClass = JSON.stringify("box")
+
+    绑定的 class 属性值保存在元素描述对象的 el.classBinding 属性中假设我们有如下模板：
+    <div :class="{ 'message': message }"></div>
+    则该标签元素描述对象的el.classBinding属性值为：
+    el.classBinding = "{ 'message': message }"
+
+    对于 style 属性的处理与对 class 属性的处理类似 ，它在 transformNode$1 中完成。
+   */
+
   }
 
+  /**
+   * 从下面代码就可看出这里就是一个字符串拼接的操作。在处理静态属性（样式）和非静态属性（样式）上不同的key的拼接最终在给到AST。
+   * 接下来讲下model$1对象中的 preTransformNode 函数
+   */
   function genData (el) {
     var data = '';
     if (el.staticClass) {
@@ -9163,6 +9206,11 @@
 
   /*  */
 
+  /**
+   * 可以看到，用来处理 style 属性的 transformNode$1 函数基本与用来处理 class 属性的transformNode 函数相同，但需要注意点是：
+      el.staticStyle = JSON.stringify(parseStyleText(staticStyle))
+      与 class 属性不同，如果一个标签使用了非绑定的 style 属性，则会使用 parseStyleText 函数对属性值进行处理。
+   */
   function transformNode$1 (el, options) {
     var warn = options.warn || baseWarn;
     var staticStyle = getAndRemoveAttr(el, 'style');
@@ -9181,14 +9229,54 @@
         }
       }
       el.staticStyle = JSON.stringify(parseStyleText(staticStyle));
+      /**
+       * parseStyleText 函数会如何处理非绑定的style属性值呢？举个例子，如下模板所示：
+        <div style="color: red; background: green;"></div>
+        如上模板中使用了非绑定的 style 属性，属性值为字符串 'color: red; background: green;'，parseStyleText 函数会把这个字符串解析为对象形式，如下：
+        {
+          color: 'red',
+          background: 'green'
+        }
+        最后再使用 JSON.stringify 函数将如上对象变为字符串后赋值给元素描述对象的 el.staticStyle 属性。
+
+        搜索看下 parseStyleText 源码 (7706行)
+       */
     }
 
+    /**
+     *  接着对于绑定的 style 属性，则会使用如下这段代码来处理：
+        var styleBinding = getBindingAttr(el, 'style', false  );
+        if (styleBinding) {
+          el.styleBinding = styleBinding;
+        }
+
+        做一个简短的总结：
+
+        非绑定的 style 属性值保存在元素描述对象的 el.staticStyle 属性中，假设有如下模板：
+        <div style="color: red; background: green;"></div>
+        则该标签元素描述对象的 el.staticStyle 属性值为：
+        el.staticStyle = JSON.stringify({
+          color: 'red',
+          background: 'green'
+        })
+
+        绑定的style属性值保存在元素描述对象的 el.styleBinding 属性中，假设我们有如下模板：
+        <div :style="{ fontSize: fontSize + 'px' }"></div>
+        则该标签元素描述对象的 el.styleBinding 属性值为：
+        el.styleBinding = "{ fontSize: fontSize + 'px' }"
+
+        接下来在看下 genData 、genData$1 函数
+     */
     var styleBinding = getBindingAttr(el, 'style', false /* getStatic */);
     if (styleBinding) {
       el.styleBinding = styleBinding;
     }
   }
 
+  /**
+   * 从下面代码就可看出这里就是一个字符串拼接的操作。在处理静态属性（样式）和非静态属性（样式）上不同的key的拼接最终在给到AST。
+   * 接下来讲下model$1对象中的 preTransformNode 函数
+   */
   function genData$1 (el) {
     var data = '';
     if (el.staticStyle) {
@@ -10484,13 +10572,51 @@
 
   /*  */
 
+  /**
+   * preTransformNode 函数接收两个参数，第一个参数是要预处理的元素描述对象，第二个参数则是编译器的选项参数。
+   * 在 preTransformNode 函数内，所有的代码都被包含在一个 if (el.tag === 'input') 中
+   */
   function preTransformNode (el, options) {
-    if (el.tag === 'input') {
+    // 也就是说只有当前解析的标签是input标签时才会执行预处理工作， preTransformNode函数是用来预处理input标签的。
+    if (el.tag === 'input') { 
+
+      // 如果当前解析的元素是input标签，则会继续判断该input标签是否使用了 v-model 属性：
       var map = el.attrsMap;
+
+      /**
+       * 如果该input标签没有使用v-model属性，则函数直接返回，终止preTransformNode 函数执行。
+         所以也可以这样理解 preTransformNode 函数要预处理的是使用了 v-model 属性的input标签。
+       */
       if (!map['v-model']) {
         return
       }
 
+      
+      /**
+       * 以下代码都是在设法获取到绑定的 type 属性的值，因为只有当一个 input 表单拥有绑定的 type 属性时才会执行真正的预处理代码。
+       * 
+       * 一起来看下示例代码 假如有如下模板：
+        <input v-model="val" :type="detection" />
+        源代码中typeBinding 的值就是"detection",来看源码的实现。
+
+        if (map[':type'] || map['v-bind:type']) {
+          typeBinding = getBindingAttr(el, 'type');
+        }
+        由于开发者在绑定属性的时候可以选 择v-bind: 或其缩写 : 两种方式，所以如上代码中分别获取了通过这两种方式绑定的type属性，如果存在其一，则使用getBindingAttr函数获取绑定的type属性的值。如果开发者没有这两种方式绑定type属性，则代码会继续执行，来到如下这段if条件语句：
+        if (!map.type && !typeBinding && map['v-bind']) {
+          typeBinding = "(" + (map['v-bind']) + ").type";
+        }
+        如果该 if 条件语句的判断条件成立，则说明该 input 标签没有使用非绑定的 type 属性，并且也没有使用 v-bind: 或 : 绑定 type 属性，并且开发者使用了 v-bind。这里大家要注意了，开发者即使没有使用 v-bind: 或 : 绑定 type 属性，但仍然可以通过如下方式绑定属性：
+        <input v-model="val" v-bind="{ type: detection}" />
+        此时就需要通过读取绑定对象的 type 属性来获取绑定的属性值，即：
+        typeBinding = "(" + (map['v-bind']) + ").type";
+        如上代码相当于：
+        typeBinding =;({type: detection}).type
+        总之我们要想方设法获取到绑定的 type 属性的值，如果获取不到则说明该input标签的类型是固定不变的，因为它是非绑定的。
+
+        只有当一个input表单拥有绑定的 type 属性时才会执行真正的预处理代码，
+        所以现在我们可以进一步的总结：preTransformNode 函数要预处理的是使用了 v-model 属性并且使用了绑定的 type 属性的 input 标签。
+       */
       var typeBinding;
       if (map[':type'] || map['v-bind:type']) {
         typeBinding = getBindingAttr(el, 'type');
@@ -10499,24 +10625,87 @@
         typeBinding = "(" + (map['v-bind']) + ").type";
       }
 
+      
+      /**
+       * 
+       * 下述代码就是预处理 input 标签代码，先解释下它宏观处理方式。
+          假设我们有如下模板：
+            <input v-model="data[type]" :type="type">
+          在模板中 input 标签使用了 v-model 属性并且使用了绑定的 type 属性的，最终在预处理节点会把 input 标签扩展为如下三种 input 标签：
+            <input v-if="type === 'checkbox'" type="checkbox" v-model="data[type]">
+            <input v-else-if="type === 'radio'" type="radio" v-model="data[type]">
+            <input v-else :type="type" v-model="data[type]">
+
+          我们知道在 AST 中一个标签对应一个元素描述对象，preTransformNode 函数将一个 input元素描述对象扩展为三个 input 标签的元素描述对象。但是由于扩展后的标签由 v-if、v-else-if 和 v-else 三个条件指令组成，其元素描述对象是会被添加到那个使用 v-if 指令的元素描述对象的 el.ifConditions 数组中的。所以虽然把一个 input 标签扩展成了三个，但实际上并不会影响 AST 的结构，并且从渲染结果上看，也是一致的。
+
+          但为什么要将一个 input 标签扩展为三个呢？
+          原因是 input 标签使用了绑定的 type 属性，该 input 标签的类型是不确定的，同样是 input标签，但类型为 checkbox 的 input 标签与类型为 radio 的 input 标签的行为是不一样的，不同类型的 input 标签所绑定的事件也有所不同。 为了保证所有类型 input 标签的功能可用，所以 Vue 选择在编译阶段完成所有类型标签的工作。
+          知道它是怎么预处理的，那下面一起来看下源码实现部分吧！
+       */
       if (typeBinding) {
-        var ifCondition = getAndRemoveAttr(el, 'v-if', true);
-        var ifConditionExtra = ifCondition ? ("&&(" + ifCondition + ")") : "";
+
+        /**
+         * 在这初始定义了四个变量分别是ifCondition、ifConditionExtra、hasElse 以及elseIfCondition，大致介绍下他们的作用。
+          ifCondition 保存的值是通过 getAndRemoveAttr 函数取得的 v-if 指令的值，注意如上代码中调用 getAndRemoveAttr 函数时传递的第三个参数为 true，所以在获取到属性值之后，会将该属性从元素描述对象的 el.attrsMap 中移除。
+          ifConditionExtra 如果 ifConditionExtra 存在将以这种格式 "&&(+" ifCondition "+)" 存储在此变量中。
+          hasElse 是一个布尔值，它代表着 input 标签是否使用了 v-else 指令。
+          elseIfCondition 与 ifCondition 类似，只不过 elseIfCondition 所存储的是 v-else-if 指令的属性值。
+         */
+        var ifCondition = getAndRemoveAttr(el, 'v-if', true);// ifCondition 保存的值是通过 getAndRemoveAttr 函数取得的 v-if 指令的值，注意如上代码中调用 getAndRemoveAttr 函数时传递的第三个参数为 true，所以在获取到属性值之后，会将该属性从元素描述对象的 el.attrsMap 中移除。
+        var ifConditionExtra = ifCondition ? ("&&(" + ifCondition + ")") : ""; // ifConditionExtra 如果 ifConditionExtra 存在将以这种格式 "&&(+" ifCondition "+)" 存储在此变量中。
         var hasElse = getAndRemoveAttr(el, 'v-else', true) != null;
         var elseIfCondition = getAndRemoveAttr(el, 'v-else-if', true);
+
+        
         // 1. checkbox
+
+        /**
+         * 前面讲过 preTransformNode 函数的作用就是将一个拥有绑定类型和 v-model 指令的 input标签扩展为三个 input 标签，这个三个 input 标签分别是复选按钮 (checkbox)、单选按钮(radio) 和其他 input 标签。而如上这段代码的作用就是创建复选按钮的，首先调用cloneASTElement 函数克隆出一个与原始标签的元素描述对象一模一样的元素描述对象出来，并将新克隆出的元素描述对象赋值给branch0常量。
+          我们来看一下 cloneASTElement 函数的实现，如下：
+          function cloneASTElement(el) {
+            return createASTElement(el.tag, el.attrsList.slice(), el.parent)
+          }
+          原理就是通过 createASTElement 函数再创建出一个元素描述对象。
+         */
         var branch0 = cloneASTElement(el);
         // process for on the main node
-        processFor(branch0);
-        addRawAttr(branch0, 'type', 'checkbox');
-        processElement(branch0, options);
+        processFor(branch0); // 处理元素的 v-for指令， 
+        
+        /**
+            addRawAttr 函数，作用就是将属性的名和值分别添加到元素描述对象的 el.attrsMap 对象以及 el.attrsList 数组中。
+         * 上述代码中：
+            addRawAttr(branch0, 'type', 'checkbox');
+            等价于把新克隆出来的 input 标签：
+            <input type="checkbox" />
+         */
+        addRawAttr(branch0, 'type', 'checkbox'); 
+
+        processElement(branch0, options); // 处理使用了key属性的元素
+
+        // 这句代码将元素描述对象的 el.processed 属性设置为 true，标识着当前元素描述对象已经被处理过了, 防止在start 钩子函数中重复的解析。
         branch0.processed = true; // prevent it from double-processed
+
+        // 这段代码为元素描述对象添加了 el.if 属性，其 if 属性值是一个表达式最终产生的值。
+        /**
+         * 假设我们有模板如下：
+            <input v-model="message" :type="state" v-if="ret" />
+            el.if 属性的值将为：state === 'checkbox' && ret，可以看到只有当本地状态 state 的值为字符串 'checkbox' 并且本地状态 ret 为真时才会渲染该复选按钮。
+         */
         branch0.if = "(" + typeBinding + ")==='checkbox'" + ifConditionExtra;
+        
+        /**
+         * addIfCondition 函数不陌生，我们知道如果一个标签使用了 v-if 指令，
+         * 则该标签的元素描述对象被添加到其自身的el.ifConditions 数组中 此函数就是帮我们完成这项工作。
+         */
         addIfCondition(branch0, {
           exp: branch0.if,
           block: branch0
         });
+
+        
+        
         // 2. add radio else-if condition
+        // 通过注释都能大概知道，第二部分扩展单选按钮，而第三部分用来扩展其他类型的 input 标签。实现都跟第一部分差不多，剩下代码就您细品。
         var branch1 = cloneASTElement(el);
         getAndRemoveAttr(branch1, 'v-for', true);
         addRawAttr(branch1, 'type', 'radio');
@@ -10596,6 +10785,59 @@
     getTagNamespace: getTagNamespace,
     staticKeys: genStaticKeys(modules$1)
   };
+  ```js
+    var baseOptions = {
+      expectHTML: true,
+      modules: modules$1,
+      directives: directives$1,
+      isPreTag: isPreTag,
+      isUnaryTag: isUnaryTag,
+      mustUseProp: mustUseProp,
+      canBeLeftOpenTag: canBeLeftOpenTag,
+      isReservedTag: isReservedTag,
+      getTagNamespace: getTagNamespace,
+      staticKeys: genStaticKeys(modules$1)
+    };
+
+    分别解析下:
+
+    第一个属性: expectHTML 被设置为 true 。
+    第二个属性:modules
+    var modules$1 = [
+      klass$1,
+      style$1,
+      model$1
+    ];
+
+    var klass$1 = {
+      staticKeys: ['staticClass'],
+      transformNode: transformNode,
+      genData: genData
+    };
+
+    var style$1 = {
+      staticKeys: ['staticStyle'],
+      transformNode: transformNode$1,
+      genData: genData$1
+    };
+
+    var model$1 = {
+      preTransformNode: preTransformNode
+    };
+
+    可以看到 klass$1、style$1、model$1 都是对象，且 klass$1、style$1 输出基本相同，只有staticKeys字段有所区别。而 model$1 对象只包含 preTransformNode 属性。
+    接下来逐个击破先看下 transformNode 函数
+
+    第三个属性:directives 值是三个属性 (model、text、html) 的对象,且属性的值都是函数。
+    第四个属性:isPreTag 它是一个函数,其作用是通过给定的标签名字检查标签是否是 'pre' 标签。
+    第五个属性:isUnaryTag 是一个通过makeMap生成的函数,该函数的作用是检测给定的标签是否是一元标签。
+    第六个属性:mustUseProp 它是一个函数,其作用是用来检测一个属性在标签中是否要使用props进行绑定。
+    第七个属性:canBeLeftOpenTag 一个使用makeMap生成的函数,它的作用是检测非一元标签,但却可以自己补全并闭合的标签。比如 div 标签是一个双标签,你需要这样使用<div> text </div>,但是你依然可以省略闭合标签,直接这样写:<div> text ,且浏览器会自动补全。但是有些标签你不可以这样用,它们是严格的双标签。
+    第八个属性:isReservedTag 它是一个函数,其作用是检查给定的标签是否是保留的标签。
+    第九个属性:getTagNamespace 它也是一个函数,其作用是获取元素(标签)的命名空间。
+    第十个属性:staticKeys 它的值是通过以 modules 为参数调用 genStaticKeys 函数的返回值得到的。 其作用是根据编译器选项的 modules 选项生成一个静态键字符串。
+    现在我们粗略的介绍了下baseOptions 中各个属性的作用,当我们用到时候再来详细讲解他们的源码。
+  ```
 
   /*  */
 
