@@ -782,3 +782,17 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -keyout localhost-privkey.pem 
         }
     }
 ```
+
+## http 协议推送 和 SSE
+
+HTTP 协议推送（HTTP/2 Server Push）和 SSE（Server-Sent Events）是两种用于在 Web 应用程序中实现服务器向客户端推送数据的技术。
+
+1. HTTP 协议推送：
+   - HTTP 协议推送是 HTTP/2 的一个特性，它允许服务器在客户端请求之前主动推送相关资源。通过 HTTP 协议推送，服务器可以根据客户端请求的资源，提前将相关的资源推送给客户端，从而减少客户端请求的延迟。
+   - 在 HTTP/2 中，服务器可以通过发送 PUSH_PROMISE 帧来推送资源。当客户端收到 PUSH_PROMISE 帧时，它可以选择接受或拒绝推送的资源。如果接受，客户端会收到推送的资源，并在后续请求中使用这些资源，从而提高页面加载速度。
+
+2. SSE（Server-Sent Events）：
+   - SSE 是一种基于 HTTP 的服务器向客户端单向推送数据的技术。它允许服务器通过长连接（持久连接）向客户端发送事件流，客户端通过监听这些事件流来接收服务器推送的数据。
+   - SSE 使用了 HTTP 协议的普通 GET 请求，但服务器会将响应设置为"Content-Type: text/event-stream"，并将数据以事件流的形式发送给客户端。客户端通过监听 `EventSource` 对象的 `onmessage` 事件来接收服务器推送的数据。
+
+总结来说，HTTP 协议推送和 SSE 都是用于在 Web 应用程序中实现服务器向客户端推送数据的技术。HTTP 协议推送是 HTTP/2 的特性，通过提前推送资源来减少请求延迟；而 SSE 是一种基于 HTTP 的单向推送技术，通过事件流将数据推送给客户端。

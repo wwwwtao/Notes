@@ -226,7 +226,7 @@ export function genElement (el: ASTElement, state: CodegenState): string {
       if (!el.plain || (el.pre && state.maybeComponent(el))) {
         data = genData(el, state)
       }
-
+      
       const children = el.inlineTemplate ? null : genChildren(el, state, true)
 
       /**

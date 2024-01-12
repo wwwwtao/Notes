@@ -1317,3 +1317,30 @@ loader 和 plugin 是 webpack 中两个不同的概念，用于实现不同的�
 
 Vue CLI 官方配置参考
 https://cli.vuejs.org/zh/config/#%E5%85%A8%E5%B1%80-cli-%E9%85%8D%E7%BD%AE
+
+### webpack 常见的 loader 和 plugin
+
+webpack 是一个现代的前端构建工具，它可以将多个模块打包成一个或多个静态资源文件。在 webpack 中，常见的 loader 和 plugin 用于处理和优化不同类型的资源。
+
+常见的 loader 包括：
+
+1. Babel-loader：用于将 ES6+ 的 JavaScript 代码转换为浏览器兼容的 JavaScript 代码。
+2. CSS-loader：用于解析处理 CSS 文件，支持导入和处理 CSS 文件中的 URL 路径。
+3. Style-loader：将 CSS 代码以 style 标签的形式插入到 HTML 页面中。
+4. File-loader：用于处理文件资源，例如图片、字体等，将它们复制到输出目录，并返回最终的 URL 路径。
+5. URL-loader：类似于 File-loader，但可以将小文件转换为 DataURL，减少 HTTP 请求。
+6. Sass-loader：用于解析处理 Sass/SCSS 文件，将其转换为 CSS。
+7. Less-loader：用于解析处理 Less 文件，将其转换为 CSS。
+8. PostCSS-loader：用于处理 CSS 代码，可以进行自动添加前缀、压缩等操作。
+
+常见的 plugin 包括：
+
+1. HtmlWebpackPlugin：用于生成 HTML 文件，并自动将打包后的资源文件（如 CSS、JavaScript）引入 HTML 中。
+2. MiniCssExtractPlugin：将 CSS 代码从打包后的 JavaScript 文件中提取出来，生成单独的 CSS 文件。
+3. CleanWebpackPlugin：用于每次构建前清理输出目录。
+4. DefinePlugin：用于定义全局变量，在编译过程中进行替换。
+5. CopyWebpackPlugin：用于复制静态资源文件到输出目录。
+6. UglifyJsPlugin：用于压缩混淆 JavaScript 代码。
+7. OptimizeCSSAssetsPlugin：用于压缩 CSS 代码。
+
+这些是 webpack 中常见的 loader 和 plugin，它们可以根据项目的需求来选择和配置，以实现对不同类型资源的处理和优化。
