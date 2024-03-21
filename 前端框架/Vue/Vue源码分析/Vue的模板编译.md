@@ -1,13 +1,13 @@
-## template -> 编辑。.. -> 形成真实 DOM
+## Vue 的模板编译『模板 -AST 树 -render- 虚拟 DOM- 真实 DOM』
 
 1. 获取到 template
 
-- 源码入口 /Users/wwwwtao/Desktop/学习/Notes/前端框架/Vue/Vue源码分析/_VueCopy（源码内有注释）/src/core/instance/index 
+- 源码入口 /Users/wwwwtao/Desktop/ 学习 /Notes/ 前端框架 /Vue/Vue 源码分析 /_VueCopy（源码内有注释）/src/core/instance/index
 
 2. template -> AST 树
 3. AST 抽象语法树 -> render _c _v _s
 4. render 函数 -> vnode
-5. PATCH（createElement(vnode)创建真实DOM添加到页面上）-> 打补丁到真实 DOM
+5. PATCH（createElement(vnode) 创建真实 DOM 添加到页面上）-> 打补丁到真实 DOM
 
 ### AST 和虚拟 DOM 区别
 

@@ -7,10 +7,11 @@ import VNode from '../vdom/vnode'
 const seenObjects = new Set()
 
 /**
- * Recursively traverse an object to evoke all converted
- * getters, so that every nested property inside the object
- * is collected as a "deep" dependency.
- */
+ * Recursively traverse an object to evoke all converted 递归遍历对象以调用所有转换的对象
+ * getters, so that every nested property inside the object  getters，以便对象内的每个嵌套属性
+ * is collected as a "deep" dependency.  作为“深度”依赖项收集。
+ * /**
+*/
 export function traverse (val: any) {
   _traverse(val, seenObjects)
   seenObjects.clear()

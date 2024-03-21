@@ -10,9 +10,12 @@
 - vue3 采用 compositionApi 进行组织功能，优化复用逻辑，相较于 optionApi 类型推断更加便捷
 
 - 增加了 Fragment,Teleport，Suspense 组件
-1. Fragment 组件：Fragment 组件是 Vue3 中的一个新特性，它允许你在模板中使用多个根节点，而不需要像 Vue2 中一样使用一个外层元素包裹。在 Vue3 中，你可以使用<template>标签或者<Fragment>组件来实现多个根节点。
+1. Fragment 组件：Fragment 组件是 Vue3 中的一个新特性，它允许你在模板中使用多个根节点，而不需要像 Vue2 中一样使用一个外层元素包裹。在 Vue3 中，你可以使用`<template>`标签或者`<Fragment>`组件来实现多个根节点。
 
 2. Teleport 组件：Teleport 组件是 Vue3 中的一个新组件，它提供了一种将组件的内容渲染到 DOM 中的不同位置的方式。使用 Teleport 组件，你可以将组件的内容渲染到 DOM 中的任何位置，而不需要将组件放在目标位置的上层组件中。
-![Vue3 Teleport组件原理分析](https://juejin.cn/post/7038923611935571981)
+**Vue3 Teleport 组件原理分析 https://juejin.cn/post/7038923611935571981**
 
 3. Suspense 组件：Suspense 组件是 Vue3 中的一个新组件，它提供了一种优雅的方式来处理异步组件的加载和错误。使用 Suspense 组件，你可以在异步组件加载完成之前显示一个占位符，并在加载过程中处理错误。
+
+![Vue2和3区别1](./images/Vue2和3区别1.png)
+![Vue2和3区别2](./images/Vue2和3区别2.jpg)

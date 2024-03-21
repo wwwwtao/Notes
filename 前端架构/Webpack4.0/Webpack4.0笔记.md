@@ -1324,7 +1324,7 @@ webpack 是一个现代的前端构建工具，它可以将多个模块打包成
 
 常见的 loader 包括：
 
-1. Babel-loader：用于将 ES6+ 的 JavaScript 代码转换为浏览器兼容的 JavaScript 代码。
+1. Babel-loader：用于将 ES6+ 的 JavaScript 代码转换为浏览器兼容的 JavaScript 代码。 <!-- esbuild-loader 和 swc-loader 优化 -->
 2. CSS-loader：用于解析处理 CSS 文件，支持导入和处理 CSS 文件中的 URL 路径。
 3. Style-loader：将 CSS 代码以 style 标签的形式插入到 HTML 页面中。
 4. File-loader：用于处理文件资源，例如图片、字体等，将它们复制到输出目录，并返回最终的 URL 路径。
