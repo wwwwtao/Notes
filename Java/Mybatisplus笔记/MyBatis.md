@@ -47,9 +47,9 @@
 
 ![sql片段抽取](./assets/sql%E7%89%87%E6%AE%B5%E6%8A%BD%E5%8F%96.png)
 
-![动态SQL之<if>](./assets/%E5%8A%A8%E6%80%81SQL%E4%B9%8B%3Cif%3E.png)
+![动态SQL之<if>](./assets/动态SQL之if.png)
 
-![动态SQL之<foreach>](./assets/%E5%8A%A8%E6%80%81SQL%E4%B9%8B%3Cforeach%3E.png)
+![动态SQL之<foreach>](./assets/动态SQL之foreach.png)
 
 ### MyBatis 增删改查
 
